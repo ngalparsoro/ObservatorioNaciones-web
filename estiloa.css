@@ -318,7 +318,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #edukia { padding: 12px 14px; }
   #heldulekua { display: flex; justify-content: center; align-items: center; height: 22px; flex: none; background: transparent; border: 0; cursor: pointer; }
   #heldulekua span { width: 44px; height: 4px; border-radius: 2px; background: var(--line); }
-  #app:has(#panela.zabalik) #legenda, #app:has(#panela.zabalik) .maplibregl-ctrl-top-right, #app:has(#panela.zabalik) .rail-gezia,
+  #app.orria-zabalik #legenda, #app.orria-zabalik .maplibregl-ctrl-top-right, #app.orria-zabalik .rail-gezia,
   #app.rail-zabalik #legenda { visibility: hidden; }  /* con la hoja o las herramientas abiertas, lo que quedaría debajo no se ve */
   #tip { display: none !important; }
   h2 { font-size: 24px; }

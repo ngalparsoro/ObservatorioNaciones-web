@@ -488,13 +488,17 @@ for (const m of MAILAK) {
 }
 
 // ---- selección y panel ----
+// Respuesta al toque (INP de Core Web Vitals, como en el Behatokia): primero se pinta lo que cambia al tocar (pestaña,
+// elección, capa, zona resaltada) y lo pesado (panel, colores del mapa) va en el fotograma siguiente. arnasa deja pintar;
+// el setTimeout de reserva, por si la pestaña está en segundo plano (sin requestAnimationFrame)
+const arnasa = () => new Promise((r) => { requestAnimationFrame(() => setTimeout(r, 0)); setTimeout(r, 100); });
 let selRef = null;
 function hautatu(h, joan = false) {
   if (selRef) map.setFeatureState(selRef, { sel: false });
   state.hautatua = h; selRef = null;
   if (h && map.getSource(h.maila)) { selRef = { source: h.maila, id: h.id }; map.setFeatureState(selRef, { sel: true }); }
   if (h && joan) { const r = IZENAK[h.maila] && IZENAK[h.maila][h.id]; if (r) map.flyTo({ center: [r[1], r[2]], zoom: Math.max(map.getZoom(), { nazioa: 5.5, autonomia: 6.4, probintzia: 7.4, udalerria: 10, sekzioa: 12 }[h.maila]) }); }
-  panela(); urlaIdatzi();
+  urlaIdatzi(); arnasa().then(panela);  // primero la zona resaltada, luego el panel
 }
 // Cuatro cifras de la zona: participación (con su variación), votantes, censo y margen 1.ª–2.ª
 function kpis(r, ra) {
@@ -587,8 +591,10 @@ function hautatuBotoia(e) {
 }
 $("#edukia").addEventListener("click", hautatuBotoia);
 $("#crumb").addEventListener("click", hautatuBotoia);
-function fitxaAldatu(f) {
-  state.fitxa = f; panela(); urlaIdatzi(); orriaZabaldu(true);
+async function fitxaAldatu(f) {
+  state.fitxa = f; urlaIdatzi(); orriaZabaldu(true);
+  for (const b of document.querySelectorAll("#fitxak [data-fitxa]")) b.setAttribute("aria-selected", b.dataset.fitxa === f);  // primero la pestaña
+  await arnasa(); panela();
   if (hov && tip.classList.contains("on")) tip.innerHTML = argibidea(hov.source, String(hov.id));  // el puntero sigue a la pestaña
 }
 $("#fitxak").addEventListener("click", (e) => { const f = e.target.closest("[data-fitxa]"); if (f) fitxaAldatu(f.dataset.fitxa); });
@@ -699,13 +705,13 @@ function bilakaeraOrria(h) {
 async function hauteskundeaAldatu(k) {
   if (!KK.includes(k)) return;
   state.k = k; lerroaMargotu();
-  await eguneratu(); panela();
+  await arnasa(); await eguneratu(); panela();  // primero la línea de tiempo, luego el mapa y el panel
 }
 // Capa del mapa (W, M, T)
-function moduaAldatu(m) {
+async function moduaAldatu(m) {
   state.modua = m; document.querySelectorAll("[data-modua]").forEach((x) => x.setAttribute("aria-pressed", x.dataset.modua === m));
   $("#maila").disabled = BARRUTIKA.includes(m);  // con «Escaños reñidos», provincias
-  legenda(); eguneratu(); panela();
+  legenda(); await arnasa(); eguneratu(); panela();  // primero el botón y la leyenda, luego el mapa y el panel
 }
 document.querySelectorAll("[data-modua]").forEach((b) => b.addEventListener("click", () => moduaAldatu(b.dataset.modua)));
 $("#maila").addEventListener("change", (e) => { state.maila = e.target.value; eguneratu(); });
@@ -757,7 +763,7 @@ $("#satelitea").addEventListener("click", sateliteaAldatu);
 // Móvil: hoja de resultados que se despliega
 function orriaZabaldu(z) {
   if (!mugikorra()) return;
-  $("#panela").classList.toggle("zabalik", z); $("#heldulekua").setAttribute("aria-expanded", z);
+  $("#panela").classList.toggle("zabalik", z); $("#app").classList.toggle("orria-zabalik", z); $("#heldulekua").setAttribute("aria-expanded", z);
   if (z && $("#app").classList.contains("rail-zabalik")) { $("#app").classList.remove("rail-zabalik"); geziaEguneratu(); }  // una cosa abierta a la vez
   setTimeout(etiketak, 260);
 }
