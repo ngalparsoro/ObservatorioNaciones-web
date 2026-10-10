@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at; connect-src 'self' https://tiles.maps.eox.at https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Observatorio Electoral de las Naciones</title>
+<meta name="description" content="Elecciones al Congreso en el Estado español, leídas por naciones: participación y competitividad por nación, comunidad, provincia, municipio y sección censal.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="letrak.css?v=ffbf8499ba9c">
+<link rel="stylesheet" href="estiloa.css?v=ffbf8499ba9c">
+<link rel="preload" href="fonts/saira-semi-condensed-600-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="modulepreload" href="vendor/maplibre-gl.mjs">
+<link rel="modulepreload" href="vendor/maplibre-gl-shared.mjs">
+<link rel="modulepreload" href="testuak.js?v=ffbf8499ba9c">
+<link rel="modulepreload" href="hemizikloa.js?v=ffbf8499ba9c">
+<link rel="preload" href="data/index.json?v=ffbf8499ba9c" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/nazioa.json?v=ffbf8499ba9c" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/izenak.json?v=ffbf8499ba9c" as="fetch" crossorigin="anonymous">
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <details class="nabigazioa">
+      <summary class="ibtn" aria-label="Menú" title="Menú" data-t-aria="menua" data-t-title="menua">☰</summary>
+      <nav class="nab-menua" aria-label="Secciones" data-t-aria="atalak">
+        <a href="./" aria-current="page" data-t="mapa">Mapa</a>
+        <a href="metodologia.html" data-orria="metodologia" data-t="metodologia">Metodología</a>
+        <a href="iturriak.html" data-orria="iturriak" data-t="iturriak">Fuentes</a>
+        <a href="guri-buruz.html" data-orria="guri-buruz" data-t="guriBuruz">Quiénes somos</a>
+        <a href="lege-oharra.html" data-orria="lege-oharra" data-t="legeOharra">Aviso legal y privacidad</a>
+      </nav>
+    </details>
+    <h1>Observatorio Electoral de las Naciones <span class="beta">beta</span></h1>
+    <nav id="crumb" aria-label="Ubicación" data-t-aria="kokapena"></nav>
+    <div class="eskuina">
+      <div class="kbd" aria-hidden="true"><kbd>Q</kbd><kbd>E</kbd><kbd>/</kbd></div>
+      <button type="button" id="laguntzabtn" class="ibtn" aria-expanded="false" aria-controls="laguntza" title="Atajos de teclado (?)" data-t-title="lasterbideakTit">?</button>
+      <button type="button" id="satelitea" class="ibtn" aria-pressed="true" title="Imagen de satélite de fondo (S)" data-t-title="sateliteTit" data-t="satelite">Satélite</button>
+      <details class="hizkuntzak" id="hizkuntzak">
+        <summary class="ibtn" aria-label="Idioma" title="Idioma" data-t-aria="hizkuntza" data-t-title="hizkuntza">ES</summary>
+        <div class="hizk-menua"></div>
+      </details>
+    </div>
+  </header>
+  <div id="map" role="application" aria-label="Mapa del Estado español por naciones" data-t-aria="mapaAria"></div>
+  <div id="etiketak" aria-hidden="true"></div>
+  <button type="button" id="railbtn" class="rail-gezia" aria-expanded="true" aria-controls="rail" title="Ocultar / mostrar las herramientas (L)" aria-label="Ocultar las herramientas" data-t-title="tresnakTit"><span aria-hidden="true">‹</span></button>
+  <aside id="rail" aria-label="Herramientas" data-t-aria="tresnak">
+    <label class="lbl" for="bilatu" data-t="buscar">Buscar</label>
+    <input id="bilatu" type="search" list="udalerriak" placeholder="Municipio…" data-t-ph="municipioPh" autocomplete="off">
+    <datalist id="udalerriak"></datalist>
+    <div class="lbl" data-t="capa">Capa del mapa</div>
+    <div id="moduak" role="group" aria-label="Capa del mapa" data-t-aria="capa">
+      <button type="button" class="mode" data-modua="irabazlea" aria-pressed="true"><span class="sw"></span><span data-t="irabazlea">Ganador</span><kbd>W</kbd></button>
+      <button type="button" class="mode" data-modua="lehia" aria-pressed="false"><span class="sw"></span><span data-t="lehia">Zonas reñidas</span><kbd>M</kbd></button>
+      <button type="button" class="mode" data-modua="part" aria-pressed="false"><span class="sw"></span><span data-t="part">Participación</span><kbd>T</kbd></button>
+      <button type="button" class="mode" data-modua="blokeak" aria-pressed="false"><span class="sw"></span><span data-t="blokeak">Bloques</span><kbd>B</kbd></button>
+    </div>
+    <label class="lbl" for="maila" data-t="nivel">Nivel</label>
+    <select id="maila" class="sel">
+      <option value="auto" data-maila="auto">Automático (según el zoom)</option>
+      <option value="nazioa" data-maila="nazioa">Nación</option>
+      <option value="autonomia" data-maila="autonomia">Comunidad</option>
+      <option value="probintzia" data-maila="probintzia">Provincia</option>
+      <option value="udalerria" data-maila="udalerria">Municipio</option>
+      <option value="sekzioa" data-maila="sekzioa">Sección</option>
+    </select>
+    <div class="lbl" data-t="ikuspegia">Vista</div>
+    <div class="bikotea">
+      <button type="button" id="penintsula" class="mode" data-t="peninsula">Península</button>
+      <button type="button" id="kanariak" class="mode" data-t="canarias">Canarias</button>
+    </div>
+  </aside>
+  <div id="legenda"></div>
+  <aside id="panela" aria-label="Panel" data-t-aria="panela">
+    <button type="button" id="heldulekua" aria-label="Abrir / cerrar el panel" aria-expanded="false" aria-controls="edukia" data-t-aria="panelaAria"><span></span></button>
+    <div id="fitxak" role="tablist" aria-label="Panel" data-t-aria="panela">
+      <button type="button" role="tab" data-fitxa="emaitzak" aria-selected="true" data-t="resultadosTab">Resultados</button>
+      <button type="button" role="tab" data-fitxa="eserlekuak" aria-selected="false" data-t="escanos">Escaños</button>
+      <button type="button" role="tab" data-fitxa="bilakaera" aria-selected="false" data-t="bilakaera">Evolución</button>
+    </div>
+    <div id="edukia" role="tabpanel" aria-live="polite"></div>
+  </aside>
+  <div id="denboralerroa" role="group" aria-label="Línea de tiempo" data-t-aria="denboraLerroa">
+    <button type="button" id="dlplay" aria-label="Reproducir" title="Reproducir (P)" data-t-aria="erreproduzitu" data-t-title="erreproduzituTit">▶</button>
+    <div class="dl-erdia"><div class="dl-goia"><span class="dl-data"></span><span class="dl-osaera" data-t="osaera">Elecciones generales · Congreso de los Diputados</span></div><div class="dl-pista"></div></div>
+    <button type="button" class="dl-azkena ibtn" title="Últimas elecciones" data-t-title="azkenaTit" data-t="azkena">Última</button>
+  </div>
+  <section id="laguntza" role="dialog" aria-modal="false" aria-labelledby="laguntzaIzenb" hidden>
+    <h2 id="laguntzaIzenb" data-t="lasterbideak">Atajos de teclado</h2>
+    <button type="button" class="itxi" id="laguntzaItxi" aria-label="Cerrar" data-t-aria="cerrar">×</button>
+    <dl>
+      <dt><kbd>Q</kbd><kbd>E</kbd></dt><dd data-t="lagQE">Elección anterior / siguiente</dd>
+      <dt><kbd>P</kbd></dt><dd data-t="lagP">Recorrer las elecciones / parar</dd>
+      <dt><kbd>W</kbd><kbd>M</kbd><kbd>T</kbd><kbd>B</kbd></dt><dd data-t="lagWMT">Ganador, escaños reñidos, participación, bloques</dd>
+      <dt><kbd>K</kbd></dt><dd data-t="lagK">Resultados → escaños → evolución (en el panel)</dd>
+      <dt><kbd>S</kbd></dt><dd data-t="lagS">Imagen de satélite sí / no</dd>
+      <dt><kbd>L</kbd></dt><dd data-t="lagL">Ocultar / mostrar las herramientas</dd>
+      <dt><kbd>0</kbd><kbd>C</kbd></dt><dd data-t="lag0C">Península, Canarias</dd>
+      <dt><kbd>/</kbd></dt><dd data-t="lagBilatu">Buscar un municipio</dd>
+      <dt><kbd>Esc</kbd></dt><dd data-t="lagEsc">Quitar la selección y cerrar las ventanas</dd>
+    </dl>
+  </section>
+  <div id="tip" role="tooltip"></div>
+  <div id="kargatzen" data-t="cargando">Cargando…</div>
+</div>
+<script type="module" src="app.js?v=ffbf8499ba9c"></script>
+</body>
+</html>

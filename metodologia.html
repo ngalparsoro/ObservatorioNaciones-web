@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at; connect-src 'self' https://tiles.maps.eox.at https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metodología · Observatorio Electoral de las Naciones</title>
+<meta name="description" content="Cómo se tratan los datos: naciones, votos, candidaturas, escaños, secciones censales y límites conocidos.">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="letrak.css?v=ffbf8499ba9c">
+<link rel="stylesheet" href="estiloa.css?v=ffbf8499ba9c">
+</head>
+<body>
+<div class="orria">
+  <header class="orri-goiburua">
+    <details class="nabigazioa">
+      <summary class="ibtn" aria-label="Menú" title="Menú">☰</summary>
+      <nav class="nab-menua" aria-label="Menú">
+        <a href="./#l=es">Mapa</a>
+        <a href="metodologia.html" aria-current="page">Metodología</a><a href="iturriak.html">Fuentes</a><a href="guri-buruz.html">Quiénes somos</a><a href="lege-oharra.html">Aviso legal y privacidad</a>
+      </nav>
+    </details>
+    <a class="logoa" href="./#l=es">Observatorio Electoral de las Naciones <span class="beta">beta</span></a>
+    <details class="hizkuntzak">
+      <summary class="ibtn" aria-label="Idioma" title="Idioma">ES</summary>
+      <div class="hizk-menua"><a href="metodologia.html" lang="es" aria-current="true"><b>ES</b> Español</a><a href="metodologia.ca.html" lang="ca"><b>CA</b> Català</a><a href="metodologia.gl.html" lang="gl"><b>GL</b> Galego</a><a href="metodologia.eu.html" lang="eu"><b>EU</b> Euskara</a><a href="metodologia.en.html" lang="en"><b>EN</b> English</a></div>
+    </details>
+  </header>
+  <main class="orri-edukia">
+<section>
+  <h2>Metodología</h2>
+  <p>Cómo se pasa de los resultados oficiales por mesa electoral al mapa: qué se cuenta, cómo se agrupa el territorio en naciones
+  y qué límites tienen los datos.</p>
+</section>
+<section>
+  <h2>Elecciones</h2>
+  <p>Elecciones generales al Congreso de los Diputados: noviembre de 2011, diciembre de 2015, junio de 2016, abril y noviembre de
+  2019 y julio de 2023. El Senado no está incluido.</p>
+</section>
+<section>
+  <h2>Naciones</h2>
+  <p>El mapa lee el Estado como un Estado de naciones. Cada comunidad autónoma pertenece a una nación; las naciones de varias
+  comunidades tienen partes interiores, como EAE y Nafarroa en Hego Euskal Herria.</p>
+  <div class="orri-taula"><table class="estua"><thead><tr><th>Nación</th><th>Partes</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Sus provincias</td></tr><tr><th>Andalucía</th><td>Sus provincias</td></tr><tr><th>Canarias</th><td>Sus provincias</td></tr><tr><th>Aragón</th><td>Sus provincias</td></tr><tr><th>Resto del Estado</th><td>Por comunidades autónomas: Asturias, Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
+  <p>Solo cuenta el territorio donde se vota al Congreso: de Euskal Herria, Hego Euskal Herria (Iparralde vota en Francia), y de los
+  Països Catalans, las tres comunidades del Estado (la Franja de Ponent queda dentro de Aragón). Asturias, Cantabria y León van
+  en el resto del Estado. Es una tabla editorial, que puede revisarse.</p>
+</section>
+<section>
+  <h2>Qué se cuenta</h2>
+  <ul class="zerrenda">
+    <li><b>Votantes</b> = votos a candidaturas + votos en blanco + votos nulos. <b>Participación</b> = votantes / censo.</li>
+    <li>Los porcentajes de cada candidatura se calculan sobre los <b>votos a candidaturas</b>, sin blancos ni nulos. Por eso no
+    coinciden con el porcentaje oficial, que se calcula sobre los votos válidos (con los blancos).</li>
+    <li>El <b>voto exterior</b> (CERA, residentes en el extranjero) no está en ninguna sección ni municipio y queda fuera, también de
+    los totales de provincia, comunidad, nación y Estado.</li>
+    <li>Todo se suma desde la mesa electoral: sección, municipio, provincia, comunidad, nación y Estado.</li>
+    <li>Los <b>municipios fusionados</b> se muestran como son hoy en todas las elecciones: Oza-Cesuras (Oza dos Ríos y Cesuras,
+    2013) y Cerdedo-Cotobade (Cerdedo y Cotobade, 2016).</li>
+  </ul>
+</section>
+<section>
+  <h2>Candidaturas</h2>
+  <p>Hasta la comunidad autónoma, cada candidatura aparece con las siglas con que se presentó allí (PSC, PSdeG-PSOE, EH Bildu…).
+  En las naciones de varias comunidades y en el Estado se agrupan por la candidatura estatal a la que pertenecen, según el propio
+  Ministerio: PSC, PSdeG-PSOE y PSOE suman como PSOE.</p>
+  <p>Para las variaciones (▲▼) respecto a las elecciones anteriores, una misma fuerza se reconoce aunque cambie de siglas
+  (ERC-SOBIRANISTES y ERC, por ejemplo). Los colores de los partidos son los de una tabla propia.</p>
+</section>
+<section>
+  <h2>Capas del mapa</h2>
+  <ul class="zerrenda">
+    <li><b>Ganador:</b> la candidatura más votada en cada zona.</li>
+    <li><b>Escaños reñidos</b> (solo por provincias, que son las circunscripciones): votos que le faltaron a la candidatura siguiente para
+    quitar el último escaño a quien se lo llevó: 1.000 o menos, 1.000–5.000, 5.000–10.000, 10.000–20.000 y más de 20.000.</li>
+    <li><b>Participación:</b> 58 % o menos, 58–64, 64–70, 70–76 y más del 76 %.</li>
+    <li><b>Bloques</b>: investidura frente a derecha, en todos los niveles; en las provincias, por el último escaño. Ver «Bloques» más abajo.</li>
+  </ul>
+</section>
+<section>
+  <h2>Escaños</h2>
+  <p>Los escaños son los oficiales de cada circunscripción (la provincia; Ceuta y Melilla, uno cada una), publicados por el
+  Ministerio del Interior. Los de una comunidad, una nación o el Estado son la suma de sus provincias; en total, 350. Los municipios y las secciones no tienen escaños propios: en ellos no se muestran.</p>
+  <p>Para el último escaño de cada provincia, el reparto se rehace con la ley D'Hondt: candidaturas con al menos el 3 % de
+  los votos válidos de la provincia (con los blancos) y, en un empate, el escaño para la que tenga más votos. Aquí sí se cuenta el
+  voto exterior (CERA), porque el reparto oficial lo cuenta. El resultado coincide con los escaños oficiales en todas las provincias
+  y elecciones. El margen es cuántos votos más necesitaba la candidatura con más opciones para quitarle el último escaño a quien se
+  lo llevó, con el resto de votos igual.</p>
+</section>
+<section>
+  <h2>Bloques</h2>
+  <p>La capa Bloques reparte las candidaturas en dos bloques, los de la investidura de 2023 (una tabla propia, que puede revisarse):</p>
+  <ul class="zerrenda">
+    <li><b>Bloque de investidura:</b> PSOE (con PSC, PSdeG-PSOE, PSE-EE…), SUMAR, EH Bildu, EAJ-PNV, ERC, Junts, BNG y Coalición Canaria.</li>
+    <li><b>Bloque de la derecha:</b> PP, VOX y UPN.</li>
+    <li><b>Antecesores</b>, en las elecciones anteriores a 2023: los de SUMAR (Podemos y sus confluencias, IU, EQUO, Más País,
+    Compromís y MÉS per Mallorca), los de Junts (CiU, DL y CDC), Amaiur (EH Bildu), Nós (BNG) y Navarra Suma (UPN).</li>
+    <li><b>Otros:</b> el resto, como Ciudadanos, UPyD, Geroa Bai, la CUP, el PRC o Teruel Existe.</li>
+  </ul>
+  <p>En las provincias, que son las circunscripciones, el mapa pinta el bloque que se llevó el último escaño, más intenso cuantos más votos le faltaron al otro bloque para quitárselo (los de su candidatura con más opciones): 5.000 o menos,
+  5.000–10.000, 10.000–20.000 y más de 20.000; en gris, si fue para una candidatura de fuera de los dos bloques. En los demás niveles
+  (nación, comunidad, municipio y sección), el bloque con más votos, más intenso cuanto mayor es su ventaja sobre el otro: 5 puntos o
+  menos, 5–10, 10–20 y más de 20. En la pestaña Escaños, los escaños de cada bloque; en Resultados, sus votos.</p>
+</section>
+<section>
+  <h2>Evolución</h2>
+  <p>La pestaña Evolución enseña cómo ha votado cada zona en las seis elecciones, del Estado al municipio (las secciones cambian
+  de un año a otro y no se pueden comparar). Cada línea es un partido, aunque cambie de siglas (con el nombre de la última vez);
+  salen los que han llegado al 4 % alguna vez, como mucho siete. Si en una elección se presentan dos candidaturas del mismo
+  partido, cuenta la más votada. Con la capa Bloques, una línea por bloque.</p>
+</section>
+<section>
+  <h2>Territorio y secciones censales</h2>
+  <ul class="zerrenda">
+    <li><b>Secciones censales:</b> el INE publica el seccionado a 1 de enero de cada año. Cada elección se dibuja con el año que
+    mejor encaja con las secciones de sus mesas: noviembre de 2011 → 2012; diciembre de 2015 → 2015; junio de 2016 → 2016; abril de 2019 → 2019; noviembre de 2019 → 2020; julio de 2023 → 2024.</li>
+    <li><b>Municipios:</b> contornos del INE de 2025. Provincias, comunidades y naciones salen de unir sus municipios.</li>
+    <li>Los contornos se simplifican para que la web cargue rápido, sin abrir huecos entre zonas vecinas.</li>
+    <li>Los terrenos comunales que no pertenecen a ningún municipio (como las Bardenas Reales) no tienen votantes y salen en gris.</li>
+  </ul>
+</section>
+<section>
+  <h2>Nombres de lugar</h2>
+  <p>Los nombres de municipios, provincias y comunidades van en la lengua del lugar, en todos los idiomas de la web: los del INE
+  (en los municipios bilingües, la forma local) y, en Hego Euskal Herria, los nombres oficiales en euskera. Las siglas de las
+  candidaturas son las del Ministerio.</p>
+</section>
+<section>
+  <h2>Límites conocidos</h2>
+  <ul class="zerrenda">
+    <li>Sin voto exterior (CERA), salvo para el último escaño: los totales son algo menores que los oficiales.</li>
+    <li>Porcentajes sobre votos a candidaturas, no sobre votos válidos.</li>
+    <li>En 2015, en las mesas de unos 2.200 municipios, los ficheros del Ministerio no cuadran entre sí: el total de votos a
+    candidaturas no coincide con la suma de los votos de cada candidatura (43.289 votos en todo el Estado, el 0,17 %). Los
+    porcentajes se calculan sobre la suma de las candidaturas (los votos que reparten los escaños) y la participación, con los
+    totales de las mesas.</li>
+    <li>El seccionado cambia de un año a otro: una misma sección puede no ser comparable entre elecciones. Por eso las secciones
+    no muestran variaciones.</li>
+    <li>Las variaciones (▲▼) comparan siempre con las elecciones generales anteriores.</li>
+  </ul>
+</section>
+<section>
+  <h2>Comprobaciones</h2>
+  <p>Unas pruebas automáticas comprueban, en cada versión, que el Congreso suma 350 escaños, que coinciden con los oficiales de
+  2023 y que los votos de cada nivel suman lo mismo que los del nivel inferior.</p>
+</section>
+  </main>
+</div>
+</body>
+</html>
