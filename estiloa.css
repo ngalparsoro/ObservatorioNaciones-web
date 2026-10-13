@@ -131,6 +131,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 /* ---- Leyenda (abajo a la izquierda) ---- */
 #legenda { position: absolute; left: 24px; bottom: 20px; width: var(--rail-w); z-index: 900; background: var(--panel); border: 1px solid var(--line); padding: 10px 12px; }
 #legenda .lbl { margin-top: 0; }
+#legenda .lbl .maila { color: var(--ink); white-space: nowrap; }  /* el nivel al que se refiere la leyenda */
 .legend { display: grid; gap: 4px; }
 .legend .li { display: flex; gap: 8px; align-items: center; font: 400 12px var(--f-mono); color: var(--ink); }
 .legend .zk { margin-left: auto; color: var(--dim); font-size: 11px; }

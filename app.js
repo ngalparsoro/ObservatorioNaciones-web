@@ -856,7 +856,9 @@ function legenda() {
   if (state.modua === "irabazlea") {
     const g = [...(irabazleakMailaka[mailaAktiboa()] || new Map()).values()].sort((a, b) => b.n - a.n).slice(0, 9);
     const izen = (x) => [...x.izenak].sort((a, b) => b[1] - a[1])[0][0];
-    $("#legenda").innerHTML = `<div class="lbl">${T.irabazleaLeg}</div><div class="legend">${g.map((x) => `<div class="li">${sq(x.kol)}${esc(izen(x))} <span class="zk">${fmt(x.n)}</span></div>`).join("")}</div>`;
+    // el nivel en el título (no en el subtítulo, que en el móvil no se ve): «Primera fuerza por nivel: provincia»
+    const lbl = `${T.irabazleaLeg}: <span class="maila">${T.mailak[mailaAktiboa()].toLocaleLowerCase(HIZK)}</span>`;
+    $("#legenda").innerHTML = `<div class="lbl">${lbl}</div><div class="legend">${g.map((x) => `<div class="li">${sq(x.kol)}${esc(izen(x))} <span class="zk">${fmt(x.n)}</span></div>`).join("")}</div>`;
     return;
   }
   const [bins, izen, lab] = state.modua === "part"

@@ -9,7 +9,7 @@ export const HIZKUNTZAK = { es: "Español", ca: "Català", gl: "Galego", eu: "Eu
 export const TESTUAK = {
   es: {
     izenburua: ["Observatorio Electoral", "de las Naciones"], irabazlea: "Ganador", part: "Participación", lehia: "Escaños reñidos", resultadosTab: "Resultados",
-    escanos: "Escaños", escanosN: "escaños", irabazleaLeg: "Primera fuerza en cada zona",
+    escanos: "Escaños", escanosN: "escaños", irabazleaLeg: "Primera fuerza por nivel",
     porNacion: "Escaños por nación", sinEscanos: "Sin escaños en este ámbito.", mayoria: "Mayoría absoluta: 176", censo: "Censo",
     votantes: "Votantes", vc: "votos a candidaturas", estado: "Estado", naciones: "Naciones", nacion: "Nación", primera: "1.ª fuerza",
     margen: "Margen", margenKpi: "Margen 1.ª–2.ª",
@@ -50,7 +50,7 @@ export const TESTUAK = {
   },
   ca: {
     izenburua: ["Observatori Electoral", "de les Nacions"], irabazlea: "Guanyador", part: "Participació", lehia: "Escons disputats", resultadosTab: "Resultats",
-    escanos: "Escons", escanosN: "escons", irabazleaLeg: "Primera força a cada zona",
+    escanos: "Escons", escanosN: "escons", irabazleaLeg: "Primera força per nivell",
     porNacion: "Escons per nació", sinEscanos: "Sense escons en aquest àmbit.", mayoria: "Majoria absoluta: 176", censo: "Cens",
     votantes: "Votants", vc: "vots a candidatures", estado: "Estat", naciones: "Nacions", nacion: "Nació", primera: "1a força",
     margen: "Marge", margenKpi: "Marge 1a–2a",
@@ -91,7 +91,7 @@ export const TESTUAK = {
   },
   gl: {
     izenburua: ["Observatorio Electoral", "das Nacións"], irabazlea: "Gañador", part: "Participación", lehia: "Escanos disputados", resultadosTab: "Resultados",
-    escanos: "Escanos", escanosN: "escanos", irabazleaLeg: "Primeira forza en cada zona",
+    escanos: "Escanos", escanosN: "escanos", irabazleaLeg: "Primeira forza por nivel",
     porNacion: "Escanos por nación", sinEscanos: "Sen escanos neste ámbito.", mayoria: "Maioría absoluta: 176", censo: "Censo",
     votantes: "Votantes", vc: "votos a candidaturas", estado: "Estado", naciones: "Nacións", nacion: "Nación", primera: "1.ª forza",
     margen: "Marxe", margenKpi: "Marxe 1.ª–2.ª",
@@ -132,7 +132,7 @@ export const TESTUAK = {
   },
   eu: {
     izenburua: ["Nazioen", "Hautes Behatokia"], irabazlea: "Irabazlea", part: "Parte-hartzea", lehia: "Lehian dauden eserlekuak", resultadosTab: "Emaitzak",
-    escanos: "Eserlekuak", escanosN: "eserleku", irabazleaLeg: "Lehen indarra eremu bakoitzean",
+    escanos: "Eserlekuak", escanosN: "eserleku", irabazleaLeg: "Lehen indarra eremuka",
     porNacion: "Eserlekuak naziotan", sinEscanos: "Eremu honek ez du eserlekurik.", mayoria: "Gehiengo osoa: 176", censo: "Errolda",
     votantes: "Boto-emaileak", vc: "hautagaitzen boto", estado: "Estatua", naciones: "Nazioak", nacion: "Nazioa", primera: "1. indarra",
     margen: "Aldea", margenKpi: "Aldea 1.–2.",
@@ -173,7 +173,7 @@ export const TESTUAK = {
   },
   en: {
     izenburua: ["Nations Electoral", "Observatory"], irabazlea: "Winner", part: "Turnout", lehia: "Close seats", resultadosTab: "Results",
-    escanos: "Seats", escanosN: "seats", irabazleaLeg: "Leading party in each area",
+    escanos: "Seats", escanosN: "seats", irabazleaLeg: "Leading party by level",
     porNacion: "Seats by nation", sinEscanos: "No seats at this level.", mayoria: "Absolute majority: 176", censo: "Electorate",
     votantes: "Voters", vc: "votes for candidates", estado: "State", naciones: "Nations", nacion: "Nation", primera: "Leader",
     margen: "Margin", margenKpi: "Margin 1st–2nd",
