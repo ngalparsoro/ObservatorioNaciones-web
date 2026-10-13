@@ -20,17 +20,17 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="vendor/maplibre-gl.css">
-<link rel="stylesheet" href="letrak.css?v=ab948bcf5980">
-<link rel="stylesheet" href="estiloa.css?v=ab948bcf5980">
+<link rel="stylesheet" href="letrak.css?v=e0c619a615b2">
+<link rel="stylesheet" href="estiloa.css?v=e0c619a615b2">
 <link rel="preload" href="fonts/saira-semi-condensed-600-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="modulepreload" href="vendor/maplibre-gl.mjs">
 <link rel="modulepreload" href="vendor/maplibre-gl-shared.mjs">
-<link rel="modulepreload" href="testuak.js?v=ab948bcf5980">
-<link rel="modulepreload" href="hemizikloa.js?v=ab948bcf5980">
-<link rel="preload" href="data/index.json?v=ab948bcf5980" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="geo/nazioa.json?v=ab948bcf5980" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="geo/izenak.json?v=ab948bcf5980" as="fetch" crossorigin="anonymous">
+<link rel="modulepreload" href="testuak.js?v=e0c619a615b2">
+<link rel="modulepreload" href="hemizikloa.js?v=e0c619a615b2">
+<link rel="preload" href="data/index.json?v=e0c619a615b2" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/nazioa.json?v=e0c619a615b2" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/izenak.json?v=e0c619a615b2" as="fetch" crossorigin="anonymous">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -72,6 +72,7 @@
       <button type="button" class="mode" data-modua="lehia" aria-pressed="false"><span class="sw"></span><span data-t="lehia">Zonas reñidas</span><kbd>M</kbd></button>
       <button type="button" class="mode" data-modua="part" aria-pressed="false"><span class="sw"></span><span data-t="part">Participación</span><kbd>T</kbd></button>
       <button type="button" class="mode" data-modua="blokeak" aria-pressed="false"><span class="sw"></span><span data-t="blokeak">Bloques</span><kbd>B</kbd></button>
+      <button type="button" class="mode" data-modua="tamaina" aria-pressed="false"><span class="sw"></span><span data-t="tamaina">Circunscripciones</span><kbd>D</kbd></button>
     </div>
     <label class="lbl" for="maila" data-t="nivel">Nivel</label>
     <select id="maila" class="sel">
@@ -109,7 +110,7 @@
     <dl>
       <dt><kbd>Q</kbd><kbd>E</kbd></dt><dd data-t="lagQE">Elección anterior / siguiente</dd>
       <dt><kbd>P</kbd></dt><dd data-t="lagP">Recorrer las elecciones / parar</dd>
-      <dt><kbd>W</kbd><kbd>M</kbd><kbd>T</kbd><kbd>B</kbd></dt><dd data-t="lagWMT">Ganador, escaños reñidos, participación, bloques</dd>
+      <dt><kbd>W</kbd><kbd>M</kbd><kbd>T</kbd><kbd>B</kbd><kbd>D</kbd></dt><dd data-t="lagWMT">Ganador, escaños reñidos, participación, bloques, tamaño de circunscripción</dd>
       <dt><kbd>K</kbd></dt><dd data-t="lagK">Resultados → escaños → evolución (en el panel)</dd>
       <dt><kbd>S</kbd></dt><dd data-t="lagS">Imagen de satélite sí / no</dd>
       <dt><kbd>L</kbd></dt><dd data-t="lagL">Ocultar / mostrar las herramientas</dd>
@@ -121,6 +122,6 @@
   <div id="tip" role="tooltip"></div>
   <div id="kargatzen" data-t="cargando">Cargando…</div>
 </div>
-<script type="module" src="app.js?v=ab948bcf5980"></script>
+<script type="module" src="app.js?v=e0c619a615b2"></script>
 </body>
 </html>

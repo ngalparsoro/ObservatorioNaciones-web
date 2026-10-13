@@ -237,6 +237,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .bil-graf .bil-ax { font: 9px var(--f-mono); fill: var(--dim); }
 .bil-graf .bil-unea { stroke: var(--gold); stroke-width: 1; stroke-dasharray: 3 3; opacity: .8; }
 .bil-graf .bil-l { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.bil-graf .bil-l.marra { stroke-dasharray: 4 3; stroke-width: 1.5; }
 .bil-graf .bil-p { stroke: var(--panel-solid); stroke-width: 1.2; }
 .bil-leg { display: grid; grid-template-columns: 12px 1fr auto 64px; gap: 8px; align-items: center; font-size: 13px; padding: 2px 0; }
 .bil-leg .num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; }
@@ -381,4 +382,22 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 @media (max-width: 700px) and (orientation: portrait) {
   .bideoa .bideoa-horizontal { display: none; }
   .bideoa .bideoa-vertical { display: block; }
+}
+
+/* ---- Circunscripciones por tamaño: la lista de provincias de un grupo, desplegable ---- */
+.tamaina-prob { margin: 4px 0 12px; font-size: 13px; }
+.tamaina-prob summary { cursor: pointer; color: var(--muted); }
+.tamaina-prob div { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; }
+.tamaina-prob button { background: none; border: 0; padding: 0; color: var(--ink-hi); cursor: pointer; font: inherit; }
+.tamaina-prob button:hover { color: var(--gold-2); }
+.tamaina-prob .zk { color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
+
+/* Móvil bajo (iPhone SE, 568 px): herramientas más compactas para que se vean las cinco capas sin desplazar */
+@media (max-width: 900px) and (max-height: 700px) {
+  #rail { padding: 8px 10px; gap: 2px; }
+  #rail .lbl { margin: 6px 0 3px; }
+  #rail .lbl:first-child { margin-top: 0; }
+  #bilatu { padding: 4px 10px; }
+  #moduak { gap: 3px; }
+  #rail .mode { padding-top: 5px; padding-bottom: 5px; }
 }

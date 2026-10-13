@@ -87,6 +87,10 @@ const BLOKE_PUNTUAK = [5, 10, 20, Infinity];          // demás niveles: ventaja
 // De claro a intenso: más intenso cuanto más ventaja (en provincias, cuantos más votos le habrían hecho falta al otro bloque)
 const BLOKE_KOLOREAK = { INB: ["#FFA3AE", "#FF8090", "#F1516D", "#D23857"], ESK: ["#A9C5FF", "#8CACFF", "#6A8BF0", "#5473D2"], "": ["#8A8F94"] };
 const BLOKE_KOLOREA = { INB: "#F1516D", ESK: "#6A8BF0", "": "#8A8F94" };  // el de cada bloque en barras y listas
+// «Circunscripciones»: las provincias por los escaños que eligen en cada elección (prozesatu.py: pequeñas 1-5, medianas 6-9,
+// grandes 10 o más). Un solo tono, de menos a más luz sobre el fondo oscuro (no dorado: es el color de las fronteras)
+const TAMAINAK = ["txikiak", "ertainak", "handiak"];
+const TAMAINA_KOLOREA = { txikiak: "#00818F", ertainak: "#00B8B0", handiak: "#7DF0D8" };
 const ARGIBIDE_MARJINA = 10;  // en el puntero (Resultados), solo quien está a 10 puntos o menos de la primera fuerza
 const MAILAK = ["nazioa", "autonomia", "probintzia", "udalerria", "sekzioa"];
 const ZOOMAK = { nazioa: [0, 5.9], autonomia: [5.9, 6.8], probintzia: [6.8, 8], udalerria: [8, 10.8], sekzioa: [10.8, 24] };
@@ -115,13 +119,13 @@ const sekUdalerria = (sek) => INDEX.batuak[sek.slice(0, 5)] || sek.slice(0, 5); 
 const URL0 = new URLSearchParams(location.hash.slice(1));
 const state = {
   k: KK.includes(URL0.get("k")) ? URL0.get("k") : KK[KK.length - 1],
-  modua: ["part", "lehia", "blokeak"].includes(URL0.get("m")) ? URL0.get("m") : "irabazlea",
+  modua: ["part", "lehia", "blokeak", "tamaina"].includes(URL0.get("m")) ? URL0.get("m") : "irabazlea",
   fitxa: ["eserlekuak", "bilakaera"].includes(URL0.get("f")) ? URL0.get("f") : "emaitzak",  // pestaña del panel
   satelitea: URL0.get("sat") !== "0",
   maila: "auto",
   hautatua: null,  // {maila, id}
 };
-if (URL0.get("s")) { const [m, id] = URL0.get("s").split(":"); if (MAILAK.includes(m) && id) state.hautatua = { maila: m, id }; }
+if (URL0.get("s")) { const [m, id] = URL0.get("s").split(":"); if ((MAILAK.includes(m) || (m === "tamaina" && TAMAINAK.includes(id))) && id) state.hautatua = { maila: m, id }; }
 function urlaIdatzi() {
   const q = new URLSearchParams({ k: state.k, m: state.modua });
   if (state.hautatua) q.set("s", `${state.hautatua.maila}:${state.hautatua.id}`);
@@ -136,8 +140,8 @@ function urlaIdatzi() {
 // Cada fichero se pide una vez (se guarda la promesa); si falla (red cortada), se olvida para volver a pedirlo
 const DATA = {};
 async function datuak(k) {
-  if (!DATA[k]) DATA[k] = Promise.all(["estatua", "nazioa", "autonomia", "probintzia", "udalerria", "eserlekuak"].map((m) => load(`data/${k}/${m}.json`)))
-    .then(([estatua, nazioa, autonomia, probintzia, udalerria, eserlekuak]) => ({ estatua, nazioa, autonomia, probintzia, udalerria, eserlekuak, sek: {} }))
+  if (!DATA[k]) DATA[k] = Promise.all(["estatua", "nazioa", "autonomia", "probintzia", "tamaina", "udalerria", "eserlekuak"].map((m) => load(`data/${k}/${m}.json`)))
+    .then(([estatua, nazioa, autonomia, probintzia, tamaina, udalerria, eserlekuak]) => ({ estatua, nazioa, autonomia, probintzia, tamaina, udalerria, eserlekuak, sek: {} }))
     .catch((e) => { delete DATA[k]; throw e; });
   return DATA[k];
 }
@@ -174,6 +178,10 @@ function eserlekuak(k, maila, id) {
   const e = d.eserlekuak, r = e[maila] && e[maila][id];
   return r ? r.map(([i, n]) => [e.s[i], n, e.k[i], e.f[i], (e.b || [])[i] || ""]) : null;
 }
+// Tamaño de una circunscripción en una elección (txikiak, ertainak, handiak), sus escaños y las provincias de cada grupo
+const tamainaZein = (k, cpro) => { const d = DATA_SYNC[k]; return (d && d.eserlekuak.tamainak && d.eserlekuak.tamainak[cpro]) || null; };
+const probEserlekuak = (k, cpro) => (eserlekuak(k, "probintzia", cpro) || []).reduce((s, x) => s + x[1], 0);
+const tamainaProbintziak = (k, t) => { const d = DATA_SYNC[k]; return d ? Object.keys(d.eserlekuak.tamainak || {}).filter((p) => d.eserlekuak.tamainak[p] === t) : []; };
 // Escaños de cada bloque en un ámbito: {INB, ESK, "": otros}
 function blokeEserlekuak(k, maila, id) {
   const e = eserlekuak(k, maila, id); if (!e) return null;
@@ -210,6 +218,7 @@ function blokeZerrenda(k, ak, maila, id) {
 // ---- nombres y jerarquía ----
 function izena(maila, id) {
   if (maila === "estatua") return T.estado;
+  if (maila === "tamaina") return T.tamainaIzenak[id] || id;
   if (maila === "sekzioa") { const u = IZENAK.udalerria[sekUdalerria(id)]; return `${u ? u[0] : sekUdalerria(id)} · ${id.slice(5, 7)}-${id.slice(7)}`; }
   const r = IZENAK[maila] && IZENAK[maila][id]; return r ? r[0] : id;
 }
@@ -299,6 +308,7 @@ async function geoKargatu(maila, probak) {
 // ---- color de cada zona (feature-state: no se rehace la geometría al cambiar de elección o de capa) ----
 function kolorea(r, maila, id) {
   if (state.modua === "lehia") { const z = maila === "probintzia" && azkenEserlekua(state.k, id); return z ? bin(z.falta, LEHIA_BINS) : NODATA; }
+  if (state.modua === "tamaina") { const t = maila === "probintzia" && tamainaZein(state.k, id); return t ? TAMAINA_KOLOREA[t] : NODATA; }
   if (state.modua === "blokeak") {
     if (maila === "probintzia") {  // la circunscripción: el bloque que se llevó el último escaño
       const z = azkenEserlekua(state.k, id); if (!z) return NODATA;
@@ -329,8 +339,9 @@ function margotu(maila) {
   }
   legenda();
 }
-// «Escaños reñidos» solo tiene sentido por circunscripción: con esa capa, siempre provincias («Bloques», en todos)
-const BARRUTIKA = ["lehia"];
+// «Escaños reñidos» y «Circunscripciones» solo tienen sentido por circunscripción: con ellas, siempre provincias
+// («Bloques», en todos los niveles)
+const BARRUTIKA = ["lehia", "tamaina"];
 const mailaAktiboa = () => (BARRUTIKA.includes(state.modua) ? "probintzia" : state.maila !== "auto" ? state.maila : MAILAK.find((m) => map.getZoom() < ZOOMAK[m][1]));
 let azkenMaila = null;
 async function eguneratu() {
@@ -346,7 +357,7 @@ async function eguneratu() {
     if (m === "sekzioa") await Promise.all(probak.map((p) => sekzioDatuak(state.k, p)));
     if (await geoKargatu(m, probak)) margotuta[m] = null;
   }
-  margotu(m);
+  margotu(m); nabarmendu();  // el grupo elegido de «Circunscripciones» puede cambiar con la elección (Jaén, Badajoz)
   if (mailaBerria) legenda();  // la de este nivel (Bloques: último escaño en provincias, votos en el resto)
   etiketak(); urlaIdatzi();
   $("#kargatzen").hidden = true;
@@ -433,6 +444,9 @@ function argibidea(maila, id) {
   return `<div class="tt-n">${esc(izena(maila, id))}</div>${argibideEsaldia(maila, id)}${zenbakiak}`;
 }
 function argibideEsaldia(maila, id) {
+  if (state.modua === "tamaina" && maila === "probintzia") {  // el tamaño de la circunscripción
+    const t = tamainaZein(state.k, id); return t ? `<div class="tt-azkena">${T.tamainaTxt(T.tamainaIzenak[t], probEserlekuak(state.k, id))}</div>` : "";
+  }
   if (["lehia", "blokeak"].includes(state.modua) && maila === "probintzia") {  // el último escaño
     const z = azkenEserlekua(state.k, id); return z ? `<div class="tt-azkena">${azkenTestua(z, state.modua !== "blokeak")}</div>` : "";
   }
@@ -484,7 +498,11 @@ for (const m of MAILAK) {
     tip.style.left = x + "px"; tip.style.top = y + "px";
   });
   map.on("mouseleave", m + "-fill", () => { if (hov) map.setFeatureState(hov, { hover: false }); hov = null; tip.classList.remove("on"); });
-  map.on("click", m + "-fill", (e) => { const f = e.features && e.features[0]; if (f) hautatu({ maila: m, id: String(f.id) }); });
+  map.on("click", m + "-fill", (e) => {  // con «Circunscripciones», la provincia lleva a su grupo
+    const f = e.features && e.features[0]; if (!f) return;
+    const t = state.modua === "tamaina" && m === "probintzia" && tamainaZein(state.k, String(f.id));
+    hautatu(t ? { maila: "tamaina", id: t } : { maila: m, id: String(f.id) });
+  });
 }
 
 // ---- selección y panel ----
@@ -492,11 +510,16 @@ for (const m of MAILAK) {
 // elección, capa, zona resaltada) y lo pesado (panel, colores del mapa) va en el fotograma siguiente. arnasa deja pintar;
 // el setTimeout de reserva, por si la pestaña está en segundo plano (sin requestAnimationFrame)
 const arnasa = () => new Promise((r) => { requestAnimationFrame(() => setTimeout(r, 0)); setTimeout(r, 100); });
-let selRef = null;
+let selRefs = [];
+function nabarmendu() {  // la zona elegida, con borde; un grupo de «Circunscripciones», todas sus provincias
+  for (const r of selRefs) map.setFeatureState(r, { sel: false });
+  const h = state.hautatua;
+  selRefs = !h ? [] : h.maila === "tamaina" ? tamainaProbintziak(state.k, h.id).map((p) => ({ source: "probintzia", id: p }))
+    : map.getSource(h.maila) ? [{ source: h.maila, id: h.id }] : [];
+  for (const r of selRefs) map.setFeatureState(r, { sel: true });
+}
 function hautatu(h, joan = false) {
-  if (selRef) map.setFeatureState(selRef, { sel: false });
-  state.hautatua = h; selRef = null;
-  if (h && map.getSource(h.maila)) { selRef = { source: h.maila, id: h.id }; map.setFeatureState(selRef, { sel: true }); }
+  state.hautatua = h; nabarmendu();
   if (h && joan) { const r = IZENAK[h.maila] && IZENAK[h.maila][h.id]; if (r) map.flyTo({ center: [r[1], r[2]], zoom: Math.max(map.getZoom(), { nazioa: 5.5, autonomia: 6.4, probintzia: 7.4, udalerria: 10, sekzioa: 12 }[h.maila]) }); }
   urlaIdatzi(); arnasa().then(panela);  // primero la zona resaltada, luego el panel
 }
@@ -529,14 +552,24 @@ function eserZerrenda(e, ea) {
   const aur = ea ? ea.reduce((m, [, n, , f]) => m.set(f, (m.get(f) || 0) + n), new Map()) : null;
   return e.map(([s, n, k, f]) => `<div class="row"><span class="nm">${sq(k)} ${esc(s)}</span><span class="num">${aldaketa(aur && n - (aur.get(f) || 0))}</span><span class="pc">${n}</span></div>`).join("");
 }
+// Debajo del Estado: las naciones o, con «Circunscripciones», los tres grupos por tamaño — [nivel, título, columna]
+const umeak = () => (state.modua === "tamaina" ? ["tamaina", T.tamainaLbl, T.tamainaZut] : ["nazioa", T.naciones, T.nacion]);
+// Un grupo de «Circunscripciones»: su tramo de escaños y sus provincias (de más a menos escaños; cada una lleva a la suya)
+function tamainaZatia(k, id) {
+  const probak = tamainaProbintziak(k, id).sort((a, b) => probEserlekuak(k, b) - probEserlekuak(k, a));
+  return `<details class="tamaina-prob"><summary>${T.probintziakN(probak.length)}</summary><div>${probak.map((p) =>
+    `<button type="button" data-hautatu="probintzia:${p}">${esc(izena("probintzia", p))} <span class="zk">${probEserlekuak(k, p)}</span></button>`).join("")}</div></details>`;
+}
 // Pestaña Escaños: el Congreso (Estado) o el ámbito elegido, con su hemiciclo, sus escaños y los de cada bloque
 function eserlekuOrria(k, ak, h) {
   if (!h) {  // Estado: Congreso entero y escaños de cada nación
     const e = eserlekuak(k, "estatua", "ES"); if (!e) return "";
-    const nazioak = Object.keys(IZENAK.nazioa).map((id) => [id, eserlekuak(k, "nazioa", id) || []]).sort((a, b) => b[1].reduce((s, x) => s + x[1], 0) - a[1].reduce((s, x) => s + x[1], 0));
+    const [um] = umeak(), guztiak = (x) => x.reduce((s, y) => s + y[1], 0);
+    const zonak = (um === "tamaina" ? TAMAINAK : Object.keys(IZENAK.nazioa)).map((id) => [id, eserlekuak(k, um, id) || []]);
+    if (um === "nazioa") zonak.sort((a, b) => guztiak(b[1]) - guztiak(a[1]));
     return `${buruak(T.congreso, `${INFO[k].izena} · ${T.mayoria}`)}${hemizikloa(e, T.escanosN)}${eserZerrenda(e, ak && eserlekuak(ak, "estatua", "ES"))}${blokeZerrenda(k, ak, "estatua", "ES")}
-      <div class="lbl">${T.porNacion}</div>${nazioak.map(([id, x]) => { const n = x.reduce((s, y) => s + y[1], 0);
-        return `<div class="nazio-eser"><button type="button" data-hautatu="nazioa:${id}">${esc(izena("nazioa", id))}</button><b>${n}</b><span class="seg">${x.map(([s, m, kol]) => `<i style="flex:${m};background:${kol}" title="${esc(s)} ${m}">${m >= n * 0.12 ? m : ""}</i>`).join("")}</span></div>`; }).join("")}`;
+      <div class="lbl">${um === "tamaina" ? T.porTamaina : T.porNacion}</div>${zonak.map(([id, x]) => { const n = guztiak(x);
+        return `<div class="nazio-eser"><button type="button" data-hautatu="${um}:${id}">${esc(izena(um, id))}</button><b>${n}</b><span class="seg">${x.map(([s, m, kol]) => `<i style="flex:${m};background:${kol}" title="${esc(s)} ${m}">${m >= n * 0.12 ? m : ""}</i>`).join("")}</span></div>`; }).join("")}`;
   }
   // Ámbito con escaños propios; municipios y secciones no los tienen: se explica y se ofrece su provincia
   const [m, id] = [h.maila, h.id];
@@ -571,17 +604,20 @@ function panela() {
   if (!h) {
     const r = erregistroa(k, "estatua", "ES"); if (!r) { el.innerHTML = ""; return; }
     const ra = ak ? erregistroa(ak, "estatua", "ES") : null;
-    const nazioak = Object.keys(IZENAK.nazioa).map((id) => [id, erregistroa(k, "nazioa", id)]).filter(([, x]) => x).sort((a, b) => b[1].votantes - a[1].votantes);
+    const [um, lbl, zut] = umeak();
+    const zonak = (um === "tamaina" ? TAMAINAK : Object.keys(IZENAK.nazioa)).map((id) => [id, erregistroa(k, um, id)]).filter(([, x]) => x);
+    if (um === "nazioa") zonak.sort((a, b) => b[1].votantes - a[1].votantes);
     el.innerHTML = buruak(T.estado, `${T.congreso} · ${INFO[k].izena}${ak ? ` · ▲▼ ${T.respectoA} ${INFO[ak].izena}` : ""}`) + `${kpis(r, ra)}
-      <div class="lbl">${T.naciones}</div><div class="taula"><span class="h">${T.nacion}</span><span class="h num">${T.part}</span><span class="h">${T.primera}</span><span class="h num">${T.margen}</span>
-      ${nazioak.map(([id, x]) => `<span><button type="button" data-hautatu="nazioa:${id}">${esc(izena("nazioa", id))}</button></span><span class="num">${pct(x.part)}</span><span>${esc(x.c[0] ? x.c[0][0] : "–")}</span><span class="num">${ptu(x.m)}</span>`).join("")}</div>
+      <div class="lbl">${lbl}</div><div class="taula"><span class="h">${zut}</span><span class="h num">${T.part}</span><span class="h">${T.primera}</span><span class="h num">${T.margen}</span>
+      ${zonak.map(([id, x]) => `<span><button type="button" data-hautatu="${um}:${id}">${esc(izena(um, id))}</button></span><span class="num">${pct(x.part)}</span><span>${esc(x.c[0] ? x.c[0][0] : "–")}</span><span class="num">${ptu(x.m)}</span>`).join("")}</div>
       ${state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : ""}${emaitzak(r)}<p class="hint">${T.estadoHint}</p>`;
     return;
   }
   const r = erregistroa(k, h.maila, h.id), ra = ak && h.maila !== "sekzioa" ? erregistroa(ak, h.maila, h.id) : null;
   const katea = goikoak(h.maila, h.id).map(([m, id]) => `<button type="button" data-hautatu="${m}:${id}">${esc(izena(m, id))}</button>`).join(" › ");
-  el.innerHTML = buruak(esc(izena(h.maila, h.id)), `${T.mailak[h.maila]} · ${T.congreso} ${INFO[k].izena}`, true) +
-    `${katea ? `<div class="katea">${katea}</div>` : ""}${r ? kpis(r, ra) + (h.maila === "probintzia" ? azkenKutxa(k, h.id) : "") + (state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : "") + emaitzak(r) : `<p class="hint">${T.sinDatos}</p>`}`;
+  const meta = h.maila === "tamaina" ? T.tamainaTarteak[h.id] : T.mailak[h.maila];
+  el.innerHTML = buruak(esc(izena(h.maila, h.id)), `${meta} · ${T.congreso} ${INFO[k].izena}`, true) +
+    `${katea ? `<div class="katea">${katea}</div>` : ""}${h.maila === "tamaina" ? tamainaZatia(k, h.id) : ""}${r ? kpis(r, ra) + (h.maila === "probintzia" ? azkenKutxa(k, h.id) : "") + (state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : "") + emaitzak(r) : `<p class="hint">${T.sinDatos}</p>`}`;
 }
 // Botones con data-hautatu (tabla de naciones, migas de pan, ×): eligen esa zona y van a ella; vacío = el Estado
 function hautatuBotoia(e) {
@@ -601,16 +637,25 @@ $("#fitxak").addEventListener("click", (e) => { const f = e.target.closest("[dat
 
 // ---- evolución (pestaña Bilakaera, como en el Behatokia): cómo ha votado la zona en todas las elecciones ----
 // Datos: data/bilakaera/<nivel>.json y data/bilakaera/udalerria/<provincia>.json (prozesatu.py): por zona y elección,
-// [participación, %INB, %ESK, [[i, %], …], [[i, escaños], …]]. Con la capa Bloques, por bloques; si no, por partidos
-// (agrupados por la regla de koloreak.csv aunque cambien las siglas, con el nombre de la última vez). Del Estado al
-// municipio: las secciones cambian de un año a otro y no se pueden comparar.
+// [participación, %INB, %ESK, [[i, %], …], [[i, escaños], …]] (provincias, + [último escaño, siguiente, votos que le
+// faltaron, escaños, tamaño]). Sigue a la capa: partidos (Ganador), bloques, participación (con el Estado de referencia),
+// último escaño (Escaños reñidos) y prima del primer partido por tamaño (Circunscripciones). Del Estado al municipio y por
+// tamaño de circunscripción: las secciones cambian de un año a otro y no se pueden comparar.
 const BILAKAERA = {};  // fichero → datos (o la promesa mientras se cargan)
 const BIL_GUTXIENEZ = 4, BIL_LERRO_MAX = 7;  // un partido sale en el gráfico si llega al 4 % alguna vez; como mucho 7
-const bilFitxategia = (maila, id) => (maila === "udalerria" ? `data/bilakaera/udalerria/${id.slice(0, 2)}.json` : `data/bilakaera/${maila}.json`);
-function bilakaeraDatuak(maila, id) {
-  const f = bilFitxategia(maila, id);
+const bilFitxategia = (maila, id = "") => (maila === "udalerria" ? `data/bilakaera/udalerria/${id.slice(0, 2)}.json` : `data/bilakaera/${maila}.json`);
+function bilakaeraDatuak(f) {
   if (!BILAKAERA[f]) BILAKAERA[f] = load(f).then((d) => (BILAKAERA[f] = d), (e) => { delete BILAKAERA[f]; throw e; });
   return BILAKAERA[f];
+}
+// Ficheros que necesita la pestaña: el de la zona y, según la capa, el del Estado (Participación), el de las provincias
+// (Escaños reñidos, de una zona mayor) o el de los tamaños (Circunscripciones, en el Estado)
+function bilBeharrak(maila, id) {
+  const f = [bilFitxategia(maila, id)];
+  if (state.modua === "part" && maila !== "estatua") f.push(bilFitxategia("estatua"));
+  if (state.modua === "lehia" && maila !== "probintzia") f.push(bilFitxategia("probintzia"));
+  if (state.modua === "tamaina" && maila === "estatua") f.push(bilFitxategia("tamaina"));
+  return f;
 }
 // Líneas del gráfico: [{izena, kolorea, b: {elección: %}}]
 function bilLerroak(d, hist, ks) {
@@ -633,15 +678,20 @@ function bilLerroak(d, hist, ks) {
 }
 // Gráfico de líneas: x = fecha de cada elección, y = %; la línea se corta donde el partido no se presentó; la elección del
 // mapa, marcada; cada punto con su valor (<title>)
-function bilGrafikoa(ks, lerroak) {
-  const W = 340, H = 180, ML = 30, MR = 12, MT = 10, MB = 22;
+// aukerak (otras capas): balioa (valor en el texto de cada punto), ardatza (marcas del eje), ymin/ymax/pausoa, ML (margen)
+// y, en cada línea, marra (discontinua, de referencia) y koloreak (color de cada punto: quién ganó el último escaño)
+function bilGrafikoa(ks, lerroak, aukerak = {}) {
+  const W = 340, H = 180, ML = aukerak.ML || 30, MR = 12, MT = 10, MB = 22;
+  const balioa = aukerak.balioa || pct, ardatza = aukerak.ardatza || String;
   const x0 = dataZ(ks[0]), x1 = dataZ(ks.at(-1));
   const xs = (k) => (ks.length === 1 ? (ML + W - MR) / 2 : ML + (W - ML - MR) * (dataZ(k) - x0) / (x1 - x0));
-  const ymax = Math.max(10, Math.ceil(Math.max(...lerroak.flatMap((l) => Object.values(l.b))) / 10) * 10);
-  const ys = (v) => MT + (H - MT - MB) * (1 - v / ymax);
+  const guztiak = lerroak.flatMap((l) => Object.values(l.b));
+  const ymin = aukerak.ymin ?? 0, ymax = aukerak.ymax ?? Math.max(10, Math.ceil(Math.max(...guztiak) / 10) * 10);
+  const pausoa = aukerak.pausoa || (ymax - ymin > 50 ? 20 : 10);
+  const ys = (v) => MT + (H - MT - MB) * (1 - (v - ymin) / (ymax - ymin));
   let s = "";
-  for (let v = 0; v <= ymax; v += ymax > 50 ? 20 : 10) {
-    s += `<line class="bil-grid" x1="${ML}" x2="${W - MR}" y1="${ys(v)}" y2="${ys(v)}"/><text class="bil-ax" x="${ML - 4}" y="${ys(v) + 3}" text-anchor="end">${v}</text>`;
+  for (let v = ymin; v <= ymax + 1e-9; v += pausoa) {
+    s += `<line class="bil-grid" x1="${ML}" x2="${W - MR}" y1="${ys(v)}" y2="${ys(v)}"/><text class="bil-ax" x="${ML - 4}" y="${ys(v) + 3}" text-anchor="end">${ardatza(v)}</text>`;
   }
   let azkenX = -Infinity;  // años: uno por año, y sin pisarse (diciembre de 2015 y junio de 2016 quedan muy cerca)
   for (const k of ks) {
@@ -652,24 +702,95 @@ function bilGrafikoa(ks, lerroak) {
   for (const l of lerroak) {
     const tramoak = [[]];
     for (const k of ks) { if (l.b[k] == null) tramoak.push([]); else tramoak.at(-1).push(k); }
-    for (const t of tramoak) if (t.length > 1) s += `<polyline class="bil-l" stroke="${l.kolorea}" points="${t.map((k) => `${xs(k).toFixed(1)},${ys(l.b[k]).toFixed(1)}`).join(" ")}"/>`;
-    for (const k of ks) if (l.b[k] != null) s += `<circle class="bil-p" cx="${xs(k).toFixed(1)}" cy="${ys(l.b[k]).toFixed(1)}" r="3.2" fill="${l.kolorea}"><title>${esc(l.izena)} · ${INFO[k].izena}: ${pct(l.b[k])}</title></circle>`;
+    for (const t of tramoak) if (t.length > 1) s += `<polyline class="bil-l${l.marra ? " marra" : ""}" stroke="${l.kolorea}" points="${t.map((k) => `${xs(k).toFixed(1)},${ys(l.b[k]).toFixed(1)}`).join(" ")}"/>`;
+    for (const k of ks) if (l.b[k] != null) s += `<circle class="bil-p" cx="${xs(k).toFixed(1)}" cy="${ys(l.b[k]).toFixed(1)}" r="${l.koloreak ? 4.5 : 3.2}" fill="${(l.koloreak && l.koloreak[k]) || l.kolorea}"><title>${esc(l.izena)} · ${INFO[k].izena}: ${balioa(l.b[k])}</title></circle>`;
   }
   return `<svg class="bil-graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="${T.bilGrafikoa}">${s}</svg>`;
+}
+// Leyenda bajo el gráfico: cada línea con su valor en la elección del mapa y la variación
+const bilLegenda = (lerroak, k, ak, balioa = pct, aldea = { puntuak: true }) => lerroak.map((l) => `<div class="bil-leg">${sq(l.kolorea)}` +
+  `<span class="nm">${esc(l.izena)}</span><span class="num">${balioa(l.b[k])}</span><span>${aldaketa(ak && l.b[k] != null && l.b[ak] != null ? l.b[k] - l.b[ak] : null, aldea)}</span></div>`).join("");
+const bilTaula = (zutabeak, errenkadak, zenbakiak = []) => `<div class="bil-taula" style="grid-template-columns:auto 1fr${" auto".repeat(zutabeak.length - 2)}">` +
+  zutabeak.map((z, i) => `<span class="h${zenbakiak.includes(i) ? " num" : ""}">${z}</span>`).join("") + errenkadak.join("") + "</div>";
+const bilGelaxka = (testua, act, num) => `<span class="${[act ? "act" : "", num ? "num" : ""].join(" ").trim()}">${testua}</span>`;
+// Participación: la de la zona y, de referencia, la del Estado; el eje, de cerca (de 5 en 5)
+function partBilakaera(maila, id, hist, ks, k, ak, nonoiz) {
+  const es = maila !== "estatua" && BILAKAERA[bilFitxategia("estatua")].r.ES;
+  const lerroak = [{ izena: izena(maila, id), kolorea: "#B6CFE3", b: Object.fromEntries(ks.map((x) => [x, hist[x][0]])) }];
+  if (es) lerroak.push({ izena: T.estado, kolorea: "#6A8090", marra: true, b: Object.fromEntries(ks.map((x) => [x, es[x][0]])) });
+  const v = lerroak.flatMap((l) => Object.values(l.b));
+  const ymin = Math.floor((Math.min(...v) - 2) / 5) * 5, ymax = Math.ceil((Math.max(...v) + 2) / 5) * 5;
+  const taula = bilTaula([T.hauteskundea, T.part, ...(es ? [T.estado] : [])], ks.slice().reverse().map((x) =>
+    bilGelaxka(INFO[x].izena, x === k) + bilGelaxka(`${pct(hist[x][0])} ${aldaketa(ks.indexOf(x) ? hist[x][0] - hist[ks[ks.indexOf(x) - 1]][0] : null, { puntuak: true })}`, x === k)
+    + (es ? bilGelaxka(pct(es[x][0]), x === k, true) : "")), [2]);
+  return `<div class="lbl">${T.partLeg}</div>${bilGrafikoa(ks, lerroak, { ymin, ymax, pausoa: 5 })}${nonoiz}${bilLegenda(lerroak, k, ak)}` +
+    `<div class="lbl">${T.bilHauteskundez}</div>${taula}`;
+}
+// Escaños reñidos, en una provincia: votos que le faltaron a la siguiente para el último escaño; cada punto, del color de
+// quien lo ganó
+function lehiaBilakaera(d, hist, ks, k) {
+  const z = (x) => hist[x][5], izen = (i) => esc(d.s[i]);
+  const lerroa = { izena: T.lehiaLeg, kolorea: "#6A8090", b: Object.fromEntries(ks.map((x) => [x, z(x)[2]])), koloreak: Object.fromEntries(ks.map((x) => [x, d.k[z(x)[0]]])) };
+  const gehienez = Math.max(...Object.values(lerroa.b)), pausoa = [1000, 2000, 5000, 10000, 20000, 50000].find((p) => gehienez / p <= 5) || 100000;
+  const [a, b, falta, n] = z(k);
+  const taula = bilTaula([T.hauteskundea, T.bilAzkena, T.bilHurrengoa, T.botoak], ks.slice().reverse().map((x) => { const [i, j, f] = z(x);
+    return bilGelaxka(INFO[x].izena, x === k) + bilGelaxka(`${sq(d.k[i])} ${izen(i)}`, x === k) + bilGelaxka(`${sq(d.k[j])} ${izen(j)}`, x === k) + bilGelaxka(fmtZutabea(f), x === k, true); }), [3]);
+  return `<div class="lbl">${T.lehiaLeg}</div>${bilGrafikoa(ks, [lerroa], { ymax: Math.ceil(gehienez / pausoa) * pausoa, pausoa, balioa: (v) => `${fmtZutabea(v)} ${T.botoak}`, ardatza: fmtZutabea, ML: 44 })}` +
+    `<div class="lehia">${T.azkenaTxt(n, izen(a), izen(b), fmt(falta))}</div><div class="lbl">${T.bilHauteskundez}</div>${taula}`;
+}
+// Escaños reñidos, en una zona mayor (Estado, nación, comunidad, tamaño): cuántos últimos escaños se decidieron por pocos votos
+const LEHIA_MUGAK = [[1000, "#E0704F"], [5000, "#EFC48F"]];
+function lehiaBatura(maila, id, ks, k, ak, nonoiz) {
+  const P = BILAKAERA[bilFitxategia("probintzia")].r;
+  const barruan = (p, x) => maila === "estatua" || (maila === "nazioa" && GOIK.autonomia[GOIK.probintzia[p]] === id)
+    || (maila === "autonomia" && GOIK.probintzia[p] === id) || (maila === "tamaina" && P[p][x][5][4] === id);
+  const probak = (x) => Object.keys(P).filter((p) => P[p][x] && barruan(p, x));
+  const lerroak = LEHIA_MUGAK.map(([m, kol]) => ({ izena: `≤ ${fmtZutabea(m)} ${T.botoak}`, kolorea: kol, b: Object.fromEntries(ks.map((x) => [x, probak(x).filter((p) => P[p][x][5][2] <= m).length])) }));
+  const gehienez = Math.max(2, ...lerroak.flatMap((l) => Object.values(l.b))), pausoa = gehienez > 10 ? 5 : gehienez > 4 ? 2 : 1;
+  const gertuena = (x) => probak(x).sort((p, q) => P[p][x][5][2] - P[q][x][5][2])[0];
+  const taula = bilTaula([T.hauteskundea, T.bilGertuena, ...LEHIA_MUGAK.map(([m]) => `≤ ${fmtZutabea(m)}`)], ks.slice().reverse().map((x) => { const g = gertuena(x);
+    return bilGelaxka(INFO[x].izena, x === k) + bilGelaxka(g ? `${esc(izena("probintzia", g))} <small>${fmtZutabea(P[g][x][5][2])}</small>` : "–", x === k)
+      + lerroak.map((l) => bilGelaxka(`${l.b[x]} / ${probak(x).length}`, x === k, true)).join(""); }), [2, 3]);
+  return `<div class="lbl">${T.bilLehiaBatura}</div>${bilGrafikoa(ks, lerroak, { ymax: Math.ceil(gehienez / pausoa) * pausoa, pausoa, balioa: String })}${nonoiz}` +
+    `${bilLegenda(lerroak, k, ak, String, { berdina: false })}<div class="lbl">${T.bilHauteskundez}</div>${taula}`;
+}
+// Circunscripciones, en el Estado: la prima del primer partido de cada tamaño (% de escaños − % de votos), lo que explica el tamaño
+function primaBilakaera(ks, k, ak, nonoiz) {
+  const t = BILAKAERA[bilFitxategia("tamaina")];
+  const lehena = (h) => { const [i, p] = h[3][0], n = h[4].reduce((s, [, m]) => s + m, 0), e = (h[4].find(([j]) => j === i) || [i, 0])[1];
+    return { i, p, eser: n ? 100 * e / n : 0, prima: n ? Math.round((100 * e / n - p) * 10) / 10 : null }; };
+  const lerroak = TAMAINAK.map((g) => ({ izena: T.tamainaLabur[g], kolorea: TAMAINA_KOLOREA[g], b: Object.fromEntries(ks.map((x) => [x, lehena(t.r[g][x]).prima])) }));
+  const v = lerroak.flatMap((l) => Object.values(l.b));
+  const ymin = Math.min(0, Math.floor(Math.min(...v) / 5) * 5), ymax = Math.ceil(Math.max(...v) / 5) * 5;
+  const pts = (x) => `${x > 0 ? "+" : ""}${ptu(x)}`;
+  const taula = bilTaula([T.hauteskundea, ...TAMAINAK.map((g) => T.tamainaLabur[g])], ks.slice().reverse().map((x) => bilGelaxka(INFO[x].izena, x === k) +
+    TAMAINAK.map((g) => { const l = lehena(t.r[g][x]); return bilGelaxka(`${sq(t.k[l.i])} ${esc(t.s[l.i])} <small>${pts(l.prima)}</small>`, x === k); }).join("")));
+  return `<div class="lbl">${T.bilPrimaLbl}</div>${bilGrafikoa(ks, lerroak, { ymin, ymax, pausoa: 5, balioa: (x) => `${pts(x)} ${T.puntos}` })}${nonoiz}` +
+    `${bilLegenda(lerroak, k, ak, (x) => `${pts(x)}`)}<div class="lbl">${T.bilHauteskundez}</div>${taula}`;
 }
 // La pestaña: gráfico, cada línea con su % en la elección del mapa y la variación, y la tabla elección a elección
 function bilakaeraOrria(h) {
   const [maila, id] = h ? [h.maila, h.id] : ["estatua", "ES"];
   const buru = buruak(h ? esc(izena(maila, id)) : T.estado, `${T.bilakaera} · ${T.congreso} ${INFO[KK[0]].urtea}–${INFO[KK.at(-1)].urtea}`, !!h);
   if (maila === "sekzioa") return buru + `<p class="hint">${T.bilSekzioa}</p>${joateko("udalerria", sekUdalerria(id))}`;
-  const d = BILAKAERA[bilFitxategia(maila, id)];
-  if (!d || d instanceof Promise) {
-    bilakaeraDatuak(maila, id).then(() => { if (state.fitxa === "bilakaera") panela(); },
+  const falta = bilBeharrak(maila, id).filter((f) => !BILAKAERA[f] || BILAKAERA[f] instanceof Promise);
+  if (falta.length) {
+    Promise.all(falta.map(bilakaeraDatuak)).then(() => { if (state.fitxa === "bilakaera") panela(); },
       () => { const p = $("#edukia .hint"); if (state.fitxa === "bilakaera" && p) p.textContent = T.error; });
     return buru + `<p class="hint">${T.cargando}</p>`;
   }
+  const d = BILAKAERA[bilFitxategia(maila, id)];
   const hist = d.r[id]; if (!hist) return buru + `<p class="hint">${T.sinDatos}</p>`;
-  const ks = KK.filter((k) => hist[k]), lerroak = bilLerroak(d, hist, ks);
+  const ks = KK.filter((k) => hist[k]);
+  const k0 = ks.includes(state.k) ? state.k : ks.at(-1), ak0 = ks[ks.indexOf(k0) - 1];
+  const nonoiz = `<div class="lbl">${INFO[k0].izena}${ak0 ? ` · ▲▼ ${T.respectoA} ${INFO[ak0].izena}` : ""}</div>`;
+  if (state.modua === "part") return buru + partBilakaera(maila, id, hist, ks, k0, ak0, nonoiz);
+  if (state.modua === "lehia") {
+    if (eserlekurikEz(maila)) return buru + `<p class="hint">${T.eserBarrutia}</p>${joateko("probintzia", id.slice(0, 2))}`;
+    return buru + (maila === "probintzia" ? lehiaBilakaera(d, hist, ks, k0) : lehiaBatura(maila, id, ks, k0, ak0, nonoiz));
+  }
+  if (state.modua === "tamaina" && maila === "estatua") return buru + primaBilakaera(ks, k0, ak0, nonoiz);
+  const lerroak = bilLerroak(d, hist, ks);
   const k = ks.includes(state.k) ? state.k : ks.at(-1), ak = ks[ks.indexOf(k) - 1];
   const legenda = lerroak.slice().sort((a, b) => (b.b[k] ?? -1) - (a.b[k] ?? -1)).map((l) => `<div class="bil-leg">${sq(l.kolorea)}<span class="nm">${esc(l.izena)}</span>` +
     `<span class="num">${pct(l.b[k])}</span><span>${aldaketa(ak && l.b[k] != null && l.b[ak] != null ? l.b[k] - l.b[ak] : null, { puntuak: true })}</span></div>`).join("");
@@ -717,6 +838,11 @@ document.querySelectorAll("[data-modua]").forEach((b) => b.addEventListener("cli
 $("#maila").addEventListener("change", (e) => { state.maila = e.target.value; eguneratu(); });
 // Leyenda de la capa (y, con «Bloques», del nivel que se ve: último escaño en provincias, votos en el resto)
 function legenda() {
+  if (state.modua === "tamaina") {  // los tres tamaños, con su tramo de escaños
+    $("#legenda").innerHTML = `<div class="lbl">${T.tamainaLeg}</div><div class="legend-azp">${T.tamainaLegAzp}</div><div class="legend">` +
+      TAMAINAK.map((t) => `<div class="li">${sq(TAMAINA_KOLOREA[t])}${T.tamainaLabur[t]} <span class="zk">${T.tamainaTarteak[t]}</span></div>`).join("") + "</div>";
+    return;
+  }
   if (state.modua === "blokeak") {  // filas: tramos; columnas: el bloque (provincias: último escaño; resto: más votos)
     const f = fmtZutabea, barrutia = mailaAktiboa() === "probintzia";
     const tarteak = barrutia ? [`≤ ${f(5000)}`, `${f(5000)} – ${f(10000)}`, `${f(10000)} – ${f(20000)}`, `> ${f(20000)}`]
@@ -739,11 +865,13 @@ function legenda() {
   $("#legenda").innerHTML = `<div class="lbl">${izen}</div>${state.modua === "lehia" ? `<div class="legend-azp">${T.barrutika}</div>` : ""}<div class="legend">${bins.map(([, c], i) => `<div class="li">${sq(c)}${lab[i]}</div>`).join("")}<div class="li">${sq(NODATA)}${T.sinDatos}</div></div>`;
 }
 // Buscador de municipios (nombres en la lengua local)
+// También con las otras formas del nombre (izenak.json, 4.º campo): «Gijón» lleva a Xixón y «Pamplona» a Iruñea
 const udalak = Object.entries(IZENAK.udalerria).sort((a, b) => a[1][0].localeCompare(b[1][0], LOKALEA));
-$("#udalerriak").innerHTML = udalak.map(([, [n]]) => `<option value="${esc(n)}"></option>`).join("");
+const izenGuztiak = ([, [n, , , besteak = []]]) => [n, ...besteak];
+$("#udalerriak").innerHTML = udalak.flatMap(izenGuztiak).map((n) => `<option value="${esc(n)}"></option>`).join("");
 $("#bilatu").addEventListener("change", (e) => {
   const v = e.target.value.trim().toLowerCase(); if (!v) return;
-  const u = udalak.find(([, [n]]) => n.toLowerCase() === v) || udalak.find(([, [n]]) => n.toLowerCase().includes(v));
+  const u = udalak.find((x) => izenGuztiak(x).some((n) => n.toLowerCase() === v)) || udalak.find((x) => izenGuztiak(x).some((n) => n.toLowerCase().includes(v)));
   if (u) { map.once("moveend", () => hautatu({ maila: "udalerria", id: u[0] })); map.flyTo({ center: [u[1][1], u[1][2]], zoom: 10.2 }); }
 });
 // Vista: Península (0) o Canarias (C), en el hueco que dejan los paneles
@@ -891,6 +1019,7 @@ const LASTERBIDEAK = {
   e: () => { playGelditu(); hauteskundeaAldatu(KK[Math.min(KK.length - 1, KK.indexOf(state.k) + 1)]); },
   p: () => $("#dlplay").click(),
   w: () => moduaAldatu("irabazlea"), m: () => moduaAldatu("lehia"), t: () => moduaAldatu("part"), b: () => moduaAldatu("blokeak"),
+  d: () => moduaAldatu("tamaina"),
   k: () => fitxaAldatu({ emaitzak: "eserlekuak", eserlekuak: "bilakaera", bilakaera: "emaitzak" }[state.fitxa]),
   s: sateliteaAldatu, l: railAldatu, 0: () => ikusi(PENINSULA), c: () => ikusi(KANARIAK),
   "/": () => {

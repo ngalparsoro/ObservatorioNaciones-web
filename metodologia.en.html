@@ -25,8 +25,8 @@
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=ab948bcf5980">
-<link rel="stylesheet" href="estiloa.css?v=ab948bcf5980">
+<link rel="stylesheet" href="letrak.css?v=e0c619a615b2">
+<link rel="stylesheet" href="estiloa.css?v=e0c619a615b2">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -60,9 +60,9 @@
   <h2>Nations</h2>
   <p>The map reads the State as a State of nations. Each autonomous community belongs to a nation; nations made up of several
   communities have internal parts, such as EAE and Nafarroa in Hego Euskal Herria.</p>
-  <div class="orri-taula"><table class="estua"><thead><tr><th>Nation</th><th>Parts</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Its provinces</td></tr><tr><th>Andalucía</th><td>Its provinces</td></tr><tr><th>Canarias</th><td>Its provinces</td></tr><tr><th>Aragón</th><td>Its provinces</td></tr><tr><th>Rest of the State</th><td>By autonomous community: Asturias, Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
+  <div class="orri-taula"><table class="estua"><thead><tr><th>Nation</th><th>Parts</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Its provinces</td></tr><tr><th>Asturies</th><td>Its provinces</td></tr><tr><th>Andalucía</th><td>Its provinces</td></tr><tr><th>Canarias</th><td>Its provinces</td></tr><tr><th>Aragón</th><td>Its provinces</td></tr><tr><th>Rest of the State</th><td>By autonomous community: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
   <p>Only territory that votes for the Spanish Congress is included: from Euskal Herria, Hego Euskal Herria (Iparralde votes in France), and
-  from the Països Catalans, the three communities in the State (the Franja de Ponent stays within Aragón). Asturias, Cantabria and
+  from the Països Catalans, the three communities in the State (the Franja de Ponent stays within Aragón). Cantabria and
   León are in the rest of the State. This is an editorial table and can be revised.</p>
 </section>
 <section>
@@ -94,6 +94,8 @@
     seat from whoever won it: 1,000 or less, 1,000–5,000, 5,000–10,000, 10,000–20,000 and over 20,000.</li>
     <li><b>Turnout:</b> 58 % or less, 58–64, 64–70, 70–76 and over 76 %.</li>
     <li><b>Blocs</b>: investiture against right, at every level; in provinces, by the last seat. See «Blocs» below.</li>
+    <li><b>Constituencies</b> (by province only): small, medium and large, by the seats they elect. See «Constituency size»
+    below.</li>
   </ul>
 </section>
 <section>
@@ -122,11 +124,26 @@
   10–20 and over 20. The Seats tab shows each bloc's seats; the Results tab, its votes.</p>
 </section>
 <section>
+  <h2>Constituency size</h2>
+  <p>The <b>Constituencies</b> layer groups provinces by the number of seats they elect in each election: <b>small</b>, 1 to 5
+  seats; <b>medium</b>, 6 to 9; and <b>large</b>, 10 or more. Each group works as a territory: it adds up the votes and seats of
+  its provinces and has its own evolution.</p>
+  <p>The groups are formed with each election's seats, so a province can change group: Jaén became small in 2015 and Badajoz in
+  2023, after losing a seat. In 2023, the large ones are Madrid, Barcelona, València, Sevilla, Alacant, Málaga and Murcia.</p>
+  <p>It shows the effect of size on the allocation: the fewer seats a constituency elects, the more votes it takes to win one, and
+  the further the allocation strays from the vote percentages.</p>
+</section>
+<section>
   <h2>Trend</h2>
   <p>The Trend tab shows how each area has voted in the six elections, from the State down to the municipality (sections change
   from year to year and cannot be compared). Each line is a party, even if its name changes (shown with its latest name); parties
   that reached 4 % at least once are shown, seven at most. If two candidacies of the same party stand in one election, the one
   with more votes counts. With the Blocs layer, one line per bloc.</p>
+  <p>The tab follows the map layer. With <b>Turnout</b>, the area's turnout and, for reference, the State's. With <b>Close
+  seats</b>, in a province, by how many votes the last seat was decided in each election and who won it; in a larger area, how many
+  last seats were decided by 1,000 or 5,000 votes or fewer. With <b>Constituencies</b>, in the State, the first party's bonus in
+  each size group: its share of seats minus its share of votes. It works for every aggregation: State, nations, communities,
+  provinces, municipalities and constituencies by size.</p>
 </section>
 <section>
   <h2>Territory and census sections</h2>
@@ -141,7 +158,8 @@
 <section>
   <h2>Place names</h2>
   <p>Names of municipalities, provinces and communities are in the local language, in every language of the website: those of
-  the INE (in bilingual municipalities, the local form) and, in Hego Euskal Herria, the official Basque names. Party names are those
+  the INE (in bilingual municipalities, the local form) and, in Hego Euskal Herria, the official Basque names and, in Asturies, the Asturian names (in
+  the west, in Galician-Asturian). The search box also finds the INE names (Gijón, Pamplona…). Party names are those
   of the Ministry.</p>
 </section>
 <section>

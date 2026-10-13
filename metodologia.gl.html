@@ -25,8 +25,8 @@
 <meta property="og:locale" content="gl_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=ab948bcf5980">
-<link rel="stylesheet" href="estiloa.css?v=ab948bcf5980">
+<link rel="stylesheet" href="letrak.css?v=e0c619a615b2">
+<link rel="stylesheet" href="estiloa.css?v=e0c619a615b2">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -60,9 +60,9 @@
   <h2>Nacións</h2>
   <p>O mapa le o Estado como un Estado de nacións. Cada comunidade autónoma pertence a unha nación; as nacións de varias
   comunidades teñen partes interiores, como EAE e Nafarroa en Hego Euskal Herria.</p>
-  <div class="orri-taula"><table class="estua"><thead><tr><th>Nación</th><th>Partes</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>As súas provincias</td></tr><tr><th>Andalucía</th><td>As súas provincias</td></tr><tr><th>Canarias</th><td>As súas provincias</td></tr><tr><th>Aragón</th><td>As súas provincias</td></tr><tr><th>Resto do Estado</th><td>Por comunidades autónomas: Asturias, Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
+  <div class="orri-taula"><table class="estua"><thead><tr><th>Nación</th><th>Partes</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>As súas provincias</td></tr><tr><th>Asturies</th><td>As súas provincias</td></tr><tr><th>Andalucía</th><td>As súas provincias</td></tr><tr><th>Canarias</th><td>As súas provincias</td></tr><tr><th>Aragón</th><td>As súas provincias</td></tr><tr><th>Resto do Estado</th><td>Por comunidades autónomas: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
   <p>Só conta o territorio onde se vota ao Congreso: de Euskal Herria, Hego Euskal Herria (Iparralde vota en Francia), e dos Països
-  Catalans, as tres comunidades do Estado (a Franxa de Poñente queda dentro de Aragón). Asturias, Cantabria e León van no resto
+  Catalans, as tres comunidades do Estado (a Franxa de Poñente queda dentro de Aragón). Cantabria e León van no resto
   do Estado. É unha táboa editorial, que pode revisarse.</p>
 </section>
 <section>
@@ -94,6 +94,8 @@
     quitarlle o último escano a quen o levou: 1.000 ou menos, 1.000–5.000, 5.000–10.000, 10.000–20.000 e máis de 20.000.</li>
     <li><b>Participación:</b> 58 % ou menos, 58–64, 64–70, 70–76 e máis do 76 %.</li>
     <li><b>Bloques</b>: investidura fronte a dereita, en todos os niveis; nas provincias, polo último escano. Ver «Bloques» máis abaixo.</li>
+    <li><b>Circunscricións</b> (só por provincias): pequenas, medianas e grandes, polos escanos que elixen. Ver «Tamaño das
+    circunscricións» máis abaixo.</li>
   </ul>
 </section>
 <section>
@@ -121,11 +123,26 @@
   menos, 5–10, 10–20 e máis de 20. Na lapela Escanos, os escanos de cada bloque; en Resultados, os seus votos.</p>
 </section>
 <section>
+  <h2>Tamaño das circunscricións</h2>
+  <p>A capa <b>Circunscricións</b> agrupa as provincias polos escanos que elixen en cada elección: <b>pequenas</b>, de 1 a 5 escanos;
+  <b>medianas</b>, de 6 a 9; e <b>grandes</b>, 10 ou máis. Cada grupo funciona como un territorio: suma os votos e os escanos das
+  súas provincias e ten a súa evolución.</p>
+  <p>Os grupos fórmanse cos escanos de cada elección, así que unha provincia pode cambiar de grupo: Jaén pasou a pequena en 2015 e
+  Badajoz en 2023, ao perder un escano. En 2023, as grandes son Madrid, Barcelona, València, Sevilla, Alacant, Málaga e Murcia.</p>
+  <p>Serve para ver o efecto do tamaño no reparto: canto menos escanos elixe unha circunscrición, máis votos fan falta para conseguir
+  un e máis se afasta o reparto das porcentaxes de voto.</p>
+</section>
+<section>
   <h2>Evolución</h2>
   <p>A lapela Evolución amosa como votou cada zona nas seis eleccións, do Estado ao concello (as seccións cambian dun ano a outro e
   non se poden comparar). Cada liña é un partido, aínda que cambie de siglas (co nome da última vez); saen os que chegaron ao 4 %
   algunha vez, como moito sete. Se nunha elección se presentan dúas candidaturas do mesmo partido, conta a máis votada. Coa capa
   Bloques, unha liña por bloque.</p>
+  <p>A lapela segue a capa do mapa. Con <b>Participación</b>, a da zona e, de referencia, a do Estado. Con <b>Escanos
+  disputados</b>, nunha provincia, por cantos votos se decidiu o último escano en cada elección e quen o gañou; nunha zona maior,
+  cantos últimos escanos se decidiron por 1.000 ou por 5.000 votos ou menos. Con <b>Circunscricións</b>, no Estado, a prima do
+  primeiro partido en cada tamaño: a súa porcentaxe de escanos menos a súa porcentaxe de votos. Funciona en todas as agregacións:
+  Estado, nacións, comunidades, provincias, concellos e circunscricións por tamaño.</p>
 </section>
 <section>
   <h2>Territorio e seccións censais</h2>
@@ -140,7 +157,8 @@
 <section>
   <h2>Nomes de lugar</h2>
   <p>Os nomes de concellos, provincias e comunidades van na lingua do lugar, en todas as linguas da web: os do INE (nos concellos
-  bilingües, a forma local) e, en Hego Euskal Herria, os nomes oficiais en éuscaro. As siglas das candidaturas son as do Ministerio.</p>
+  bilingües, a forma local) e, en Hego Euskal Herria, os nomes oficiais en éuscaro e, en Asturies, os nomes en asturiano (no
+  occidente, en galego-asturiano). O buscador tamén atopa os nomes do INE (Gijón, Pamplona…). As siglas das candidaturas son as do Ministerio.</p>
 </section>
 <section>
   <h2>Límites coñecidos</h2>

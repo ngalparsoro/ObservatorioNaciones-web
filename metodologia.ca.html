@@ -25,8 +25,8 @@
 <meta property="og:locale" content="ca_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=ab948bcf5980">
-<link rel="stylesheet" href="estiloa.css?v=ab948bcf5980">
+<link rel="stylesheet" href="letrak.css?v=e0c619a615b2">
+<link rel="stylesheet" href="estiloa.css?v=e0c619a615b2">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -60,9 +60,9 @@
   <h2>Nacions</h2>
   <p>El mapa llegeix l'Estat com un Estat de nacions. Cada comunitat autònoma pertany a una nació; les nacions de diverses
   comunitats tenen parts interiors, com EAE i Nafarroa a Hego Euskal Herria.</p>
-  <div class="orri-taula"><table class="estua"><thead><tr><th>Nació</th><th>Parts</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Les seves províncies</td></tr><tr><th>Andalucía</th><td>Les seves províncies</td></tr><tr><th>Canarias</th><td>Les seves províncies</td></tr><tr><th>Aragón</th><td>Les seves províncies</td></tr><tr><th>Resta de l&#x27;Estat</th><td>Per comunitats autònomes: Asturias, Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
+  <div class="orri-taula"><table class="estua"><thead><tr><th>Nació</th><th>Parts</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Les seves províncies</td></tr><tr><th>Asturies</th><td>Les seves províncies</td></tr><tr><th>Andalucía</th><td>Les seves províncies</td></tr><tr><th>Canarias</th><td>Les seves províncies</td></tr><tr><th>Aragón</th><td>Les seves províncies</td></tr><tr><th>Resta de l&#x27;Estat</th><td>Per comunitats autònomes: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
   <p>Només hi compta el territori on es vota al Congrés: d'Euskal Herria, Hego Euskal Herria (Iparralde vota a França), i dels Països
-  Catalans, les tres comunitats de l'Estat (la Franja de Ponent queda dins d'Aragón). Asturias, Cantabria i León van a la resta
+  Catalans, les tres comunitats de l'Estat (la Franja de Ponent queda dins d'Aragón). Cantabria i León van a la resta
   de l'Estat. És una taula editorial, que es pot revisar.</p>
 </section>
 <section>
@@ -94,6 +94,8 @@
     prendre l'últim escó a qui se'l va endur: 1.000 o menys, 1.000–5.000, 5.000–10.000, 10.000–20.000 i més de 20.000.</li>
     <li><b>Participació:</b> 58 % o menys, 58–64, 64–70, 70–76 i més del 76 %.</li>
     <li><b>Blocs</b>: investidura davant de dreta, a tots els nivells; a les províncies, per l'últim escó. Vegeu «Blocs» més avall.</li>
+    <li><b>Circumscripcions</b> (només per províncies): petites, mitjanes i grans, pels escons que elegeixen. Vegeu «Mida de les
+    circumscripcions» més avall.</li>
   </ul>
 </section>
 <section>
@@ -122,11 +124,26 @@
   5–10, 10–20 i més de 20. A la pestanya Escons, els escons de cada bloc; a Resultats, els seus vots.</p>
 </section>
 <section>
+  <h2>Mida de les circumscripcions</h2>
+  <p>La capa <b>Circumscripcions</b> agrupa les províncies pels escons que elegeixen a cada elecció: <b>petites</b>, d'1 a 5 escons;
+  <b>mitjanes</b>, de 6 a 9; i <b>grans</b>, 10 o més. Cada grup funciona com un territori: suma els vots i els escons de les seves
+  províncies i té la seva evolució.</p>
+  <p>Els grups es formen amb els escons de cada elecció, de manera que una província pot canviar de grup: Jaén va passar a petita el
+  2015 i Badajoz el 2023, en perdre un escó. El 2023, les grans són Madrid, Barcelona, València, Sevilla, Alacant, Málaga i Murcia.</p>
+  <p>Serveix per veure l'efecte de la mida en el repartiment: com menys escons elegeix una circumscripció, més vots calen per
+  aconseguir-ne un i més s'allunya el repartiment dels percentatges de vot.</p>
+</section>
+<section>
   <h2>Evolució</h2>
   <p>La pestanya Evolució mostra com ha votat cada zona a les sis eleccions, de l'Estat al municipi (les seccions canvien d'un any
   a l'altre i no es poden comparar). Cada línia és un partit, encara que canviï de sigles (amb el nom de l'última vegada); hi surten
   els que han arribat al 4 % alguna vegada, com a màxim set. Si en una elecció es presenten dues candidatures del mateix partit,
   compta la més votada. Amb la capa Blocs, una línia per bloc.</p>
+  <p>La pestanya segueix la capa del mapa. Amb <b>Participació</b>, la de la zona i, de referència, la de l'Estat. Amb <b>Escons
+  disputats</b>, en una província, per quants vots es va decidir l'últim escó a cada elecció i qui el va guanyar; en una zona més
+  gran, quants últims escons es van decidir per 1.000 o per 5.000 vots o menys. Amb <b>Circumscripcions</b>, a l'Estat, la prima
+  del primer partit a cada mida: el seu percentatge d'escons menys el seu percentatge de vots. Funciona en totes les agregacions:
+  Estat, nacions, comunitats, províncies, municipis i circumscripcions per mida.</p>
 </section>
 <section>
   <h2>Territori i seccions censals</h2>
@@ -141,7 +158,8 @@
 <section>
   <h2>Noms de lloc</h2>
   <p>Els noms de municipis, províncies i comunitats van en la llengua del lloc, en totes les llengües del web: els de l'INE (als
-  municipis bilingües, la forma local) i, a Hego Euskal Herria, els noms oficials en basc. Les sigles de les candidatures són les del
+  municipis bilingües, la forma local) i, a Hego Euskal Herria, els noms oficials en basc i, a Asturies, els noms en asturià (a
+  l'oest, en gallec-asturià). El cercador també troba els noms de l'INE (Gijón, Pamplona…). Les sigles de les candidatures són les del
   Ministeri.</p>
 </section>
 <section>
