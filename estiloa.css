@@ -145,6 +145,14 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .sq { width: 12px; height: 12px; flex: none; display: inline-block; }
 
 /* ---- Línea de tiempo (abajo, entre la leyenda y el panel): las elecciones en su fecha, ▶ las recorre ---- */
+/* Crédito de las ortofotos del PNOA a pie de mapa, como pide la licencia del IGN («PNOA CC BY 4.0 scne.es», la fórmula
+   abreviada): solo cuando se ven (desde el zoom 10, con el satélite; app.js); en la franja libre de abajo, bajo la línea
+   de tiempo. Los créditos completos, en ⓘ. */
+#ortokreditua { position: absolute; bottom: 4px; left: calc(24px + var(--rail-w) + 16px); right: calc(24px + var(--panel-w) + 16px);
+  z-index: 900; text-align: center; font: 400 10px/12px var(--f-mono); color: var(--ink); letter-spacing: .02em;
+  text-shadow: 0 0 3px #000, 0 0 6px rgba(0,0,0,.9); pointer-events: none; white-space: nowrap; }
+#ortokreditua a { color: inherit; pointer-events: auto; }
+#ortokreditua[hidden] { display: none; }
 #denboralerroa { position: absolute; bottom: 20px; left: calc(24px + var(--rail-w) + 16px); right: calc(24px + var(--panel-w) + 16px); z-index: 1040;
   display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); }
 #denboralerroa::before { content: ""; position: absolute; left: -2px; top: -2px; width: 12px; height: 12px; border: 2px solid var(--gold); border-right: 0; border-bottom: 0; }
@@ -322,6 +330,10 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #heldulekua span { width: 44px; height: 4px; border-radius: 2px; background: var(--line); }
   #app.orria-zabalik #legenda, #app.orria-zabalik .maplibregl-ctrl-top-right, #app.orria-zabalik .rail-gezia,
   #app.rail-zabalik #legenda { visibility: hidden; }  /* con la hoja o las herramientas abiertas, lo que quedaría debajo no se ve */
+  /* en el móvil, abajo está la hoja: el crédito de las ortofotos, arriba a la derecha, bajo la línea de tiempo; con la
+     hoja abierta, que tapa el mapa, no se ve */
+  #ortokreditua { bottom: auto; top: calc(var(--top-h) + var(--dl-h) + 10px); left: auto; right: 10px; }
+  #app.orria-zabalik #ortokreditua { visibility: hidden; }
   #tip { display: none !important; }
   h2 { font-size: 24px; }
 }

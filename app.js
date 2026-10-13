@@ -94,9 +94,16 @@ const TAMAINA_KOLOREA = { txikiak: "#00818F", ertainak: "#00B8B0", handiak: "#7D
 const ARGIBIDE_MARJINA = 10;  // en el puntero (Resultados), solo quien está a 10 puntos o menos de la primera fuerza
 const MAILAK = ["nazioa", "autonomia", "probintzia", "udalerria", "sekzioa"];
 const ZOOMAK = { nazioa: [0, 5.9], autonomia: [5.9, 6.8], probintzia: [6.8, 8], udalerria: [8, 10.8], sekzioa: [10.8, 24] };
-// Fondo de satélite: Sentinel-2 cloudless 2024 (EOX, CC BY-NC-SA 4.0), como en el Hauteskunde Behatokia
+// Imagen de fondo, gratuita y sin clave, como en el Hauteskunde Behatokia: Sentinel-2 cloudless 2024 (EOX, 10 m, CC BY-NC-SA
+// 4.0) para todo el mapa y, al acercar (desde el nivel de municipio), las ortofotos del PNOA (IGN, 25-50 cm, CC BY 4.0),
+// recortadas a España (geo/maskara.json), porque fuera devuelven relleno blanco. Créditos: los que pide cada licencia
+// (el IGN: «CC BY 4.0 scne.es», la fórmula de su servicio; en Melilla su imagen es de Airbus y lo dice el servicio).
 const SATELITEA = "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2024_3857/default/GoogleMapsCompatible/{z}/{y}/{x}.jpg";
 const SAT_KREDITUA = '<a href="https://s2maps.eu" target="_blank" rel="noopener">Sentinel-2 cloudless 2024</a> (EOX, Copernicus, CC BY-NC-SA)';
+const PNOA = "https://www.ign.es/wmts/pnoa-ma?request=GetTile&service=WMTS&VERSION=1.0.0&Layer=OI.OrthoimageCoverage&Style=default&Format=image/jpeg&TileMatrixSet=GoogleMapsCompatible&TileMatrix={z}&TileRow={y}&TileCol={x}";
+const PNOA_KREDITUA = '<a href="https://pnoa.ign.es" target="_blank" rel="noopener">PNOA máxima actualidad</a> (IGN) CC BY 4.0 ' +
+  '<a href="https://www.scne.es" target="_blank" rel="noopener">scne.es</a> · Melilla: Pléiades Neo © Airbus DS (2022)';
+const ORTO_ZOOM = 10;  // desde el nivel de municipio
 const PENINSULA = [[-9.6, 35.9], [4.5, 43.9]], KANARIAK = [[-18.3, 27.5], [-13.3, 29.5]];
 const bin = (v, bins) => { if (v == null || isNaN(v)) return NODATA; for (const [l, c] of bins) if (v <= l) return c; return NODATA; };
 
@@ -234,15 +241,97 @@ function goikoak(maila, id) {  // de la nación hacia abajo, sin el propio
   return out;
 }
 
+// ---- ortofotos del PNOA, recortadas a España ----
+// Cada tesela «orto://z/x/y» se compone aquí. Fuera de España no se pide nada (queda transparente y se ve el Sentinel-2 de
+// debajo); entera dentro, va la del PNOA tal cual; en la frontera o en la costa, recortada con la parte del contorno que
+// la cruza. El contorno (0,9 MB) se carga la primera vez que hace falta. Si el servidor del IGN falla, queda el satélite.
+let maskara = null;
+const maskaraLortu = () => (maskara ??= load("geo/maskara.json").then((g) => (g.type === "Polygon" ? [g.coordinates] : g.coordinates).map(([eraztuna]) => {
+  let w = 180, s = 90, e = -180, n = -90;
+  for (const [x, y] of eraztuna) { w = Math.min(w, x); e = Math.max(e, x); s = Math.min(s, y); n = Math.max(n, y); }
+  return { bbox: [w, s, e, n], eraztuna };
+})));
+const lonTile = (x, n) => x / n * 360 - 180;
+const latTile = (y, n) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) * 180 / Math.PI;
+// ¿algún trozo del segmento dentro del rectángulo [oeste, sur, este, norte]? (Liang-Barsky)
+const zatiaBarruan = ([x1, y1], [x2, y2], [w, s, e, n]) => {
+  let t0 = 0, t1 = 1;
+  for (const [p, q] of [[x1 - x2, x1 - w], [x2 - x1, e - x1], [y1 - y2, y1 - s], [y2 - y1, n - y1]]) {
+    if (p === 0) { if (q < 0) return false; continue; }
+    const r = q / p;
+    if (p < 0) { if (r > t1) return false; t0 = Math.max(t0, r); } else { if (r < t0) return false; t1 = Math.min(t1, r); }
+  }
+  return true;
+};
+const mugaGurutzatzen = (eraztuna, t) => eraztuna.some((a, i) => i > 0 && zatiaBarruan(eraztuna[i - 1], a, t));
+const barruan = ([x, y], eraztuna) => {  // punto en polígono (rayo hacia el este)
+  let b = false;
+  for (let i = 0, j = eraztuna.length - 1; i < eraztuna.length; j = i++) {
+    const [xi, yi] = eraztuna[i], [xj, yj] = eraztuna[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) b = !b;
+  }
+  return b;
+};
+// El contorno, solo dentro del rectángulo (Sutherland-Hodgman): así el recorte de cada tesela es corto
+const moztu = (eraztuna, [w, s, e, n]) => {
+  let pts = eraztuna;
+  for (const [ok, ebaki] of [
+    [(p) => p[0] >= w, (a, b) => [w, a[1] + (b[1] - a[1]) * (w - a[0]) / (b[0] - a[0])]],
+    [(p) => p[0] <= e, (a, b) => [e, a[1] + (b[1] - a[1]) * (e - a[0]) / (b[0] - a[0])]],
+    [(p) => p[1] >= s, (a, b) => [a[0] + (b[0] - a[0]) * (s - a[1]) / (b[1] - a[1]), s]],
+    [(p) => p[1] <= n, (a, b) => [a[0] + (b[0] - a[0]) * (n - a[1]) / (b[1] - a[1]), n]]]) {
+    const irt = [];
+    pts.forEach((b, i) => {
+      const a = pts[(i + pts.length - 1) % pts.length];
+      if (ok(b)) { if (!ok(a)) irt.push(ebaki(a, b)); irt.push(b); } else if (ok(a)) irt.push(ebaki(a, b));
+    });
+    pts = irt;
+    if (!pts.length) break;
+  }
+  return pts;
+};
+let hutsa = null;  // tesela transparente
+const hutsaLortu = () => (hutsa ??= (() => {  // (sin getContext, convertToBlob falla: «no rendering context»)
+  const c = new OffscreenCanvas(256, 256);
+  c.getContext("2d");
+  return c.convertToBlob({ type: "image/png" }).then((x) => x.arrayBuffer());
+})());
+maplibregl.addProtocol("orto", async (params, abort) => {
+  const [z, x, y] = params.url.slice("orto://".length).split("/").map(Number), n = 2 ** z;
+  const t = [lonTile(x, n), latTile(y + 1, n), lonTile(x + 1, n), latTile(y, n)];  // oeste, sur, este, norte
+  const ondoan = (await maskaraLortu()).filter(({ bbox: b }) => !(t[2] < b[0] || t[0] > b[2] || t[3] < b[1] || t[1] > b[3]));
+  const mugan = ondoan.filter((p) => mugaGurutzatzen(p.eraztuna, t));
+  const osorik = !mugan.length && ondoan.some((p) => barruan([(t[0] + t[2]) / 2, (t[1] + t[3]) / 2], p.eraztuna));
+  if (!mugan.length && !osorik) return { data: await hutsaLortu() };  // fuera de España: ni se pide
+  let r;
+  try {
+    r = await fetch(PNOA.replace("{z}", z).replace("{x}", x).replace("{y}", y), { signal: abort.signal });
+  } catch (e) { if (abort.signal.aborted) throw e; return { data: await hutsaLortu() }; }
+  if (!r.ok) return { data: await hutsaLortu() };
+  if (osorik) return { data: await r.arrayBuffer() };
+  const img = await createImageBitmap(await r.blob());
+  const px = (lon) => ((lon + 180) / 360 * n - x) * 256;
+  const py = (lat) => ((1 - Math.asinh(Math.tan(lat * Math.PI / 180)) / Math.PI) / 2 * n - y) * 256;
+  const m = (t[2] - t[0]) * 0.02, zabala = [t[0] - m, t[1] - m, t[2] + m, t[3] + m];  // un poco más: el corte, fuera de la tesela
+  const recorte = new Path2D();
+  for (const p of mugan) moztu(p.eraztuna, zabala).forEach(([lon, lat], i) => (i ? recorte.lineTo(px(lon), py(lat)) : recorte.moveTo(px(lon), py(lat))));
+  const lienzo = new OffscreenCanvas(256, 256), ctx = lienzo.getContext("2d");
+  ctx.clip(recorte, "evenodd");
+  ctx.drawImage(img, 0, 0, 256, 256);
+  return { data: await (await lienzo.convertToBlob({ type: "image/png" })).arrayBuffer() };
+});
+
 // ---- mapa ----
 const GEO = { nazioa: GEO_NAZ, autonomia: GEO_AUT, probintzia: GEO_PROB,
   udalerria: { type: "FeatureCollection", features: [] }, sekzioa: { type: "FeatureCollection", features: [] } };
 for (const m of ["nazioa", "autonomia", "probintzia"]) for (const f of GEO[m].features) f.properties.id = f.id;
 // «lurra»: todo el territorio en gris «sin datos», debajo (comunales sin municipio que el seccionado no cubre)
 const sources = { lurra: { type: "geojson", data: LURRA },
-  sat: { type: "raster", tiles: [SATELITEA], tileSize: 256, maxzoom: 13, attribution: SAT_KREDITUA } };  // EOX no da más detalle
+  sat: { type: "raster", tiles: [SATELITEA], tileSize: 256, maxzoom: 13, attribution: SAT_KREDITUA },  // EOX no da más detalle
+  orto: { type: "raster", tiles: ["orto://{z}/{x}/{y}"], tileSize: 256, minzoom: ORTO_ZOOM, maxzoom: 19, attribution: PNOA_KREDITUA } };
 const layers = [{ id: "atzealdea", type: "background", paint: { "background-color": "#0C131A" } },
   { id: "sat", type: "raster", source: "sat", layout: { visibility: state.satelitea ? "visible" : "none" } },
+  { id: "orto", type: "raster", source: "orto", minzoom: ORTO_ZOOM, layout: { visibility: state.satelitea ? "visible" : "none" } },
   { id: "lurra", type: "fill", source: "lurra", layout: { visibility: state.satelitea ? "none" : "visible" }, paint: { "fill-color": NODATA } }];
 const opakutasuna = () => ["case", ["boolean", ["feature-state", "hover"], false], state.satelitea ? 0.85 : 1, state.satelitea ? 0.62 : 0.88];
 for (const m of MAILAK) {
@@ -883,13 +972,18 @@ $("#kanariak").addEventListener("click", () => ikusi(KANARIAK));
 // Satélite (S): encender / apagar (con él, los colores dejan ver el terreno)
 function sateliteaAldatu() {
   state.satelitea = !state.satelitea; $("#satelitea").setAttribute("aria-pressed", state.satelitea);
-  map.setLayoutProperty("sat", "visibility", state.satelitea ? "visible" : "none");
+  for (const l of ["sat", "orto"]) map.setLayoutProperty(l, "visibility", state.satelitea ? "visible" : "none");
+  ortoKreditua();
   map.setLayoutProperty("lurra", "visibility", state.satelitea ? "none" : "visible");  // comunales: se ve el terreno
   for (const m of MAILAK) map.setPaintProperty(m + "-fill", "fill-opacity", opakutasuna());
   urlaIdatzi();
 }
 $("#satelitea").setAttribute("aria-pressed", state.satelitea);
 $("#satelitea").addEventListener("click", sateliteaAldatu);
+// Crédito de las ortofotos a pie de mapa (lo pide la licencia del IGN): solo cuando se ven
+function ortoKreditua() { $("#ortokreditua").hidden = !(state.satelitea && map.getZoom() >= ORTO_ZOOM); }
+map.on("zoom", ortoKreditua);
+ortoKreditua();
 // Móvil: hoja de resultados que se despliega
 function orriaZabaldu(z) {
   if (!mugikorra()) return;
