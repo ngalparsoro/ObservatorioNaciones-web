@@ -25,8 +25,8 @@
 <meta property="og:locale" content="ca_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=4cae8b197f95">
-<link rel="stylesheet" href="estiloa.css?v=4cae8b197f95">
+<link rel="stylesheet" href="letrak.css?v=4105d0a78421">
+<link rel="stylesheet" href="estiloa.css?v=4105d0a78421">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -55,6 +55,58 @@
   <h2>Eleccions</h2>
   <p>Eleccions generals al Congrés dels Diputats: novembre del 2011, desembre del 2015, juny del 2016, abril i novembre del 2019 i
   juliol del 2023. El Senat no hi és inclòs.</p>
+</section>
+<section>
+  <h2>Eleccions autonòmiques</h2>
+  <p>Amb el selector <b>Eleccions</b> (o la tecla A), el mapa passa a les eleccions als parlaments de les disset comunitats
+  autònomes, del 2008 al 2026, amb els resultats oficials que publica cada comunitat (vegeu Fonts). Ceuta i Melilla no hi són:
+  les seves assemblees s'elegeixen amb les municipals.</p>
+  <ul class="zerrenda">
+    <li><b>Línia de temps:</b> l'estat de les autonomies a cada moment, mes a mes i fins avui: cada comunitat amb la seva elecció vigent, la
+    darrera fins a aquell dia. Canvia cada cop que en vota alguna, des del maig del 2011 (llavors encara eren vigents les
+    d'Andalusia, 2008; Galícia i el País Basc, 2009, i Catalunya, 2010).</li>
+    <li><b>Cercador d'eleccions</b> (a la dreta de la línia de temps): un dia amb eleccions (28, des del 2008) o l'elecció
+    d'una sola comunitat, per mes, any o comunitat. El mapa mostra només el que s'ha triat i deixa la resta buida; una altra
+    comunitat, en tocar-la, diu per què no hi és i porta a les seves eleccions. La × torna a la línia de temps.</li>
+    <li><b>Sense nacions:</b> cada parlament és d'una comunitat, i les comunitats d'una mateixa nació voten en dates diferents;
+    per això les autonòmiques van de la comunitat a la secció, sense nacions ni total de l'Estat.</li>
+    <li><b>Seccions censals:</b> on la font dona els resultats per mesa o per secció (58 de les 78 eleccions; Andalusia, per secció des de la seva API), les meses se sumen per
+    secció, com al Congrés, i es dibuixen amb el seccionat de l'INE que hi encaixa millor. On la font només els dona per
+    municipi (Astúries, l'Aragó 2011 i 2015, Múrcia excepte el 2019, Cantàbria 2015 i 2019, Castella-la Manxa excepte el 2019)
+    o per província (Extremadura), en apropar el mapa aquestes zones es veuen per municipis.</li>
+    <li><b>Com al Congrés:</b> votants = candidatures + blancs + nuls (on la font no dona blancs ni nuls, els seus votants);
+    percentatges sobre els vots a candidatures; sense vot exterior (CERA); municipis fusionats, tal com són avui.</li>
+    <li><b>Sigles:</b> les de cada font, amb la mateixa sigla escrita sempre igual (P.P. i PARTIDO POPULAR, com a PP). Les
+    coalicions van amb el color del seu partit principal: Adelante Andalucía el 2018, de Podemos i IU, com a Podemos.</li>
+    <li><b>Canàries</b>, des del 2019, vota amb dues paperetes, la d'illa i la regional: el mapa fa servir la d'illa; els escons, de les dues.</li>
+    <li><b>Variacions (▲▼):</b> respecte a l'elecció anterior de la mateixa comunitat.</li>
+    <li><b>Escons:</b> cada parlament reparteix els seus amb la llei D'Hondt a cada circumscripció, amb la barrera de la seva llei
+    electoral: el 3 % dels vots vàlids de la circumscripció (Andalusia, l'Aragó, Astúries, Castella i Lleó, Castella-la Manxa,
+    Catalunya, Navarra, el País Basc i Múrcia des del 2019) o el 5 % (les Illes Balears, Cantàbria, Galícia, Madrid i la Rioja); el
+    5 % de tota la comunitat (Múrcia fins al 2015; al País Valencià, dels vots emesos); a Extremadura, el 5 % a la província o a tota
+    la comunitat; a Canàries, a cada illa, el 30 % insular o el 6 % regional (des del 2019, el 15 % o el 4 %) i, a la circumscripció
+    autonòmica, el 4 %. Les circumscripcions són les províncies, llevat de les illes (les Illes Balears i Canàries, que des del 2019
+    tria a més 9 escons a tota la comunitat), les tres d'Astúries i les cinc de Múrcia fins al 2015. Com al repartiment oficial, amb
+    el vot exterior (CERA); a Castella i Lleó fins al 2022, les dades per mesa del qual no el tenen, amb els vots oficials de cada
+    candidatura amb escó. El resultat coincideix, a totes les eleccions, amb els escons oficials que publica cada comunitat (vegeu
+    Fonts). Es veuen per comunitat, la de cada parlament, amb les seves circumscripcions; les províncies, els municipis i les seccions
+    no tenen escons propis.</li>
+    <li><b>Escons disputats:</b> per comunitat: l'últim escó de la seva circumscripció més disputada, amb el seu nom (a la
+    pestanya Escons, totes les seves circumscripcions). Sense blocs, que són els del Congrés (vegeu Blocs), ni la capa
+    Circumscripcions, també del Congrés.</li>
+  </ul>
+  <p>El que falta o és incomplet a les fonts:</p>
+  <ul class="zerrenda">
+    <li><b>Extremadura:</b> només per província (Badajoz i Càceres), amb els resultats de la Junta Electoral d'Extremadura
+    comprovats amb el DOE: no hi ha resultats per municipi publicats. Els seus totals oficials porten el vot exterior (CERA),
+    que no es pot separar.</li>
+    <li><b>Cantàbria:</b> del 2011 tampoc. Del 2015, el recompte provisional (coincideix amb el definitiu de l'ICANE); del 2019,
+    només els vots de les candidatures, amb els partits petits sumats a «Otros» i sense cens ni votants.</li>
+    <li><b>Castella-la Manxa:</b> el 2011 i el 2015, els partits petits sumats a «Otros» i sense blancs ni nuls; del 2023, els
+    vots definitius per municipi; el cens, els vots en blanc i els nuls de cada municipi, de l'escrutini provisional, al qual
+    falten meses de 23 municipis (allà, sense participació; la de cada província, l'oficial del DOCM sense el vot exterior);
+    sense seccions, perquè el definitiu no està publicat per mesa.</li>
+  </ul>
 </section>
 <section>
   <h2>Nacions</h2>
@@ -173,13 +225,15 @@
     totals de les meses.</li>
     <li>El seccionat canvia d'un any a l'altre: una mateixa secció pot no ser comparable entre eleccions. Per això les seccions no
     mostren variacions.</li>
-    <li>Les variacions (▲▼) comparen sempre amb les eleccions generals anteriors.</li>
+    <li>Les variacions (▲▼) comparen amb l'elecció anterior del mateix tipus: al Congrés, les generals anteriors; a les
+    autonòmiques, l'elecció anterior de cada comunitat.</li>
   </ul>
 </section>
 <section>
   <h2>Comprovacions</h2>
   <p>Unes proves automàtiques comproven, a cada versió, que el Congrés suma 350 escons, que coincideixen amb els oficials del 2023
   i que els vots de cada nivell sumen el mateix que els del nivell inferior.</p>
+  <p>A les autonòmiques, que els vots de cada municipi quadren, que els totals coincideixen amb els que publica cada font a part, quan els publica, i que el repartiment D'Hondt dona els escons oficials de cada parlament.</p>
 </section>
   </main>
 </div>

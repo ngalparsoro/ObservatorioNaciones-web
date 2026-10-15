@@ -25,8 +25,8 @@
 <meta property="og:locale" content="gl_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=4cae8b197f95">
-<link rel="stylesheet" href="estiloa.css?v=4cae8b197f95">
+<link rel="stylesheet" href="letrak.css?v=4105d0a78421">
+<link rel="stylesheet" href="estiloa.css?v=4105d0a78421">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -55,6 +55,57 @@
   <h2>Eleccións</h2>
   <p>Eleccións xerais ao Congreso dos Deputados: novembro de 2011, decembro de 2015, xuño de 2016, abril e novembro de 2019 e
   xullo de 2023. O Senado non está incluído.</p>
+</section>
+<section>
+  <h2>Eleccións autonómicas</h2>
+  <p>Co selector <b>Eleccións</b> (ou a tecla A), o mapa pasa ás eleccións aos parlamentos das dezasete comunidades autónomas,
+  de 2008 a 2026, cos resultados oficiais que publica cada comunidade (ver Fontes). Ceuta e Melilla non entran: as súas
+  asembleas elíxense coas municipais.</p>
+  <ul class="zerrenda">
+    <li><b>Liña do tempo:</b> o estado das autonomías en cada momento, mes a mes e ata hoxe: cada comunidade coa súa elección vixente, a
+    última ata ese día. Cambia cada vez que vota algunha, desde maio de 2011 (entón seguían vixentes as de Andalucía, 2008;
+    Galicia e o País Vasco, 2009, e Cataluña, 2010).</li>
+    <li><b>Buscador de eleccións</b> (á dereita da liña do tempo): un día con eleccións (28, desde 2008) ou a elección dunha
+    soa comunidade, por mes, ano ou comunidade. O mapa amosa só o escollido e deixa o resto baleiro; outra comunidade, ao
+    tocala, di por que non está e leva ás súas eleccións. A × volve á liña do tempo.</li>
+    <li><b>Sen nacións:</b> cada parlamento é dunha comunidade, e as comunidades dunha mesma nación votan en datas distintas;
+    por iso as autonómicas van da comunidade á sección, sen nacións nin total do Estado.</li>
+    <li><b>Seccións censais:</b> onde a fonte dá os resultados por mesa ou por sección (58 das 78 eleccións; Andalucía, por sección desde a súa API), as mesas súmanse por
+    sección, como no Congreso, e debúxanse co seccionado do INE que mellor encaixa con elas. Onde a fonte só os dá por
+    concello (Asturias, Aragón 2011 e 2015, Murcia agás 2019, Cantabria 2015 e 2019, Castela-A Mancha agás 2019)
+    ou por provincia (Estremadura), ao achegar o mapa esas zonas vense por concellos.</li>
+    <li><b>Como no Congreso:</b> votantes = candidaturas + brancos + nulos (onde a fonte non dá brancos nin nulos, os seus
+    votantes); porcentaxes sobre os votos a candidaturas; sen voto exterior (CERA); concellos fusionados, como son hoxe.</li>
+    <li><b>Siglas:</b> as de cada fonte, coa mesma sigla escrita sempre igual (P.P. e PARTIDO POPULAR, como PP). As coalicións
+    van coa cor do seu partido principal: Adelante Andalucía en 2018, de Podemos e IU, como Podemos.</li>
+    <li><b>Canarias</b>, desde 2019, vota con dúas papeletas, a de illa e a rexional: o mapa usa a de illa; os escanos, das dúas.</li>
+    <li><b>Variacións (▲▼):</b> respecto á elección anterior da mesma comunidade.</li>
+    <li><b>Escanos:</b> cada parlamento reparte os seus coa lei D'Hondt en cada circunscrición, coa barreira da súa lei electoral: o
+    3 % dos votos válidos da circunscrición (Andalucía, Aragón, Asturias, Castela e León, Castela-A Mancha, Cataluña, Navarra, o País
+    Vasco e Murcia desde 2019) ou o 5 % (Illes Balears, Cantabria, Galicia, Madrid e A Rioxa); o 5 % de toda a comunidade (Murcia ata
+    2015; na Comunidade Valenciana, dos votos emitidos); en Estremadura, o 5 % na provincia ou en toda a comunidade; en Canarias, en
+    cada illa, o 30 % insular ou o 6 % rexional (desde 2019, o 15 % ou o 4 %) e, na circunscrición autonómica, o 4 %. As
+    circunscricións son as provincias, agás as illas (Illes Balears e Canarias, que desde 2019 elixe ademais 9 escanos en toda a
+    comunidade), as tres de Asturias e as cinco de Murcia ata 2015. Como no reparto oficial, co voto exterior (CERA); en Castela e
+    León ata 2022, cuxos datos por mesa non o teñen, cos votos oficiais de cada candidatura con escano. O resultado coincide, en
+    todas as eleccións, cos escanos oficiais que publica cada comunidade (ver Fontes). Vense por comunidade, a de cada parlamento, coas súas circunscricións; as provincias, os concellos e as seccións non
+    teñen escanos propios.</li>
+    <li><b>Escanos disputados:</b> por comunidade: o último escano da súa circunscrición máis disputada, co seu nome (na
+    lapela Escanos, todas as súas circunscricións). Sen bloques, que son os do Congreso (ver Bloques), nin a capa
+    Circunscricións, tamén do Congreso.</li>
+  </ul>
+  <p>O que falta ou está incompleto nas fontes:</p>
+  <ul class="zerrenda">
+    <li><b>Estremadura:</b> só por provincia (Badajoz e Cáceres), cos resultados da Xunta Electoral de Estremadura
+    comprobados co DOE: non hai resultados por concello publicados. Os seus totais oficiais levan o voto exterior (CERA), que
+    non se pode separar.</li>
+    <li><b>Cantabria:</b> de 2011 tampouco. De 2015, o reconto provisional (coincide co definitivo do ICANE); de 2019, só os
+    votos das candidaturas, cos partidos pequenos sumados en «Otros» e sen censo nin votantes.</li>
+    <li><b>Castela-A Mancha:</b> en 2011 e 2015, os partidos pequenos sumados en «Otros» e sen brancos nin nulos; de 2023, os
+    votos definitivos por concello; o censo, os brancos e os nulos de cada concello, do escrutinio provisional, ao que lle
+    faltan mesas de 23 concellos (alí, sen participación; a de cada provincia, a oficial do DOCM sen o voto exterior); sen
+    seccións, porque o definitivo non está publicado por mesa.</li>
+  </ul>
 </section>
 <section>
   <h2>Nacións</h2>
@@ -170,13 +221,15 @@
     sobre a suma das candidaturas (os votos que reparten os escanos) e a participación, cos totais das mesas.</li>
     <li>O seccionado cambia dun ano a outro: unha mesma sección pode non ser comparable entre eleccións. Por iso as seccións non
     amosan variacións.</li>
-    <li>As variacións (▲▼) comparan sempre coas eleccións xerais anteriores.</li>
+    <li>As variacións (▲▼) comparan coa elección anterior do mesmo tipo: no Congreso, as xerais anteriores; nas autonómicas,
+    a elección anterior de cada comunidade.</li>
   </ul>
 </section>
 <section>
   <h2>Comprobacións</h2>
   <p>Unhas probas automáticas comproban, en cada versión, que o Congreso suma 350 escanos, que coinciden cos oficiais de 2023 e que
   os votos de cada nivel suman o mesmo que os do nivel inferior.</p>
+  <p>Nas autonómicas, que os votos de cada concello cadran, que os totais coinciden cos que publica cada fonte á parte, cando os publica, e que o reparto D'Hondt dá os escanos oficiais de cada parlamento.</p>
 </section>
   </main>
 </div>

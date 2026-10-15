@@ -25,8 +25,8 @@
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=4cae8b197f95">
-<link rel="stylesheet" href="estiloa.css?v=4cae8b197f95">
+<link rel="stylesheet" href="letrak.css?v=4105d0a78421">
+<link rel="stylesheet" href="estiloa.css?v=4105d0a78421">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -55,6 +55,62 @@
   <h2>Elections</h2>
   <p>General elections to the Congress of Deputies: November 2011, December 2015, June 2016, April and November 2019, and July
   2023. The Senate is not included.</p>
+</section>
+<section>
+  <h2>Regional elections</h2>
+  <p>With the <b>Elections</b> selector (or the A key), the map switches to the elections to the parliaments of the seventeen
+  autonomous communities, from 2008 to 2026, with the official results published by each community (see Sources). Ceuta and
+  Melilla are not included: their assemblies are elected together with the municipal councils.</p>
+  <ul class="zerrenda">
+    <li><b>Timeline:</b> the state of the regions at each moment, month by month up to today: each community with its election in force, the latest
+    one up to that day. It changes whenever any of them votes, from May 2011 (when those of Andalusia, 2008; Galicia and the
+    Basque Country, 2009; and Catalonia, 2010, were still in force).</li>
+    <li><b>Election search</b> (to the right of the timeline): a day with elections (28, since 2008) or the election of a
+    single community, by month, year or community. The map shows only what was chosen and leaves the rest empty; tapping
+    another community tells you why it is not there and leads to its elections. The × goes back to the timeline.</li>
+    <li><b>No nations:</b> each parliament belongs to one community, and the communities of the same nation vote on different
+    dates; so regional elections go from the community down to the section, with no nations and no state-wide total.</li>
+    <li><b>Census sections:</b> where the source gives results by polling station or by section (58 of the 78 elections; Andalusia, by section from its API), polling
+    stations are added up by section, as for Congress, and drawn with the INE section map that best matches them. Where
+    the source only gives them by municipality (Asturias, Aragon 2011 and 2015, Murcia except 2019, Cantabria 2015 and
+    2019, Castilla-La Mancha except 2019) or by province (Extremadura), those areas are shown by
+    municipality when zooming in.</li>
+    <li><b>As for Congress:</b> voters = votes for parties + blank + invalid (where the source gives no blank or invalid votes,
+    its own voter count); percentages of the votes for parties; no vote from abroad (CERA); merged municipalities as they are
+    today.</li>
+    <li><b>Abbreviations:</b> those of each source, with the same abbreviation always written the same way (P.P. and PARTIDO
+    POPULAR, as PP). Coalitions take the colour of their main party: Adelante Andalucía in 2018, formed by Podemos and IU, as
+    Podemos.</li>
+    <li><b>The Canary Islands</b> have voted with two ballots since 2019, an island one and a regional one: the map uses the
+    island ballot; the seats, both.</li>
+    <li><b>Changes (▲▼):</b> from the previous election in the same community.</li>
+    <li><b>Seats:</b> each parliament allocates its own by the D'Hondt method in each constituency, with the threshold of its
+    electoral law: 3 % of the valid votes in the constituency (Andalusia, Aragon, Asturias, Castilla y León, Castilla-La Mancha,
+    Catalonia, Navarre, the Basque Country and Murcia since 2019) or 5 % (the Balearic Islands, Cantabria, Galicia, Madrid and La
+    Rioja); 5 % of the whole community (Murcia until 2015; in the Valencian Community, of the votes cast); in Extremadura, 5 % in
+    the province or in the whole community; in the Canary Islands, on each island, 30 % of the island or 6 % of the region (since
+    2019, 15 % or 4 %) and, in the regional constituency, 4 %. The constituencies are the provinces, except for the islands (the
+    Balearic and the Canary Islands, which since 2019 also elect 9 seats across the whole community), the three in Asturias and the
+    five in Murcia until 2015. As in the official allocation, with the vote from abroad (CERA); in Castilla y León until 2022, whose
+    polling-station data do not include it, with the official votes of each party that won seats. The result matches, in every
+    election, the official seats published by each community (see Sources). They are shown by community, that of each parliament, with its constituencies; provinces, municipalities and sections
+    have no seats of their own.</li>
+    <li><b>Close seats:</b> by community: the last seat of its closest constituency, with its name (all its constituencies
+    in the Seats tab). No blocs, which are those of Congress (see Blocs), and no Constituencies layer, also for Congress
+    only.</li>
+  </ul>
+  <p>What is missing or incomplete in the sources:</p>
+  <ul class="zerrenda">
+    <li><b>Extremadura:</b> by province only (Badajoz and Cáceres), with the results of the Electoral Board of Extremadura
+    checked against the DOE (official gazette): no results by municipality have been published. Its official totals include
+    the vote from abroad (CERA), which cannot be separated.</li>
+    <li><b>Cantabria:</b> none for 2011 either. For 2015, the provisional count (it matches ICANE's final figures); for 2019, only
+    the votes for each party, with small parties added up as «Otros» (others) and no electorate or voters.</li>
+    <li><b>Castilla-La Mancha:</b> in 2011 and 2015, small parties added up as «Otros» (others) and no blank or invalid votes;
+    for 2023, the final votes by municipality; each municipality's electorate, blank and invalid votes from the provisional
+    count, which lacks polling stations in 23 municipalities (there, no turnout; each province's turnout is the official one in
+    the DOCM, without the vote from abroad); no sections, because the final count is not published by polling station.</li>
+  </ul>
 </section>
 <section>
   <h2>Nations</h2>
@@ -173,13 +229,15 @@
     polling-station totals.</li>
     <li>Section boundaries change from year to year: the same section may not be comparable between elections. That is why
     sections show no changes.</li>
-    <li>Changes (▲▼) always compare with the previous general election.</li>
+    <li>Changes (▲▼) compare with the previous election of the same kind: for Congress, the previous general election; for
+    regional elections, the previous election in each community.</li>
   </ul>
 </section>
 <section>
   <h2>Checks</h2>
   <p>Automated tests check, for every version, that Congress adds up to 350 seats, that they match the official 2023 seats and
   that the votes at each level add up to the same as those at the level below.</p>
+  <p>For regional elections, that the votes of each municipality add up, that the totals match those each source publishes separately, where it does, and that the D'Hondt allocation gives each parliament's official seats.</p>
 </section>
   </main>
 </div>

@@ -5,12 +5,12 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at https://www.ign.es; connect-src 'self' https://tiles.maps.eox.at https://www.ign.es https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Observatorio Electoral de las Naciones</title>
-<meta name="description" content="Elecciones al Congreso en el Estado español, leídas por naciones: participación y competitividad por nación, comunidad, provincia, municipio y sección censal.">
+<meta name="description" content="Elecciones al Congreso y autonómicas en el Estado español, leídas por naciones: participación y competitividad por nación, comunidad, provincia, municipio y sección censal.">
 <link rel="canonical" href="https://nazioenbehatokia.eus/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Observatorio Electoral de las Naciones">
 <meta property="og:title" content="Observatorio Electoral de las Naciones">
-<meta property="og:description" content="Elecciones al Congreso en el Estado español, leídas por naciones: participación y competitividad por nación, comunidad, provincia, municipio y sección censal.">
+<meta property="og:description" content="Elecciones al Congreso y autonómicas en el Estado español, leídas por naciones: participación y competitividad por nación, comunidad, provincia, municipio y sección censal.">
 <meta property="og:url" content="https://nazioenbehatokia.eus/">
 <meta property="og:image" content="https://nazioenbehatokia.eus/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -20,17 +20,18 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="vendor/maplibre-gl.css">
-<link rel="stylesheet" href="letrak.css?v=4cae8b197f95">
-<link rel="stylesheet" href="estiloa.css?v=4cae8b197f95">
+<link rel="stylesheet" href="letrak.css?v=4105d0a78421">
+<link rel="stylesheet" href="estiloa.css?v=4105d0a78421">
 <link rel="preload" href="fonts/saira-semi-condensed-600-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="modulepreload" href="vendor/maplibre-gl.mjs">
 <link rel="modulepreload" href="vendor/maplibre-gl-shared.mjs">
-<link rel="modulepreload" href="testuak.js?v=4cae8b197f95">
-<link rel="modulepreload" href="hemizikloa.js?v=4cae8b197f95">
-<link rel="preload" href="data/index.json?v=4cae8b197f95" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="geo/nazioa.json?v=4cae8b197f95" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="geo/izenak.json?v=4cae8b197f95" as="fetch" crossorigin="anonymous">
+<link rel="modulepreload" href="testuak.js?v=4105d0a78421">
+<link rel="modulepreload" href="hemizikloa.js?v=4105d0a78421">
+<link rel="preload" href="data/index.json?v=4105d0a78421" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="data/autonomikoak/index.json?v=4105d0a78421" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/nazioa.json?v=4105d0a78421" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/izenak.json?v=4105d0a78421" as="fetch" crossorigin="anonymous">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -66,6 +67,11 @@
     <label class="lbl" for="bilatu" data-t="buscar">Buscar</label>
     <input id="bilatu" type="search" list="udalerriak" placeholder="Municipio…" data-t-ph="municipioPh" autocomplete="off">
     <datalist id="udalerriak"></datalist>
+    <div class="lbl" data-t="motaLbl">Elecciones</div>
+    <div id="motak" class="bikotea" role="group" aria-label="Elecciones" data-t-aria="motaLbl">
+      <button type="button" class="mode" data-mota="kongresua" aria-pressed="true" data-t="kongresua">Congreso</button>
+      <button type="button" class="mode" data-mota="autonomikoak" aria-pressed="false" data-t="autonomicas">Autonómicas</button>
+    </div>
     <div class="lbl" data-t="capa">Capa del mapa</div>
     <div id="moduak" role="group" aria-label="Capa del mapa" data-t-aria="capa">
       <button type="button" class="mode" data-modua="irabazlea" aria-pressed="true"><span class="sw"></span><span data-t="irabazlea">Ganador</span><kbd>W</kbd></button>
@@ -100,17 +106,29 @@
     <div id="edukia" role="tabpanel" aria-live="polite"></div>
   </aside>
   <div id="denboralerroa" role="group" aria-label="Línea de tiempo" data-t-aria="denboraLerroa">
-    <button type="button" id="dlplay" aria-label="Reproducir" title="Reproducir (P)" data-t-aria="erreproduzitu" data-t-title="erreproduzituTit">▶</button>
-    <div class="dl-erdia"><div class="dl-goia"><span class="dl-data"></span><span class="dl-osaera" data-t="osaera">Elecciones generales · Congreso de los Diputados</span></div><div class="dl-pista"></div></div>
-    <button type="button" class="dl-azkena ibtn" title="Últimas elecciones" data-t-title="azkenaTit" data-t="azkena">Última</button>
+    <button type="button" id="dlplay" aria-label="Reproducir" title="Recorrer el tiempo (P)" data-t-aria="erreproduzitu" data-t-title="erreproduzituTit">▶</button>
+    <div class="dl-erdia">
+      <div class="dl-goia"><span class="dl-data"></span><span class="dl-osaera" data-t="osaera">Elecciones generales · Congreso de los Diputados</span>
+        <button type="button" id="dlitzuli" class="dl-itzuli" hidden title="Volver a la línea de tiempo" aria-label="Volver a la línea de tiempo" data-t-title="dlItzuli" data-t-aria="dlItzuli">×</button></div>
+      <div class="dl-pista"></div>
+    </div>
+    <details id="dlhautatu">
+      <summary class="ibtn" title="Buscar una elección (F)" data-t-title="dataBilatuTit"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.2 10.2 14.5 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="dl-bilatu-testua" data-t="dataBilatu">Buscar</span></summary>
+      <div class="dl-menua">
+        <input id="dlbilatu" type="search" role="combobox" aria-expanded="true" aria-controls="dlzerrenda" aria-autocomplete="list" autocomplete="off" placeholder="Fecha…" aria-label="Buscar una elección (F)" data-t-aria="dataBilatuTit">
+        <div id="dlzerrenda" class="dl-zerrenda" role="listbox" aria-label="Elección" data-t-aria="hauteskundea"></div>
+      </div>
+    </details>
   </div>
   <div id="ortokreditua" hidden>PNOA CC BY 4.0 <a href="https://www.scne.es" target="_blank" rel="noopener">scne.es</a></div>
   <section id="laguntza" role="dialog" aria-modal="false" aria-labelledby="laguntzaIzenb" hidden>
     <h2 id="laguntzaIzenb" data-t="lasterbideak">Atajos de teclado</h2>
     <button type="button" class="itxi" id="laguntzaItxi" aria-label="Cerrar" data-t-aria="cerrar">×</button>
     <dl>
+      <dt><kbd>A</kbd></dt><dd data-t="lagA">Congreso / autonómicas</dd>
       <dt><kbd>Q</kbd><kbd>E</kbd></dt><dd data-t="lagQE">Elección anterior / siguiente</dd>
-      <dt><kbd>P</kbd></dt><dd data-t="lagP">Recorrer las elecciones / parar</dd>
+      <dt><kbd>P</kbd></dt><dd data-t="lagP">Recorrer el tiempo / parar</dd>
+      <dt><kbd>F</kbd></dt><dd data-t="lagF">Buscar una elección</dd>
       <dt><kbd>W</kbd><kbd>M</kbd><kbd>T</kbd><kbd>B</kbd><kbd>D</kbd></dt><dd data-t="lagWMT">Ganador, escaños reñidos, participación, bloques, tamaño de circunscripción</dd>
       <dt><kbd>K</kbd></dt><dd data-t="lagK">Resultados → escaños → evolución (en el panel)</dd>
       <dt><kbd>S</kbd></dt><dd data-t="lagS">Imagen de satélite sí / no</dd>
@@ -123,6 +141,6 @@
   <div id="tip" role="tooltip"></div>
   <div id="kargatzen" data-t="cargando">Cargando…</div>
 </div>
-<script type="module" src="app.js?v=4cae8b197f95"></script>
+<script type="module" src="app.js?v=4105d0a78421"></script>
 </body>
 </html>

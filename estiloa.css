@@ -1,7 +1,8 @@
 /* Observatorio Electoral de las Naciones · mismo lenguaje visual que el Hauteskunde Behatokia: pizarra muy oscura, ámbar solo
    para lo activo, letra condensada técnica y cifras en monoespaciada. Diseño único oscuro, todo pintado a mano.
-   Disposición (ordenador): barra arriba, herramientas a la izquierda, leyenda abajo a la izquierda, línea de tiempo
-   abajo en el centro y panel de resultados a la derecha. Móvil: línea de tiempo arriba y resultados en una hoja inferior. */
+   Disposición (ordenador): barra arriba, herramientas a la izquierda, leyenda abajo a la izquierda, línea de tiempo (con el
+   buscador de elecciones) abajo en el centro y panel de resultados a la derecha. Móvil: línea de tiempo arriba y resultados
+   en una hoja inferior. */
 :root {
   --bg: #0C131A; --bg-2: #131D26; --panel: rgba(14,22,30,.93); --panel-solid: #101A22;
   --line: #2E4252; --line-2: #22323F; --ink: #D6E1E8; --ink-hi: #F4F7F9; --muted: #9FB3C2; --dim: #6A8090;
@@ -121,6 +122,8 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .mode[aria-pressed="true"] kbd { color: var(--gold); border-color: var(--gold-line); }
 .bikotea { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .bikotea .mode { justify-content: center; padding-left: 10px; }
+/* capas que el tipo de elección no tiene: apagadas, con su fondo (no se transparenta el mapa) */
+.mode[hidden] { display: none; }  /* la capa que no tiene el tipo de elección (autonómicas: Circunscripciones) */
 .sel { width: 100%; background: var(--bg-2); color: var(--ink); border: 1px solid var(--line); font: 500 12px var(--f-mono); padding: 7px 8px; letter-spacing: .02em; }
 .rail-gezia { position: absolute; top: calc(var(--top-h) + 28px); left: calc(24px + var(--rail-w) + 4px); z-index: 1001; width: 20px; height: 44px; padding: 0;
   cursor: pointer; background: var(--panel-solid); color: var(--gold); border: 1px solid var(--line); border-left: 0; font: 600 18px/1 var(--f-display); }
@@ -144,7 +147,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .sel:disabled { opacity: .45; cursor: not-allowed; }
 .sq { width: 12px; height: 12px; flex: none; display: inline-block; }
 
-/* ---- Línea de tiempo (abajo, entre la leyenda y el panel): las elecciones en su fecha, ▶ las recorre ---- */
+/* ---- Línea de tiempo (abajo, entre la leyenda y el panel): ▶ la recorre; a la derecha, el buscador de elecciones ---- */
 /* Crédito de las ortofotos del PNOA a pie de mapa, como pide la licencia del IGN («PNOA CC BY 4.0 scne.es», la fórmula
    abreviada): solo cuando se ven (desde el zoom 10, con el satélite; app.js); en la franja libre de abajo, bajo la línea
    de tiempo. Los créditos completos, en ⓘ. */
@@ -157,26 +160,48 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
   display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); }
 #denboralerroa::before { content: ""; position: absolute; left: -2px; top: -2px; width: 12px; height: 12px; border: 2px solid var(--gold); border-right: 0; border-bottom: 0; }
 #dlplay { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--gold); background: var(--gold-bg); color: var(--gold); cursor: pointer; font-size: 12px; }
-#dlplay:focus-visible, .dl-puntua:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+#dlplay:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .dl-erdia { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .dl-goia { display: flex; gap: 10px; align-items: baseline; min-width: 0; }
 .dl-data { font: 600 13px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
-.dl-osaera { font: 400 10.5px var(--f-mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dl-azkena { flex: none; }
-.dl-pista { position: relative; height: 52px; margin: 0 8px; touch-action: none; cursor: ew-resize; user-select: none; }
-.dl-ardatza { position: absolute; left: 0; right: 0; top: 22px; height: 1px; background: var(--line); }
-.dl-urtea { position: absolute; top: 25px; transform: translateX(-50%); font: 400 9.5px var(--f-mono); color: var(--dim); pointer-events: none; }
+.dl-osaera { font: 400 10.5px var(--f-mono); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* elegidas en el buscador: lo dice el subtítulo, en ámbar, y la × vuelve a la línea de tiempo */
+#denboralerroa.hautaketa .dl-osaera { color: var(--gold-2); }
+.dl-itzuli { flex: none; align-self: center; width: 20px; height: 20px; padding: 0; line-height: 1; background: transparent; color: var(--gold);
+  border: 1px solid var(--gold-line); cursor: pointer; font-size: 14px; }
+.dl-itzuli:hover { background: var(--gold-bg); border-color: var(--gold); }
+.dl-itzuli:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.dl-itzuli[hidden] { display: none; }
+.dl-pista { position: relative; height: 40px; margin: 0 8px; touch-action: none; cursor: ew-resize; user-select: none; }
+.dl-ardatza { position: absolute; left: 0; right: 0; top: 14px; height: 1px; background: var(--line); }
+.dl-urtea { position: absolute; top: 17px; transform: translateX(-50%); font: 400 9.5px var(--f-mono); color: var(--dim); pointer-events: none; }
 .dl-urtea::before { content: ""; position: absolute; left: 50%; top: -4px; width: 1px; height: 4px; background: var(--line); }
-.dl-puntua { position: absolute; top: 10px; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; padding: 0; cursor: pointer;
-  border: 1.5px solid var(--muted); background: var(--panel-solid); z-index: 2; }
-.dl-puntua::after { content: ""; position: absolute; inset: -8px; }  /* más fácil de tocar */
-.dl-puntua.act { background: var(--gold); border-color: var(--gold); }
-.dl-puntua:hover { border-color: var(--ink-hi); }
-.dl-kurtsorea { position: absolute; top: 0; height: 24px; width: 2px; margin-left: -1px; background: var(--gold); opacity: .7; pointer-events: none; z-index: 1; }
-.dl-heldulekua { position: absolute; top: 38px; width: 16px; height: 13px; margin-left: -8px; cursor: grab; outline: none;
+.dl-kurtsorea { position: absolute; top: 2px; height: 24px; width: 2px; margin-left: -1px; background: var(--gold); opacity: .7; pointer-events: none; z-index: 1; }
+.dl-heldulekua { position: absolute; top: 27px; width: 16px; height: 13px; margin-left: -8px; cursor: grab; outline: none;
   background: var(--gold); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
 .dl-heldulekua:focus-visible { box-shadow: 0 0 0 3px var(--gold-line); filter: brightness(1.2); }
 .dl-pista:active .dl-heldulekua { cursor: grabbing; }
+#denboralerroa.hautaketa .dl-kurtsorea, #denboralerroa.hautaketa .dl-heldulekua { opacity: .35; }  /* fuera de la línea de tiempo */
+/* el buscador de elecciones: el botón, a la derecha; la lista, encima (en el móvil, debajo) */
+#dlhautatu { flex: none; }
+#dlhautatu > summary { list-style: none; display: flex; align-items: center; gap: 6px; padding: 7px 10px; cursor: pointer; }
+#dlhautatu > summary::-webkit-details-marker { display: none; }
+#dlhautatu[open] > summary { border-color: var(--gold-line); color: var(--gold-2); }
+.dl-menua { position: absolute; right: -1px; bottom: calc(100% + 6px); z-index: 1300; width: min(440px, calc(100% + 2px)); display: flex; flex-direction: column;
+  max-height: min(60vh, 480px); background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 -20px 60px rgba(0,0,0,.6); }
+#dlbilatu { flex: none; margin: 10px; padding: 7px 10px; background: var(--bg); border: 1px solid var(--line); color: var(--ink); }
+#dlbilatu:focus { outline: none; border-color: var(--gold); }
+.dl-zerrenda { position: relative; overflow-y: auto; scrollbar-width: thin; }
+.dl-aukera { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: baseline; width: 100%; padding: 8px 12px; text-align: left;
+  background: transparent; border: 0; border-top: 1px solid var(--line-2); cursor: pointer; }
+.dl-aukera b { font: 600 13px var(--f-display); letter-spacing: .05em; text-transform: uppercase; color: var(--ink-hi); white-space: nowrap; }
+.dl-aukera span { font-size: 12.5px; line-height: 1.35; color: var(--muted); }
+.dl-aukera.bat span { color: var(--ink); }  /* la elección de una sola comunidad */
+.dl-aukera:hover, .dl-aukera.foku { background: var(--gold-bg); }
+.dl-aukera[aria-selected="true"] b { color: var(--gold); }
+.dl-ezer { padding: 12px; color: var(--dim); font-size: 13px; border-top: 1px solid var(--line-2); }
+#denboralerroa.zabalik { z-index: 1200; }  /* el buscador abierto, por encima del panel y de la hoja del móvil */
+#dlhautatu:not([open]) .dl-menua { display: none; }  /* cerrado, sin medidas (Chrome guarda las del contenido de un details cerrado) */
 
 /* ---- Panel de resultados (derecha), con esquinas de instrumental ---- */
 #panela { position: absolute; top: calc(var(--top-h) + 36px); right: 24px; bottom: 20px; width: var(--panel-w); z-index: 1000;
@@ -294,7 +319,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 
 /* ---- Móvil: línea de tiempo arriba, herramientas tras la flecha, resultados en una hoja inferior desplegable ---- */
 @media (max-width: 900px) {
-  :root { --top-h: 56px; --orria-h: 150px; --dl-h: 92px; }  /* --dl-h: alto de la línea de tiempo, arriba */
+  :root { --top-h: 56px; --orria-h: 150px; --dl-h: 80px; }  /* --dl-h: alto de la línea de tiempo, arriba */
   #top { gap: 8px; padding: 0 10px; }
   #top h1 { font-size: 13px; line-height: 1.1; white-space: normal; max-width: 236px; }  /* el nombre, en dos líneas */
   #legenda .lbl { font-size: 9.5px; letter-spacing: .1em; }
@@ -303,11 +328,14 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #laguntzabtn { display: none; }
   #satelitea { font-size: 0; width: 34px; padding: 7px 0; }
   #satelitea::before { content: "◐"; font-size: 15px; }
-  #denboralerroa { top: calc(var(--top-h) + 6px); bottom: auto; left: 8px; right: 8px; padding: 6px 10px; gap: 8px; }
-  .dl-osaera { display: none; }
-  .rail-gezia { top: calc(var(--top-h) + 98px); left: 0; }
+  #denboralerroa { top: calc(var(--top-h) + 6px); bottom: auto; left: 8px; right: 8px; height: var(--dl-h); padding: 6px 10px; gap: 8px; }
+  .dl-menua { top: calc(100% + 6px); bottom: auto; width: calc(100% + 2px); max-height: calc(100vh - var(--top-h) - var(--dl-h) - 40px);
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  .dl-bilatu-testua { display: none; }  /* en el móvil, solo la lupa */
+  #dlhautatu > summary { padding: 9px; }
+  .rail-gezia { top: calc(var(--top-h) + var(--dl-h) + 12px); left: 0; }
   #app.rail-zabalik .rail-gezia { left: min(268px, calc(100% - 28px)); }
-  #rail { display: none; top: calc(var(--top-h) + 98px); left: 8px; width: min(260px, calc(100% - 36px)); max-height: calc(100% - var(--top-h) - 106px - var(--orria-h));
+  #rail { display: none; top: calc(var(--top-h) + var(--dl-h) + 12px); left: 8px; width: min(260px, calc(100% - 36px)); max-height: calc(100% - var(--top-h) - var(--dl-h) - 20px - var(--orria-h));
     padding: 10px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0,0,0,.6); z-index: 1150; }
   #app.rail-zabalik #rail { display: flex; }
   #app.menurik-ez #rail { transform: none; opacity: 1; visibility: visible; }
@@ -323,7 +351,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #panela { top: auto; left: 0; right: 0; bottom: 0; width: 100%; height: var(--orria-h); z-index: 1100; border-left: 0; border-right: 0; border-bottom: 0;
     background: var(--panel-solid); }
   #panela::after { display: none; }
-  #panela.zabalik { height: min(75vh, calc(100% - var(--top-h) - var(--dl-h) - 8px)); }  /* abierta, hasta la línea de tiempo, sin taparla */
+  #panela.zabalik { height: min(75vh, calc(100% - var(--top-h) - var(--dl-h) - 14px)); }  /* abierta, hasta la línea de tiempo, sin taparla */
   #panela:not(.zabalik) #edukia { overflow: hidden; }
   #edukia { padding: 12px 14px; }
   #heldulekua { display: flex; justify-content: center; align-items: center; height: 22px; flex: none; background: transparent; border: 0; cursor: pointer; }
@@ -344,7 +372,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #top .beta { display: none; }
   #denboralerroa { padding: 6px 8px; gap: 6px; }
   #dlplay { width: 30px; height: 30px; }
-  .dl-azkena { padding: 6px 7px; }
+  #dlhautatu > summary { padding: 7px; }
 }
 
 /* ---- Páginas estáticas (Metodología, Fuentes, Quiénes somos, Aviso legal, 404) ---- */
@@ -403,6 +431,12 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .tamaina-prob div { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; }
 .tamaina-prob button { background: none; border: 0; padding: 0; color: var(--ink-hi); cursor: pointer; font: inherit; }
 .tamaina-prob button:hover { color: var(--gold-2); }
+.taula.hiru { grid-template-columns: 1fr auto auto; }  /* autonómicas, línea de tiempo: comunidad, elección y 1.ª fuerza */
+.aut-data { font: 400 12px var(--f-mono); white-space: nowrap; color: var(--muted); }
+.aut-data.berria { color: var(--gold-2); }
+.aut-data.berria::before { content: "● "; color: var(--gold); }
+.aut-datak { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }  /* las elecciones de una comunidad que no vota ese día */
+.aut-datak .ibtn { padding: 6px 9px; text-transform: uppercase; }
 .tamaina-prob .zk { color: var(--muted); font-family: var(--f-mono); font-size: 11px; }
 
 /* Móvil bajo (iPhone SE, 568 px): herramientas más compactas para que se vean las cinco capas sin desplazar */
@@ -414,3 +448,8 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #moduak { gap: 3px; }
   #rail .mode { padding-top: 5px; padding-bottom: 5px; }
 }
+
+/* Autonómicas, pestaña Escaños: las circunscripciones de una comunidad que tiene varias, con su último escaño debajo */
+.nazio-eser.barrutia > span:first-child { color: var(--ink-hi); font-weight: 500; }
+.barruti-azk { grid-column: 1 / -1; margin: -4px 0 4px; font-size: 12px; color: var(--muted); }
+.barruti-azk b { color: var(--ink); font-weight: 500; }
