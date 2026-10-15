@@ -903,6 +903,7 @@ const autCcakDenak = () => izenez(Object.keys(GOIK.autonomia).filter((c) => !AUT
 const autHint = (k) => (hautaketa(k) ? T.autHintBilatu : T.autHint);
 // Sin zona elegida: no hay total del Estado. En la línea de tiempo, cada comunidad con su elección vigente (● las que votan
 // ese día) y su primera fuerza; con lo elegido en el buscador, esas comunidades, con su participación y su primera fuerza
+// (tres columnas: con cuatro, en el móvil pequeño no caben; el margen, en la ficha de cada una)
 function autOrokorra(k) {
   const lehena = (x) => (x && x.c[0] ? `${sq(x.c[0][3])} ${esc(x.c[0][0])}` : T.sinDatos), hutsik = INFO[k].hutsik || [];
   if (!hautaketa(k)) {
@@ -915,10 +916,10 @@ function autOrokorra(k) {
       `<p class="hint">${T.autHint}</p>`;
   }
   return buruak(T.autParlamentuak, `${T.autonomicas} · ${INFO[k].izena}`) +
-    `<div class="lbl">${T.autBozkatu}</div><div class="taula"><span class="h">${T.mailak.autonomia}</span><span class="h num">${T.part}</span><span class="h">${T.primera}</span><span class="h num">${T.margen}</span>
+    `<div class="lbl">${T.autBozkatu}</div><div class="taula hiru"><span class="h">${T.mailak.autonomia}</span><span class="h num">${T.part}</span><span class="h">${T.primera}</span>
     ${autCcak(k).map((c) => { const x = erregistroa(k, "autonomia", c);
     return `<span><button type="button" data-hautatu="autonomia:${c}">${esc(izena("autonomia", c))}</button></span><span class="num">${pct(x && x.part)}</span>` +
-      `<span>${lehena(x)}</span><span class="num">${ptu(x && x.m)}</span>`; }).join("")}</div>` +
+      `<span>${lehena(x)}</span>`; }).join("")}</div>` +
     (hutsik.length ? `<p class="hint">${T.autFalta(hutsik.map((c) => esc(izena("autonomia", c))).join(", "))}</p>` : "") + `<p class="hint">${T.autHintBilatu}</p>`;
 }
 // Con una zona elegida: de qué elección son los datos, lo que hay que saber de la fuente (partidos sumados en «Otros», sin
