@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at https://www.ign.es; connect-src 'self' https://tiles.maps.eox.at https://www.ign.es https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at https://www.ign.es; connect-src 'self' https://tiles.maps.eox.at https://www.ign.es https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Metodología · Observatorio Electoral de las Naciones</title>
 <meta name="description" content="Cómo se tratan los datos: naciones, votos, candidaturas, escaños, secciones censales y límites conocidos.">
@@ -25,8 +26,8 @@
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=4ddd9d51bbce">
-<link rel="stylesheet" href="estiloa.css?v=4ddd9d51bbce">
+<link rel="stylesheet" href="letrak.css?v=bc946b6b5c94">
+<link rel="stylesheet" href="estiloa.css?v=bc946b6b5c94">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -57,71 +58,6 @@
   2019 y julio de 2023. El Senado no está incluido.</p>
 </section>
 <section>
-  <h2>Elecciones autonómicas</h2>
-  <p>Con el selector <b>Elecciones</b> (o la tecla A), el mapa pasa a las elecciones a los parlamentos de las diecisiete
-  comunidades autónomas, de 2008 a 2026, con los resultados oficiales que publica cada comunidad (ver Fuentes). Ceuta y Melilla
-  no entran: sus asambleas se eligen con las municipales.</p>
-  <ul class="zerrenda">
-    <li><b>Línea de tiempo:</b> el estado de las autonomías en cada momento, mes a mes y hasta hoy: cada comunidad con su elección vigente, la
-    última hasta ese día. Cambia cada vez que vota alguna, desde mayo de 2011 (entonces seguían vigentes las de Andalucía, 2008;
-    Galicia y el País Vasco, 2009, y Cataluña, 2010).</li>
-    <li><b>Buscador de elecciones</b> (a la derecha de la línea de tiempo): un día con elecciones (28, desde 2008) o la elección
-    de una sola comunidad, por mes, año o comunidad. El mapa enseña solo lo elegido y deja el resto vacío; otra comunidad, al
-    tocarla, dice por qué no está y lleva a sus elecciones. La × vuelve a la línea de tiempo.</li>
-    <li><b>Sin naciones:</b> cada parlamento es de una comunidad, y las comunidades de una misma nación votan en fechas
-    distintas; por eso las autonómicas van de la comunidad a la sección, sin naciones ni total del Estado.</li>
-    <li><b>Secciones censales:</b> donde la fuente da los resultados por mesa o por sección (58 de las 78 elecciones; Andalucía,
-    por sección desde su API), las mesas se suman por sección, como en el Congreso, y se dibujan con el seccionado del INE que mejor encaja con ellas. Donde la fuente
-    solo los da por municipio (Asturias, Aragón 2011 y 2015, Murcia salvo 2019, Cantabria 2015 y 2019, Castilla-La Mancha salvo 2019) o por provincia (Extremadura), al acercar el mapa esas zonas se ven por municipios.</li>
-    <li><b>Como en el Congreso:</b> votantes = candidaturas + blancos + nulos (donde la fuente no da blancos ni nulos, sus
-    votantes); porcentajes sobre los votos a candidaturas; sin voto exterior (CERA); municipios fusionados, como son hoy.</li>
-    <li><b>Siglas:</b> las de cada fuente, con la misma sigla escrita siempre igual (P.P. y PARTIDO POPULAR, como PP). Las
-    coaliciones van con el color de su partido principal: Adelante Andalucía en 2018, de Podemos e IU, como Podemos.</li>
-    <li><b>Canarias</b>, desde 2019, vota con dos papeletas, la de isla y la regional: el mapa usa la de isla; los escaños, de las dos.</li>
-    <li><b>Variaciones (▲▼):</b> respecto a la elección anterior de la misma comunidad.</li>
-    <li><b>Escaños:</b> cada parlamento reparte los suyos con la ley D'Hondt en cada circunscripción, con la barrera de su ley
-    electoral: el 3 % de los votos válidos de la circunscripción (Andalucía, Aragón, Asturias, Castilla y León, Castilla-La Mancha,
-    Cataluña, Navarra, el País Vasco y Murcia desde 2019) o el 5 % (Illes Balears, Cantabria, Galicia, Madrid y La Rioja); el 5 % de
-    toda la comunidad (Murcia hasta 2015; en la Comunitat Valenciana, de los votos emitidos); en Extremadura, el 5 % en la provincia
-    o en toda la comunidad; en Canarias, en cada isla, el 30 % insular o el 6 % regional (desde 2019, el 15 % o el 4 %) y, en la
-    circunscripción autonómica, el 4 %. Las circunscripciones son las provincias, salvo las islas (Illes Balears y Canarias, que desde
-    2019 elige además 9 escaños en toda la comunidad), las tres de Asturias y las cinco de Murcia hasta 2015. Como en el reparto
-    oficial, con el voto exterior (CERA); en Castilla y León hasta 2022, cuyos datos por mesa no lo tienen, con los votos oficiales
-    de cada candidatura con escaño. El resultado coincide, en todas las elecciones, con los escaños oficiales que publica cada
-    comunidad (ver Fuentes). Se ven por comunidad, la de cada parlamento, con sus circunscripciones; las provincias, los municipios y las secciones no
-    tienen escaños propios.</li>
-    <li><b>Escaños reñidos:</b> por comunidad: el último escaño de su circunscripción más reñida, con su nombre (en la pestaña
-    Escaños, todas sus circunscripciones). Sin bloques, que son los del Congreso (ver Bloques), ni la capa Circunscripciones,
-    también del Congreso.</li>
-  </ul>
-  <p>Lo que falta o está incompleto en las fuentes:</p>
-  <ul class="zerrenda">
-    <li><b>Extremadura:</b> solo por provincia (Badajoz y Cáceres), con los resultados de la Junta Electoral de Extremadura
-    comprobados con el DOE: no hay resultados por municipio publicados. Sus totales oficiales llevan el voto exterior (CERA),
-    que no se puede separar.</li>
-    <li><b>Cantabria:</b> de 2011 tampoco. De 2015, el recuento provisional (coincide con el definitivo del ICANE); de 2019, solo
-    los votos de las candidaturas, con los partidos pequeños sumados en «Otros» y sin censo ni votantes.</li>
-    <li><b>Castilla-La Mancha:</b> en 2011 y 2015, los partidos pequeños sumados en «Otros» y sin blancos ni nulos; de 2023, los
-    votos definitivos por municipio; el censo, los blancos y los nulos de cada municipio, del escrutinio provisional, al que le
-    faltan mesas de 23 municipios (ahí, sin participación; la de cada provincia, la oficial del DOCM sin el voto exterior); sin
-    secciones, porque el definitivo no está publicado por mesa.</li>
-    <li><b>Canarias:</b> en algunas mesas de 2011 (y en una de 2019), la fuente da un censo imposible, a cero o menor que
-    los votantes: esos municipios (Las Palmas de Gran Canaria, La Laguna, Mogán, Puntallana y Alajeró en 2011; Santa Lucía de
-    Tirajana en 2019), sin participación. El Pinar de El Hierro viene con el número de Adeje: se le da el suyo.</li>
-    <li><b>Castilla-La Mancha 2015:</b> la fuente trae corrido el código de 66 municipios (y, en siete, también el nombre):
-    cada uno va con el suyo por su nombre y, donde el nombre tampoco vale, por su censo (el de las generales de 2015).</li>
-  </ul>
-</section>
-<section>
-  <h2>Naciones</h2>
-  <p>El mapa lee el Estado como un Estado de naciones. Cada comunidad autónoma pertenece a una nación; las naciones de varias
-  comunidades tienen partes interiores, como EAE y Nafarroa en Hego Euskal Herria.</p>
-  <div class="orri-taula"><table class="estua"><thead><tr><th>Nación</th><th>Partes</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Sus provincias</td></tr><tr><th>Asturies</th><td>Sus provincias</td></tr><tr><th>Andalucía</th><td>Sus provincias</td></tr><tr><th>Canarias</th><td>Sus provincias</td></tr><tr><th>Aragón</th><td>Sus provincias</td></tr><tr><th>Resto del Estado</th><td>Por comunidades autónomas: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
-  <p>Solo cuenta el territorio donde se vota al Congreso: de Euskal Herria, Hego Euskal Herria (Iparralde vota en Francia), y de los
-  Països Catalans, las tres comunidades del Estado (la Franja de Ponent queda dentro de Aragón). Cantabria y León van
-  en el resto del Estado. Es una tabla editorial, que puede revisarse.</p>
-</section>
-<section>
   <h2>Qué se cuenta</h2>
   <ul class="zerrenda">
     <li><b>Votantes</b> = votos a candidaturas + votos en blanco + votos nulos. <b>Participación</b> = votantes / censo.</li>
@@ -133,6 +69,15 @@
     <li>Los <b>municipios fusionados</b> se muestran como son hoy en todas las elecciones: Oza-Cesuras (Oza dos Ríos y Cesuras,
     2013) y Cerdedo-Cotobade (Cerdedo y Cotobade, 2016).</li>
   </ul>
+</section>
+<section>
+  <h2>Naciones</h2>
+  <p>El mapa lee el Estado como un Estado de naciones. Cada comunidad autónoma pertenece a una nación; las naciones de varias
+  comunidades tienen partes interiores, como EAE y Nafarroa en Hego Euskal Herria.</p>
+  <div class="orri-taula"><table class="estua"><thead><tr><th>Nación</th><th>Partes</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Sus provincias</td></tr><tr><th>Asturies</th><td>Sus provincias</td></tr><tr><th>Andalucía</th><td>Sus provincias</td></tr><tr><th>Canarias</th><td>Sus provincias</td></tr><tr><th>Aragón</th><td>Sus provincias</td></tr><tr><th>Resto del Estado</th><td>Por comunidades autónomas: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
+  <p>Solo cuenta el territorio donde se vota al Congreso: de Euskal Herria, Hego Euskal Herria (Iparralde vota en Francia), y de los
+  Països Catalans, las tres comunidades del Estado (la Franja de Ponent queda dentro de Aragón). Cantabria y León van
+  en el resto del Estado. Es una tabla editorial, que puede revisarse.</p>
 </section>
 <section>
   <h2>Candidaturas</h2>
@@ -158,7 +103,7 @@
   <h2>Escaños</h2>
   <p>Los escaños son los oficiales de cada circunscripción (la provincia; Ceuta y Melilla, uno cada una), publicados por el
   Ministerio del Interior. Los de una comunidad, una nación o el Estado son la suma de sus provincias; en total, 350. Los municipios y las secciones no tienen escaños propios: en ellos no se muestran.</p>
-  <p>Para el último escaño de cada provincia, el reparto se rehace con la ley D'Hondt: candidaturas con al menos el 3 % de
+  <p>Para el último escaño de cada provincia, el reparto se rehace con la ley D'Hondt (el método de reparto proporcional de la ley electoral): candidaturas con al menos el 3 % de
   los votos válidos de la provincia (con los blancos) y, en un empate, el escaño para la que tenga más votos. Aquí sí se cuenta el
   voto exterior (CERA), porque el reparto oficial lo cuenta. El resultado coincide con los escaños oficiales en todas las provincias
   y elecciones. El margen es cuántos votos más necesitaba la candidatura con más opciones para quitarle el último escaño a quien se
@@ -205,7 +150,7 @@
 <section>
   <h2>Territorio y secciones censales</h2>
   <ul class="zerrenda">
-    <li><b>Secciones censales:</b> el INE publica el seccionado a 1 de enero de cada año. Cada elección se dibuja con el año que
+    <li><b>Secciones censales:</b> el INE (Instituto Nacional de Estadística) publica el seccionado a 1 de enero de cada año. Cada elección se dibuja con el año que
     mejor encaja con las secciones de sus mesas: noviembre de 2011 → 2012; diciembre de 2015 → 2015; junio de 2016 → 2016; abril de 2019 → 2019; noviembre de 2019 → 2020; julio de 2023 → 2024.</li>
     <li><b>Municipios:</b> contornos del INE de 2025. Provincias, comunidades y naciones salen de unir sus municipios.</li>
     <li>Los contornos se simplifican para que la web cargue rápido, sin abrir huecos entre zonas vecinas.</li>
@@ -218,6 +163,49 @@
   (en los municipios bilingües, la forma local) y, en Hego Euskal Herria, los nombres oficiales en euskera y, en Asturies, los nombres en
   asturiano (en el oeste, en gallego-asturiano). El buscador también encuentra los nombres del INE (Gijón, Pamplona…). Las siglas de las
   candidaturas son las del Ministerio.</p>
+</section>
+<section>
+  <h2>Elecciones autonómicas</h2>
+  <p>Con el selector <b>Elecciones</b> (o la tecla A), el mapa pasa a las elecciones a los parlamentos de las diecisiete
+  comunidades autónomas, de 2008 a 2026, con los resultados oficiales que publica cada comunidad (ver Fuentes). Ceuta y Melilla
+  no entran: sus asambleas se eligen con las municipales.</p>
+  <ul class="zerrenda">
+    <li><b>Línea de tiempo:</b> el estado de las autonomías en cada momento, mes a mes y hasta hoy: cada comunidad con su elección vigente, la
+    última hasta ese día. Cambia cada vez que vota alguna, desde mayo de 2011 (entonces seguían vigentes las de Andalucía, 2008;
+    Galicia y el País Vasco, 2009, y Cataluña, 2010).</li>
+    <li><b>Buscador de elecciones</b> (a la derecha de la línea de tiempo): un día con elecciones (28, desde 2008) o la elección
+    de una sola comunidad, por mes, año o comunidad. El mapa enseña solo lo elegido y deja el resto vacío; otra comunidad, al
+    tocarla, dice por qué no está y lleva a sus elecciones. La × vuelve a la línea de tiempo.</li>
+    <li><b>Sin naciones:</b> cada parlamento es de una comunidad, y las comunidades de una misma nación votan en fechas
+    distintas; por eso las autonómicas van de la comunidad a la sección, sin naciones ni total del Estado.</li>
+    <li><b>Secciones censales:</b> donde la fuente da los resultados por mesa o por sección (58 de las 78 elecciones; Andalucía,
+    por sección desde su API), las mesas se suman por sección, como en el Congreso, y se dibujan con el seccionado del INE que mejor encaja con ellas. Donde la fuente
+    solo los da por municipio (Asturias, Aragón 2011 y 2015, Murcia salvo 2019, Cantabria 2015 y 2019, Castilla-La Mancha salvo 2019) o por provincia (Extremadura), al acercar el mapa esas zonas se ven por municipios.</li>
+    <li><b>Como en el Congreso:</b> votantes = candidaturas + blancos + nulos (donde la fuente no da blancos ni nulos, sus
+    votantes); porcentajes sobre los votos a candidaturas; sin voto exterior (CERA); municipios fusionados, como son hoy.</li>
+    <li><b>Siglas:</b> las de cada fuente, con la misma sigla escrita siempre igual (P.P. y PARTIDO POPULAR, como PP). Las
+    coaliciones van con el color de su partido principal: Adelante Andalucía en 2018, de Podemos e IU, como Podemos.</li>
+    <li><b>Canarias</b>, desde 2019, vota con dos papeletas, la de isla y la regional: el mapa usa la de isla; los escaños, de las dos.</li>
+    <li><b>Variaciones (▲▼):</b> respecto a la elección anterior de la misma comunidad.</li>
+    <li><b>Escaños reñidos:</b> por comunidad: el último escaño de su circunscripción más reñida, con su nombre (en la pestaña
+    Escaños, todas sus circunscripciones). Sin bloques, que son los del Congreso (ver Bloques), ni la capa Circunscripciones,
+    también del Congreso.</li>
+  </ul>
+  <details class="xehetasunak"><summary>Más detalle: cómo reparte sus escaños cada parlamento (barreras electorales y circunscripciones)</summary>
+  <ul class="zerrenda">
+    <li><b>Escaños:</b> cada parlamento reparte los suyos con la ley D'Hondt en cada circunscripción, con la barrera de su ley
+    electoral: el 3 % de los votos válidos de la circunscripción (Andalucía, Aragón, Asturias, Castilla y León, Castilla-La Mancha,
+    Cataluña, Navarra, el País Vasco y Murcia desde 2019) o el 5 % (Illes Balears, Cantabria, Galicia, Madrid y La Rioja); el 5 % de
+    toda la comunidad (Murcia hasta 2015; en la Comunitat Valenciana, de los votos emitidos); en Extremadura, el 5 % en la provincia
+    o en toda la comunidad; en Canarias, en cada isla, el 30 % insular o el 6 % regional (desde 2019, el 15 % o el 4 %) y, en la
+    circunscripción autonómica, el 4 %. Las circunscripciones son las provincias, salvo las islas (Illes Balears y Canarias, que desde
+    2019 elige además 9 escaños en toda la comunidad), las tres de Asturias y las cinco de Murcia hasta 2015. Como en el reparto
+    oficial, con el voto exterior (CERA); en Castilla y León hasta 2022, cuyos datos por mesa no lo tienen, con los votos oficiales
+    de cada candidatura con escaño. El resultado coincide, en todas las elecciones, con los escaños oficiales que publica cada
+    comunidad (ver Fuentes). Se ven por comunidad, la de cada parlamento, con sus circunscripciones; las provincias, los municipios y las secciones no
+    tienen escaños propios.</li>
+  </ul>
+  </details>
 </section>
 <section>
   <h2>Límites conocidos</h2>
@@ -233,6 +221,24 @@
     <li>Las variaciones (▲▼) comparan con la elección anterior del mismo tipo: en el Congreso, las generales anteriores; en las
     autonómicas, la elección anterior de cada comunidad.</li>
   </ul>
+  <details class="xehetasunak"><summary>Autonómicas: lo que falta o está incompleto en las fuentes</summary>
+  <ul class="zerrenda">
+    <li><b>Extremadura:</b> solo por provincia (Badajoz y Cáceres), con los resultados de la Junta Electoral de Extremadura
+    comprobados con el DOE: no hay resultados por municipio publicados. Sus totales oficiales llevan el voto exterior (CERA),
+    que no se puede separar.</li>
+    <li><b>Cantabria:</b> de 2011 tampoco. De 2015, el recuento provisional (coincide con el definitivo del ICANE); de 2019, solo
+    los votos de las candidaturas, con los partidos pequeños sumados en «Otros» y sin censo ni votantes.</li>
+    <li><b>Castilla-La Mancha:</b> en 2011 y 2015, los partidos pequeños sumados en «Otros» y sin blancos ni nulos; de 2023, los
+    votos definitivos por municipio; el censo, los blancos y los nulos de cada municipio, del escrutinio provisional, al que le
+    faltan mesas de 23 municipios (ahí, sin participación; la de cada provincia, la oficial del DOCM sin el voto exterior); sin
+    secciones, porque el definitivo no está publicado por mesa.</li>
+    <li><b>Canarias:</b> en algunas mesas de 2011 (y en una de 2019), la fuente da un censo imposible, a cero o menor que
+    los votantes: esos municipios (Las Palmas de Gran Canaria, La Laguna, Mogán, Puntallana y Alajeró en 2011; Santa Lucía de
+    Tirajana en 2019), sin participación. El Pinar de El Hierro viene con el número de Adeje: se le da el suyo.</li>
+    <li><b>Castilla-La Mancha 2015:</b> la fuente trae corrido el código de 66 municipios (y, en siete, también el nombre):
+    cada uno va con el suyo por su nombre y, donde el nombre tampoco vale, por su censo (el de las generales de 2015).</li>
+  </ul>
+  </details>
 </section>
 <section>
   <h2>Comprobaciones</h2>

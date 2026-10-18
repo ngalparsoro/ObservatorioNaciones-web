@@ -453,3 +453,8 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .nazio-eser.barrutia > span:first-child { color: var(--ink-hi); font-weight: 500; }
 .barruti-azk { grid-column: 1 / -1; margin: -4px 0 4px; font-size: 12px; color: var(--muted); }
 .barruti-azk b { color: var(--ink); font-weight: 500; }
+/* Desplegables de las páginas (Metodología): el detalle, plegado hasta que se quiere */
+.orri-edukia details.xehetasunak { margin-top: 10px; border: 1px solid var(--line-2); padding: 0 14px; }
+.orri-edukia details.xehetasunak > summary { cursor: pointer; padding: 10px 0; font: 500 11.5px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gold-2); }
+.orri-edukia details.xehetasunak[open] > summary { border-bottom: 1px solid var(--line-2); margin-bottom: 8px; }
+.orri-edukia details.xehetasunak > summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

@@ -2,7 +2,8 @@
 <html lang="ca">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at https://www.ign.es; connect-src 'self' https://tiles.maps.eox.at https://www.ign.es https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; worker-src 'self'; style-src 'self' 'unsafe-inline'; style-src-elem 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: blob: https://tiles.maps.eox.at https://www.ign.es; connect-src 'self' https://tiles.maps.eox.at https://www.ign.es https://cloudflareinsights.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Metodologia · Observatori Electoral de les Nacions</title>
 <meta name="description" content="Com es tracten les dades: nacions, vots, candidatures, escons, seccions censals i límits coneguts.">
@@ -25,8 +26,8 @@
 <meta property="og:locale" content="ca_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=4ddd9d51bbce">
-<link rel="stylesheet" href="estiloa.css?v=4ddd9d51bbce">
+<link rel="stylesheet" href="letrak.css?v=bc946b6b5c94">
+<link rel="stylesheet" href="estiloa.css?v=bc946b6b5c94">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -57,72 +58,6 @@
   juliol del 2023. El Senat no hi és inclòs.</p>
 </section>
 <section>
-  <h2>Eleccions autonòmiques</h2>
-  <p>Amb el selector <b>Eleccions</b> (o la tecla A), el mapa passa a les eleccions als parlaments de les disset comunitats
-  autònomes, del 2008 al 2026, amb els resultats oficials que publica cada comunitat (vegeu Fonts). Ceuta i Melilla no hi són:
-  les seves assemblees s'elegeixen amb les municipals.</p>
-  <ul class="zerrenda">
-    <li><b>Línia de temps:</b> l'estat de les autonomies a cada moment, mes a mes i fins avui: cada comunitat amb la seva elecció vigent, la
-    darrera fins a aquell dia. Canvia cada cop que en vota alguna, des del maig del 2011 (llavors encara eren vigents les
-    d'Andalusia, 2008; Galícia i el País Basc, 2009, i Catalunya, 2010).</li>
-    <li><b>Cercador d'eleccions</b> (a la dreta de la línia de temps): un dia amb eleccions (28, des del 2008) o l'elecció
-    d'una sola comunitat, per mes, any o comunitat. El mapa mostra només el que s'ha triat i deixa la resta buida; una altra
-    comunitat, en tocar-la, diu per què no hi és i porta a les seves eleccions. La × torna a la línia de temps.</li>
-    <li><b>Sense nacions:</b> cada parlament és d'una comunitat, i les comunitats d'una mateixa nació voten en dates diferents;
-    per això les autonòmiques van de la comunitat a la secció, sense nacions ni total de l'Estat.</li>
-    <li><b>Seccions censals:</b> on la font dona els resultats per mesa o per secció (58 de les 78 eleccions; Andalusia, per secció des de la seva API), les meses se sumen per
-    secció, com al Congrés, i es dibuixen amb el seccionat de l'INE que hi encaixa millor. On la font només els dona per
-    municipi (Astúries, l'Aragó 2011 i 2015, Múrcia excepte el 2019, Cantàbria 2015 i 2019, Castella-la Manxa excepte el 2019)
-    o per província (Extremadura), en apropar el mapa aquestes zones es veuen per municipis.</li>
-    <li><b>Com al Congrés:</b> votants = candidatures + blancs + nuls (on la font no dona blancs ni nuls, els seus votants);
-    percentatges sobre els vots a candidatures; sense vot exterior (CERA); municipis fusionats, tal com són avui.</li>
-    <li><b>Sigles:</b> les de cada font, amb la mateixa sigla escrita sempre igual (P.P. i PARTIDO POPULAR, com a PP). Les
-    coalicions van amb el color del seu partit principal: Adelante Andalucía el 2018, de Podemos i IU, com a Podemos.</li>
-    <li><b>Canàries</b>, des del 2019, vota amb dues paperetes, la d'illa i la regional: el mapa fa servir la d'illa; els escons, de les dues.</li>
-    <li><b>Variacions (▲▼):</b> respecte a l'elecció anterior de la mateixa comunitat.</li>
-    <li><b>Escons:</b> cada parlament reparteix els seus amb la llei D'Hondt a cada circumscripció, amb la barrera de la seva llei
-    electoral: el 3 % dels vots vàlids de la circumscripció (Andalusia, l'Aragó, Astúries, Castella i Lleó, Castella-la Manxa,
-    Catalunya, Navarra, el País Basc i Múrcia des del 2019) o el 5 % (les Illes Balears, Cantàbria, Galícia, Madrid i la Rioja); el
-    5 % de tota la comunitat (Múrcia fins al 2015; al País Valencià, dels vots emesos); a Extremadura, el 5 % a la província o a tota
-    la comunitat; a Canàries, a cada illa, el 30 % insular o el 6 % regional (des del 2019, el 15 % o el 4 %) i, a la circumscripció
-    autonòmica, el 4 %. Les circumscripcions són les províncies, llevat de les illes (les Illes Balears i Canàries, que des del 2019
-    tria a més 9 escons a tota la comunitat), les tres d'Astúries i les cinc de Múrcia fins al 2015. Com al repartiment oficial, amb
-    el vot exterior (CERA); a Castella i Lleó fins al 2022, les dades per mesa del qual no el tenen, amb els vots oficials de cada
-    candidatura amb escó. El resultat coincideix, a totes les eleccions, amb els escons oficials que publica cada comunitat (vegeu
-    Fonts). Es veuen per comunitat, la de cada parlament, amb les seves circumscripcions; les províncies, els municipis i les seccions
-    no tenen escons propis.</li>
-    <li><b>Escons disputats:</b> per comunitat: l'últim escó de la seva circumscripció més disputada, amb el seu nom (a la
-    pestanya Escons, totes les seves circumscripcions). Sense blocs, que són els del Congrés (vegeu Blocs), ni la capa
-    Circumscripcions, també del Congrés.</li>
-  </ul>
-  <p>El que falta o és incomplet a les fonts:</p>
-  <ul class="zerrenda">
-    <li><b>Extremadura:</b> només per província (Badajoz i Càceres), amb els resultats de la Junta Electoral d'Extremadura
-    comprovats amb el DOE: no hi ha resultats per municipi publicats. Els seus totals oficials porten el vot exterior (CERA),
-    que no es pot separar.</li>
-    <li><b>Cantàbria:</b> del 2011 tampoc. Del 2015, el recompte provisional (coincideix amb el definitiu de l'ICANE); del 2019,
-    només els vots de les candidatures, amb els partits petits sumats a «Otros» i sense cens ni votants.</li>
-    <li><b>Castella-la Manxa:</b> el 2011 i el 2015, els partits petits sumats a «Otros» i sense blancs ni nuls; del 2023, els
-    vots definitius per municipi; el cens, els vots en blanc i els nuls de cada municipi, de l'escrutini provisional, al qual
-    falten meses de 23 municipis (allà, sense participació; la de cada província, l'oficial del DOCM sense el vot exterior);
-    sense seccions, perquè el definitiu no està publicat per mesa.</li>
-    <li><b>Canàries:</b> en algunes meses del 2011 (i en una del 2019), la font dona un cens impossible, a zero o menor que
-    els votants: aquests municipis (Las Palmas de Gran Canaria, La Laguna, Mogán, Puntallana i Alajeró el 2011; Santa Lucía de
-    Tirajana el 2019), sense participació. El Pinar de El Hierro ve amb el número d'Adeje: se li dona el seu.</li>
-    <li><b>Castella-la Manxa 2015:</b> la font porta desplaçat el codi de 66 municipis (i, en set, també el nom): cadascun va
-    amb el seu pel nom i, on el nom tampoc no serveix, pel cens (el de les generals del 2015).</li>
-  </ul>
-</section>
-<section>
-  <h2>Nacions</h2>
-  <p>El mapa llegeix l'Estat com un Estat de nacions. Cada comunitat autònoma pertany a una nació; les nacions de diverses
-  comunitats tenen parts interiors, com EAE i Nafarroa a Hego Euskal Herria.</p>
-  <div class="orri-taula"><table class="estua"><thead><tr><th>Nació</th><th>Parts</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Les seves províncies</td></tr><tr><th>Asturies</th><td>Les seves províncies</td></tr><tr><th>Andalucía</th><td>Les seves províncies</td></tr><tr><th>Canarias</th><td>Les seves províncies</td></tr><tr><th>Aragón</th><td>Les seves províncies</td></tr><tr><th>Resta de l&#x27;Estat</th><td>Per comunitats autònomes: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
-  <p>Només hi compta el territori on es vota al Congrés: d'Euskal Herria, Hego Euskal Herria (Iparralde vota a França), i dels Països
-  Catalans, les tres comunitats de l'Estat (la Franja de Ponent queda dins d'Aragón). Cantabria i León van a la resta
-  de l'Estat. És una taula editorial, que es pot revisar.</p>
-</section>
-<section>
   <h2>Què es compta</h2>
   <ul class="zerrenda">
     <li><b>Votants</b> = vots a candidatures + vots en blanc + vots nuls. <b>Participació</b> = votants / cens.</li>
@@ -134,6 +69,15 @@
     <li>Els <b>municipis fusionats</b> es mostren com són avui en totes les eleccions: Oza-Cesuras (Oza dos Ríos i Cesuras, 2013)
     i Cerdedo-Cotobade (Cerdedo i Cotobade, 2016).</li>
   </ul>
+</section>
+<section>
+  <h2>Nacions</h2>
+  <p>El mapa llegeix l'Estat com un Estat de nacions. Cada comunitat autònoma pertany a una nació; les nacions de diverses
+  comunitats tenen parts interiors, com EAE i Nafarroa a Hego Euskal Herria.</p>
+  <div class="orri-taula"><table class="estua"><thead><tr><th>Nació</th><th>Parts</th></tr></thead><tbody><tr><th>Hego Euskal Herria</th><td>EAE · Nafarroa</td></tr><tr><th>Països Catalans</th><td>Catalunya · País Valencià · Illes Balears</td></tr><tr><th>Galiza</th><td>Les seves províncies</td></tr><tr><th>Asturies</th><td>Les seves províncies</td></tr><tr><th>Andalucía</th><td>Les seves províncies</td></tr><tr><th>Canarias</th><td>Les seves províncies</td></tr><tr><th>Aragón</th><td>Les seves províncies</td></tr><tr><th>Resta de l&#x27;Estat</th><td>Per comunitats autònomes: Cantabria, Castilla y León, Castilla-La Mancha, Extremadura, Madrid, Murcia, La Rioja, Ceuta, Melilla</td></tr></tbody></table></div>
+  <p>Només hi compta el territori on es vota al Congrés: d'Euskal Herria, Hego Euskal Herria (Iparralde vota a França), i dels Països
+  Catalans, les tres comunitats de l'Estat (la Franja de Ponent queda dins d'Aragón). Cantabria i León van a la resta
+  de l'Estat. És una taula editorial, que es pot revisar.</p>
 </section>
 <section>
   <h2>Candidatures</h2>
@@ -159,7 +103,7 @@
   <h2>Escons</h2>
   <p>Els escons són els oficials de cada circumscripció (la província; Ceuta i Melilla, un cadascuna), publicats pel Ministeri de
   l'Interior. Els d'una comunitat, una nació o l'Estat són la suma de les seves províncies; en total, 350. Els municipis i les seccions no tenen escons propis: no s'hi mostren.</p>
-  <p>Per a l'últim escó de cada província, el repartiment es refà amb la llei D'Hondt: candidatures amb almenys el 3 % dels
+  <p>Per a l'últim escó de cada província, el repartiment es refà amb la llei D'Hondt (el mètode de repartiment proporcional de la llei electoral): candidatures amb almenys el 3 % dels
   vots vàlids de la província (amb els blancs) i, en cas d'empat, l'escó per a la que tingui més vots. Aquí sí que es compta el vot
   exterior (CERA), perquè el repartiment oficial el compta. El resultat coincideix amb els escons oficials a totes les províncies i
   eleccions. El marge és quants vots més necessitava la candidatura amb més opcions per prendre l'últim escó a qui se'l va endur,
@@ -205,7 +149,7 @@
 <section>
   <h2>Territori i seccions censals</h2>
   <ul class="zerrenda">
-    <li><b>Seccions censals:</b> l'INE publica el seccionat a 1 de gener de cada any. Cada elecció es dibuixa amb l'any que encaixa
+    <li><b>Seccions censals:</b> l'INE (Institut Nacional d'Estadística) publica el seccionat a 1 de gener de cada any. Cada elecció es dibuixa amb l'any que encaixa
     millor amb les seccions de les seves meses: novembre de 2011 → 2012; desembre de 2015 → 2015; juny de 2016 → 2016; abril de 2019 → 2019; novembre de 2019 → 2020; juliol de 2023 → 2024.</li>
     <li><b>Municipis:</b> contorns de l'INE del 2025. Províncies, comunitats i nacions surten d'unir-ne els municipis.</li>
     <li>Els contorns se simplifiquen perquè el web carregui de pressa, sense obrir forats entre zones veïnes.</li>
@@ -218,6 +162,50 @@
   municipis bilingües, la forma local) i, a Hego Euskal Herria, els noms oficials en basc i, a Asturies, els noms en asturià (a
   l'oest, en gallec-asturià). El cercador també troba els noms de l'INE (Gijón, Pamplona…). Les sigles de les candidatures són les del
   Ministeri.</p>
+</section>
+<section>
+  <h2>Eleccions autonòmiques</h2>
+  <p>Amb el selector <b>Eleccions</b> (o la tecla A), el mapa passa a les eleccions als parlaments de les disset comunitats
+  autònomes, del 2008 al 2026, amb els resultats oficials que publica cada comunitat (vegeu Fonts). Ceuta i Melilla no hi són:
+  les seves assemblees s'elegeixen amb les municipals.</p>
+  <ul class="zerrenda">
+    <li><b>Línia de temps:</b> l'estat de les autonomies a cada moment, mes a mes i fins avui: cada comunitat amb la seva elecció vigent, la
+    darrera fins a aquell dia. Canvia cada cop que en vota alguna, des del maig del 2011 (llavors encara eren vigents les
+    d'Andalusia, 2008; Galícia i el País Basc, 2009, i Catalunya, 2010).</li>
+    <li><b>Cercador d'eleccions</b> (a la dreta de la línia de temps): un dia amb eleccions (28, des del 2008) o l'elecció
+    d'una sola comunitat, per mes, any o comunitat. El mapa mostra només el que s'ha triat i deixa la resta buida; una altra
+    comunitat, en tocar-la, diu per què no hi és i porta a les seves eleccions. La × torna a la línia de temps.</li>
+    <li><b>Sense nacions:</b> cada parlament és d'una comunitat, i les comunitats d'una mateixa nació voten en dates diferents;
+    per això les autonòmiques van de la comunitat a la secció, sense nacions ni total de l'Estat.</li>
+    <li><b>Seccions censals:</b> on la font dona els resultats per mesa o per secció (58 de les 78 eleccions; Andalusia, per secció des de la seva API), les meses se sumen per
+    secció, com al Congrés, i es dibuixen amb el seccionat de l'INE que hi encaixa millor. On la font només els dona per
+    municipi (Astúries, l'Aragó 2011 i 2015, Múrcia excepte el 2019, Cantàbria 2015 i 2019, Castella-la Manxa excepte el 2019)
+    o per província (Extremadura), en apropar el mapa aquestes zones es veuen per municipis.</li>
+    <li><b>Com al Congrés:</b> votants = candidatures + blancs + nuls (on la font no dona blancs ni nuls, els seus votants);
+    percentatges sobre els vots a candidatures; sense vot exterior (CERA); municipis fusionats, tal com són avui.</li>
+    <li><b>Sigles:</b> les de cada font, amb la mateixa sigla escrita sempre igual (P.P. i PARTIDO POPULAR, com a PP). Les
+    coalicions van amb el color del seu partit principal: Adelante Andalucía el 2018, de Podemos i IU, com a Podemos.</li>
+    <li><b>Canàries</b>, des del 2019, vota amb dues paperetes, la d'illa i la regional: el mapa fa servir la d'illa; els escons, de les dues.</li>
+    <li><b>Variacions (▲▼):</b> respecte a l'elecció anterior de la mateixa comunitat.</li>
+    <li><b>Escons disputats:</b> per comunitat: l'últim escó de la seva circumscripció més disputada, amb el seu nom (a la
+    pestanya Escons, totes les seves circumscripcions). Sense blocs, que són els del Congrés (vegeu Blocs), ni la capa
+    Circumscripcions, també del Congrés.</li>
+  </ul>
+  <details class="xehetasunak"><summary>Més detall: com reparteix els seus escons cada parlament (barreres electorals i circumscripcions)</summary>
+  <ul class="zerrenda">
+    <li><b>Escons:</b> cada parlament reparteix els seus amb la llei D'Hondt a cada circumscripció, amb la barrera de la seva llei
+    electoral: el 3 % dels vots vàlids de la circumscripció (Andalusia, l'Aragó, Astúries, Castella i Lleó, Castella-la Manxa,
+    Catalunya, Navarra, el País Basc i Múrcia des del 2019) o el 5 % (les Illes Balears, Cantàbria, Galícia, Madrid i la Rioja); el
+    5 % de tota la comunitat (Múrcia fins al 2015; al País Valencià, dels vots emesos); a Extremadura, el 5 % a la província o a tota
+    la comunitat; a Canàries, a cada illa, el 30 % insular o el 6 % regional (des del 2019, el 15 % o el 4 %) i, a la circumscripció
+    autonòmica, el 4 %. Les circumscripcions són les províncies, llevat de les illes (les Illes Balears i Canàries, que des del 2019
+    tria a més 9 escons a tota la comunitat), les tres d'Astúries i les cinc de Múrcia fins al 2015. Com al repartiment oficial, amb
+    el vot exterior (CERA); a Castella i Lleó fins al 2022, les dades per mesa del qual no el tenen, amb els vots oficials de cada
+    candidatura amb escó. El resultat coincideix, a totes les eleccions, amb els escons oficials que publica cada comunitat (vegeu
+    Fonts). Es veuen per comunitat, la de cada parlament, amb les seves circumscripcions; les províncies, els municipis i les seccions
+    no tenen escons propis.</li>
+  </ul>
+  </details>
 </section>
 <section>
   <h2>Límits coneguts</h2>
@@ -233,6 +221,24 @@
     <li>Les variacions (▲▼) comparen amb l'elecció anterior del mateix tipus: al Congrés, les generals anteriors; a les
     autonòmiques, l'elecció anterior de cada comunitat.</li>
   </ul>
+  <details class="xehetasunak"><summary>Autonòmiques: el que falta o és incomplet a les fonts</summary>
+  <ul class="zerrenda">
+    <li><b>Extremadura:</b> només per província (Badajoz i Càceres), amb els resultats de la Junta Electoral d'Extremadura
+    comprovats amb el DOE: no hi ha resultats per municipi publicats. Els seus totals oficials porten el vot exterior (CERA),
+    que no es pot separar.</li>
+    <li><b>Cantàbria:</b> del 2011 tampoc. Del 2015, el recompte provisional (coincideix amb el definitiu de l'ICANE); del 2019,
+    només els vots de les candidatures, amb els partits petits sumats a «Otros» i sense cens ni votants.</li>
+    <li><b>Castella-la Manxa:</b> el 2011 i el 2015, els partits petits sumats a «Otros» i sense blancs ni nuls; del 2023, els
+    vots definitius per municipi; el cens, els vots en blanc i els nuls de cada municipi, de l'escrutini provisional, al qual
+    falten meses de 23 municipis (allà, sense participació; la de cada província, l'oficial del DOCM sense el vot exterior);
+    sense seccions, perquè el definitiu no està publicat per mesa.</li>
+    <li><b>Canàries:</b> en algunes meses del 2011 (i en una del 2019), la font dona un cens impossible, a zero o menor que
+    els votants: aquests municipis (Las Palmas de Gran Canaria, La Laguna, Mogán, Puntallana i Alajeró el 2011; Santa Lucía de
+    Tirajana el 2019), sense participació. El Pinar de El Hierro ve amb el número d'Adeje: se li dona el seu.</li>
+    <li><b>Castella-la Manxa 2015:</b> la font porta desplaçat el codi de 66 municipis (i, en set, també el nom): cadascun va
+    amb el seu pel nom i, on el nom tampoc no serveix, pel cens (el de les generals del 2015).</li>
+  </ul>
+  </details>
 </section>
 <section>
   <h2>Comprovacions</h2>

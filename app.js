@@ -19,6 +19,8 @@
 // · puntero · panel · evolución · controles · herramientas · línea de tiempo y buscador de elecciones · ayuda y teclado
 // · arranque.
 import * as maplibregl from "./vendor/maplibre-gl.mjs";
+// GitHub Pages no manda cabeceras: si alguien mete la web en un marco de otro sitio (clickjacking), se sale de él
+if (window.top !== window.self) window.top.location = window.location;
 
 // Huella de la versión (scripts/orriak.py la pone en index.html: app.js?v=…). Va en la URL de los módulos propios y de
 // cada fichero de datos: si cambian, cambia la URL. Así el navegador no puede quedarse con unos textos viejos (pasó con
@@ -119,10 +121,16 @@ const load = async (u) => {
   const r = await fetch(huellaz(u), BERTSIOA_DU ? { cache: "force-cache" } : {});
   if (!r.ok) throw new Error(u); return r.json();
 };
-let INDEX, AUT, IZENAK, GEO_NAZ, GEO_AUT, GEO_PROB, LURRA;
+let INDEX, AUT, IZENAK, GEO_NAZ, GEO_AUT, GEO_PROB;
 try {
-  [INDEX, AUT, IZENAK, GEO_NAZ, GEO_AUT, GEO_PROB, LURRA] = await Promise.all(["data/index.json", "data/autonomikoak/index.json", "geo/izenak.json", "geo/nazioa.json", "geo/autonomia.json", "geo/probintzia.json", "geo/lurra.json"].map(load));
+  [INDEX, AUT, IZENAK, GEO_NAZ, GEO_AUT, GEO_PROB] = await Promise.all(["data/index.json", "data/autonomikoak/index.json", "geo/izenak.json", "geo/nazioa.json", "geo/autonomia.json", "geo/probintzia.json"].map(load));
 } catch (e) { $("#kargatzen").textContent = T.error; throw e; }
+// Los nombres de los 8.100 municipios (geo/udal_izenak.json, 330 KB) no hacen falta para el primer pintado: se piden al
+// acercarse, al buscar o al elegir un municipio (una sola vez), y hasta entonces no hay ninguno
+IZENAK.udalerria = {};
+let udalIzenakZain = null;
+const udalIzenakLortu = () => (udalIzenakZain ??= load("geo/udal_izenak.json").then((u) => { IZENAK.udalerria = u; bilatzaileaBete(); etiketak(); })
+  .catch((e) => { udalIzenakZain = null; throw e; }));
 // Dos tipos de elección (state.mota). El Congreso (k = AAAAMM), en su línea de tiempo. Las autonómicas
 // (scripts/autonomikoak_web.py), de dos maneras: en la línea de tiempo, el estado de las autonomías en cada momento
 // (k = «a» + AAAAMM: cada día en que vota alguna comunidad desde mayo de 2011, con la elección vigente de cada una,
@@ -208,8 +216,9 @@ function urlaIdatzi() {
 // Cada fichero se pide una vez (se guarda la promesa); si falla (red cortada), se olvida para volver a pedirlo
 const DATA = {};
 async function datuak(k) {
-  if (!DATA[k]) DATA[k] = (autKoa(k) ? autDatuak(k) : Promise.all(["estatua", "nazioa", "autonomia", "probintzia", "tamaina", "udalerria", "eserlekuak"].map((m) => load(`data/${k}/${m}.json`)))
-    .then(([estatua, nazioa, autonomia, probintzia, tamaina, udalerria, eserlekuak]) => ({ estatua, nazioa, autonomia, probintzia, tamaina, udalerria, eserlekuak, sek: {} })))
+  // dos ficheros: orokorra.json (Estado, naciones, comunidades, provincias, tamaños y escaños) y udalerria.json
+  if (!DATA[k]) DATA[k] = (autKoa(k) ? autDatuak(k) : Promise.all(["orokorra", "udalerria"].map((m) => load(`data/${k}/${m}.json`)))
+    .then(([orokorra, udalerria]) => ({ ...orokorra, udalerria, sek: {} })))
     .catch((e) => { delete DATA[k]; throw e; });
   return DATA[k];
 }
@@ -468,13 +477,16 @@ const GEO = { nazioa: GEO_NAZ, autonomia: GEO_AUT, probintzia: GEO_PROB,
   udalerria: { type: "FeatureCollection", features: [] }, sekzioa: { type: "FeatureCollection", features: [] } };
 for (const m of ["nazioa", "autonomia", "probintzia"]) for (const f of GEO[m].features) f.properties.id = f.id;
 // «lurra»: todo el territorio en gris «sin datos», debajo (comunales sin municipio que el seccionado no cubre)
-const sources = { lurra: { type: "geojson", data: LURRA },
+const sources = { lurra: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
   sat: { type: "raster", tiles: [SATELITEA], tileSize: 256, maxzoom: 13, attribution: SAT_KREDITUA },  // EOX no da más detalle
   orto: { type: "raster", tiles: ["orto://{z}/{x}/{y}"], tileSize: 256, minzoom: ORTO_ZOOM, maxzoom: 19, attribution: PNOA_KREDITUA } };
 const layers = [{ id: "atzealdea", type: "background", paint: { "background-color": "#0C131A" } },
   { id: "sat", type: "raster", source: "sat", layout: { visibility: state.satelitea ? "visible" : "none" } },
   { id: "orto", type: "raster", source: "orto", minzoom: ORTO_ZOOM, layout: { visibility: state.satelitea ? "visible" : "none" } },
   { id: "lurra", type: "fill", source: "lurra", layout: { visibility: state.satelitea ? "none" : "visible" }, paint: { "fill-color": NODATA } }];
+// El contorno (geo/lurra.json, 260 KB) solo se pide cuando se ve: sin satélite (al empezar o al apagarlo)
+let lurraZain = null;
+const lurraLortu = () => (lurraZain ??= load("geo/lurra.json").then((g) => map.getSource("lurra").setData(g)).catch((e) => { lurraZain = null; throw e; }));
 // Fuera de la elección (autonómicas: las comunidades que no votan ese día), ni color ni bordes: el mapa, limpio
 const KANPO = ["boolean", ["feature-state", "kanpo"], false];
 const opakutasuna = () => ["case", KANPO, 0, ["boolean", ["feature-state", "hover"], false], state.satelitea ? 0.85 : 1, state.satelitea ? 0.62 : 0.88];
@@ -622,6 +634,7 @@ function udalAzpian(m) {
 }
 let azkenMaila = null, azkenAzpian = false;
 async function eguneratu() {
+  if (map.getZoom() >= UDAL_HASI - 0.5 || state.maila === "udalerria" || state.maila === "sekzioa") aurretik(udalIzenakLortu());
   mugakEguneratu();
   const m = mailaAktiboa(), azpian = udalAzpian(m);
   const mailaBerria = m !== azkenMaila || azpian !== azkenAzpian;
@@ -803,7 +816,8 @@ function nabarmendu() {  // la zona elegida, con borde; un grupo de «Circunscri
     : map.getSource(h.maila) ? [{ source: h.maila, id: h.id }] : [];
   for (const r of selRefs) map.setFeatureState(r, { sel: true });
 }
-function hautatu(h, joan = false) {
+async function hautatu(h, joan = false) {
+  if (h && (h.maila === "udalerria" || h.maila === "sekzioa")) await udalIzenakLortu();  // su nombre, en el panel y el enlace
   state.hautatua = h; nabarmendu();
   if (h && joan) { const r = IZENAK[h.maila] && IZENAK[h.maila][h.id]; if (r) map.flyTo({ center: [r[1], r[2]], zoom: Math.max(map.getZoom(), { nazioa: 5.5, autonomia: 6.4, probintzia: 7.4, udalerria: 10, sekzioa: 12 }[h.maila]) }); }
   urlaIdatzi(); arnasa().then(panela);  // primero la zona resaltada, luego el panel
@@ -1310,9 +1324,14 @@ function legenda() {
 }
 // Buscador de municipios (nombres en la lengua local)
 // También con las otras formas del nombre (izenak.json, 4.º campo): «Gijón» lleva a Xixón y «Pamplona» a Iruñea
-const udalak = Object.entries(IZENAK.udalerria).sort((a, b) => a[1][0].localeCompare(b[1][0], LOKALEA));
+// La lista (8.100 municipios y sus otros nombres) se arma cuando llegan los nombres: al tocar el buscador, si no antes
+let udalak = [];
 const izenGuztiak = ([, [n, , , besteak = []]]) => [n, ...besteak];
-$("#udalerriak").innerHTML = udalak.flatMap(izenGuztiak).map((n) => `<option value="${esc(n)}"></option>`).join("");
+function bilatzaileaBete() {
+  udalak = Object.entries(IZENAK.udalerria).sort((a, b) => a[1][0].localeCompare(b[1][0], LOKALEA));
+  $("#udalerriak").innerHTML = udalak.flatMap(izenGuztiak).map((n) => `<option value="${esc(n)}"></option>`).join("");
+}
+$("#bilatu").addEventListener("focus", () => aurretik(udalIzenakLortu()));
 $("#bilatu").addEventListener("change", (e) => {
   const v = e.target.value.trim().toLowerCase(); if (!v) return;
   const u = udalak.find((x) => izenGuztiak(x).some((n) => n.toLowerCase() === v)) || udalak.find((x) => izenGuztiak(x).some((n) => n.toLowerCase().includes(v)));
@@ -1328,6 +1347,7 @@ function sateliteaAldatu() {
   for (const l of ["sat", "orto"]) map.setLayoutProperty(l, "visibility", state.satelitea ? "visible" : "none");
   ortoKreditua();
   map.setLayoutProperty("lurra", "visibility", state.satelitea ? "none" : "visible");  // comunales: se ve el terreno
+  if (!state.satelitea) aurretik(lurraLortu());
   for (const m of MAILAK) map.setPaintProperty(m + "-fill", "fill-opacity", opakutasuna());
   urlaIdatzi();
 }
@@ -1553,6 +1573,7 @@ document.addEventListener("keydown", (e) => {
 motaKontrolak();  // tipo de elección, capa y pestaña: pueden venir del enlace
 legenda(); lerroaMargotu();
 async function hasi() {
+  if (!state.satelitea) aurretik(lurraLortu());
   await eguneratu();
   if (state.hautatua) hautatu(state.hautatua); else panela();
 }
