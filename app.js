@@ -857,10 +857,12 @@ async function hautatu(h, joan = false) {
 // Participación con el voto exterior y, entre paréntesis, la de los residentes (la del mapa)
 const partTestua = (r) => `${pct(r.part)}${r.partE != null ? ` (${T.egoiliarrak} ${pct(r.partE)})` : ""}`;
 function kpis(r, ra) {
-  // ▲▼ con la misma base: las dos con voto exterior o, si a una le falta, las dos de residentes
-  const [a, b] = ra && r.partE != null && ra.partE != null ? [r.part, ra.part] : [partEgoiliar(r), ra && partEgoiliar(ra)];
-  const d = aldaketa(ra && a != null && b != null ? a - b : null, { puntuak: true });
-  return `<div class="kpis"><div class="kpi"><div class="v">${pct(r.part)}${d}</div><div class="k">${T.part}${r.partE != null ? ` · ${T.egoiliarrak} ${pct(r.partE)}` : ""}</div></div>
+  // la oficial y, con voto exterior, debajo y con su propia cifra, la de los residentes (la del mapa). ▲▼ con la misma
+  // base: la oficial solo frente a otra oficial; la de residentes, siempre
+  const aldea = (x, y) => aldaketa(x != null && y != null ? x - y : null, { puntuak: true });
+  const d = !ra ? "" : r.partE != null ? (ra.partE != null ? aldea(r.part, ra.part) : "") : aldea(r.part, partEgoiliar(ra));
+  const e = r.partE != null ? `<div class="v v2">${pct(r.partE)}${ra ? aldea(r.partE, partEgoiliar(ra)) : ""}</div><div class="k">${T.egoiliarrak}</div>` : "";
+  return `<div class="kpis"><div class="kpi"><div class="v">${pct(r.part)}${d}</div><div class="k">${T.part}</div>${e}</div>
     <div class="kpi"><div class="v">${fmt(r.votantes)}</div><div class="k">${T.votantes}</div></div>
     <div class="kpi"><div class="v">${fmt(r.censo)}</div><div class="k">${T.censo}</div></div>
     <div class="kpi"><div class="v">${ptu(r.m)}</div><div class="k">${T.margenKpi}</div></div></div>`;

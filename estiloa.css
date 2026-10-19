@@ -229,6 +229,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .kpi { background: var(--panel-solid); padding: 10px 12px; }
 .kpi .v { font: 500 18px var(--f-mono); color: var(--ink-hi); font-variant-numeric: tabular-nums; }
 .kpi .k { font: 400 10px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-top: 2px; }
+.kpi .v.v2 { font-size: 15px; margin-top: 8px; }  /* participación de residentes, bajo la oficial */
 .d { font-size: 11px; margin-left: 6px; } .d.up { color: var(--up); } .d.down { color: var(--down); }
 .lehia { font-size: 14px; color: var(--ink); border-left: 3px solid var(--gold); padding: 6px 10px; background: var(--gold-bg); }
 .lehia b { color: var(--ink-hi); font-weight: 600; }
