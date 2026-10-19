@@ -26,8 +26,8 @@
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=bc946b6b5c94">
-<link rel="stylesheet" href="estiloa.css?v=bc946b6b5c94">
+<link rel="stylesheet" href="letrak.css?v=60078376c51e">
+<link rel="stylesheet" href="estiloa.css?v=60078376c51e">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -63,8 +63,11 @@
     <li><b>Voters</b> = votes for candidates + blank votes + spoiled votes. <b>Turnout</b> = voters / electorate.</li>
     <li>Each party's percentage is calculated over the <b>votes for candidates</b>, without blank or spoiled votes. That is why it
     does not match the official percentage, which is calculated over valid votes (including blank votes).</li>
-    <li>The <b>vote from abroad</b> (CERA, residents abroad) is not assigned to any section or municipality and is left out,
-    including from the province, community, nation and State totals.</li>
+    <li>The <b>vote from abroad</b> (CERA, residents abroad) is not assigned to any section or municipality. Municipalities and sections exclude
+    it; from the province upward (community, nation and State), votes and percentages include it, as in the official result, and the
+    panel breaks it down separately. Turnout is given both ways: the official one, with it, and that of residents, without it, which
+    is the one used by the map layer and the evolution (the vote from abroad turns out very little: with it, Ourense drops from 72 %
+    to 53 % in 2023).</li>
     <li>Everything is added up from the polling station: section, municipality, province, community, nation and State.</li>
     <li><b>Merged municipalities</b> are shown as they are today in every election: Oza-Cesuras (Oza dos Ríos and Cesuras,
     2013) and Cerdedo-Cotobade (Cerdedo and Cotobade, 2016).</li>
@@ -183,7 +186,8 @@
     2019, Castilla-La Mancha except 2019) or by province (Extremadura), those areas are shown by
     municipality when zooming in.</li>
     <li><b>As for Congress:</b> voters = votes for parties + blank + invalid (where the source gives no blank or invalid votes,
-    its own voter count); percentages of the votes for parties; no vote from abroad (CERA); merged municipalities as they are
+    its own voter count); percentages of the votes for parties; the vote from abroad (CERA) included from the province upward where
+    the source gives it; merged municipalities as they are
     today.</li>
     <li><b>Abbreviations:</b> those of each source, with the same abbreviation always written the same way (P.P. and PARTIDO
     POPULAR, as PP). Coalitions take the colour of their main party: Adelante Andalucía in 2018, formed by Podemos and IU, as
@@ -214,7 +218,7 @@
 <section>
   <h2>Known limits</h2>
   <ul class="zerrenda">
-    <li>No vote from abroad (CERA), except for the last seat: totals are slightly lower than the official ones.</li>
+    <li>Municipalities and sections exclude the vote from abroad (CERA): their sum is slightly lower than their province's total. From the province up it is included, except in the regional elections whose source does not give it (there, totals are slightly lower than the official ones). The turnout layer uses residents' turnout at every level.</li>
     <li>Percentages over votes for candidates, not over valid votes.</li>
     <li>In 2015, in the polling stations of about 2,200 municipalities, the Ministry's files do not agree with each other: the
     total of votes for candidates does not match the sum of each party's votes (43,289 votes across the State, 0.17 %).

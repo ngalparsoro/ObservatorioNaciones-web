@@ -238,7 +238,7 @@ async function autDatuak(k) {
 // por comunidad). Cada fichero trae sus candidaturas: los índices se rehacen
 function autBatu(gakoak, fitxak) {
   const s = [], k = [], f = [], idx = new Map();
-  const autonomia = { s, k, f, r: {} }, probintzia = { s, k, f, r: {} }, eserlekuak = { s, k, f, autonomia: {}, azkena: {}, barrutiak: {} };
+  const autonomia = { s, k, f, r: {}, cera: {} }, probintzia = { s, k, f, r: {}, cera: {} }, eserlekuak = { s, k, f, autonomia: {}, azkena: {}, barrutiak: {} };
   fitxak.forEach((t, n) => {
     const cca = gakoak[n].slice(0, 2);
     const b = t.s.map((sig, i) => {
@@ -254,6 +254,16 @@ function autBatu(gakoak, fitxak) {
     const [a, bb, falta, m, aukerak, iz, prob] = t.azkena;
     eserlekuak.azkena[cca] = [b[a], b[bb], falta, m, aukerak.map(([i, x]) => [b[i], x]), iz, prob];
     if (t.barrutiak.length) eserlekuak.barrutiak[cca] = t.barrutiak.map(([iz_, p, x, [a_, b_, f_, m_]]) => [iz_, p, eser(x), [b[a_], b[b_], f_, m_]]);
+    // el voto exterior (donde la fuente lo da): por provincia y, sumado, la comunidad
+    const zc = ([censo, vot, zur, bal, vc, lista]) => [censo, vot, zur, bal, vc, lista.map(([i, v]) => [b[i], v])];
+    for (const [p, x] of Object.entries(t.cera || {})) probintzia.cera[p] = zc(x);
+    const ps = Object.values(t.cera || {});
+    if (ps.length) {
+      const batu = (i) => (ps.some((x) => x[i] == null) ? null : ps.reduce((n, x) => n + x[i], 0));
+      const botoak = new Map();
+      for (const x of ps) for (const [i, v] of x[5]) botoak.set(b[i], (botoak.get(b[i]) || 0) + v);
+      autonomia.cera[cca] = [batu(0), batu(1), batu(2), batu(3), batu(4), [...botoak].sort((x, y) => y[1] - x[1])];
+    }
   });
   return { autonomia, probintzia, eserlekuak };
 }
@@ -291,14 +301,35 @@ function autSekzioak(k, cpro) {
 // elección de su comunidad (null: sin secciones)
 const sekUrtea = (k, cpro) => (autKoa(k) ? (autSekGakoa(k, cpro) && AUT.sekzioak[autSekGakoa(k, cpro)]) || null : INFO[k].sekzioUrtea);
 // Registro de una zona: {censo, votantes, vc (votos a candidaturas), part (%), m (diferencia 1.ª–2.ª en puntos),
-// c: [[siglas, votos, %, color, partido, bloque]]} (partido: regla de koloreak.csv; bloque: INB, ESK o «»)
+// c: [[siglas, votos, %, color, partido, bloque]]} (partido: regla de koloreak.csv; bloque: INB, ESK o «»).
+// De la provincia para arriba, con el voto exterior (CERA) donde la fuente lo da, como el resultado oficial: entonces
+// partE es la participación de los residentes (sin él), la de la capa del mapa y la evolución
+const CERA_MAILAK = new Set(["estatua", "nazioa", "autonomia", "probintzia", "tamaina"]);
 function erregistroa(k, maila, id) {
   const d = DATA_SYNC[k]; if (!d) return null;
   const f = maila === "sekzioa" ? d.sek[id.slice(0, 2)] : d[maila === "estatua" ? "estatua" : maila];
   if (!f || f instanceof Promise || !f.r[id]) return null;
-  const [censo, votantes, vc, lista] = f.r[id];
+  let [censo, votantes, vc, lista] = f.r[id], partE = null;
+  const x = CERA_MAILAK.has(maila) && f.cera && f.cera[id];
+  if (x) {
+    const [cc, cv, , , cvc, cl] = x, v = new Map(lista);
+    for (const [i, n] of cl) v.set(i, (v.get(i) || 0) + n);
+    lista = [...v].sort((a, b) => b[1] - a[1]); vc += cvc;
+    if (cc != null && cv != null && censo) { partE = (100 * votantes) / censo; censo += cc; votantes += cv; }
+  }
   const c = lista.map(([i, v]) => [f.s[i], v, vc ? (100 * v) / vc : null, f.k[i], f.f[i], (f.b || [])[i] || ""]);
-  return { censo, votantes, vc, c, part: censo ? (100 * votantes) / censo : null, m: c.length > 1 ? c[0][2] - c[1][2] : c.length ? 100 : null };
+  return { censo, votantes, vc, c, part: censo ? (100 * votantes) / censo : null, partE, cera: !!x,
+           m: c.length > 1 ? c[0][2] - c[1][2] : c.length ? 100 : null };
+}
+const partEgoiliar = (r) => (r.partE ?? r.part);  // la de los residentes (sin voto exterior)
+// El voto exterior (CERA) de una zona, de la provincia para arriba: {censo, votantes, zur, bal, vc, part, c}; null si la
+// fuente no lo da aparte (autonómicas) o la zona no tiene (municipios y secciones)
+function ceraErregistroa(k, maila, id) {
+  const d = DATA_SYNC[k]; if (!d) return null;
+  const f = d[maila], x = f && f.cera && f.cera[id]; if (!x) return null;
+  const [censo, votantes, zur, bal, vc, lista] = x;
+  const c = lista.map(([i, v]) => [f.s[i], v, vc ? (100 * v) / vc : null, f.k[i], f.f[i]]);
+  return { censo, votantes, zur, bal, vc, c, part: censo && votantes != null ? (100 * votantes) / censo : null };
 }
 // La elección con la que se compara (▲▼). En el Congreso, la anterior. En las autonómicas, la anterior de la comunidad de la
 // zona (la vista de esa sola elección); null sin zona elegida o si su comunidad no está en la vista
@@ -582,7 +613,7 @@ function kolorea(r, maila, id) {
   }
   if (!r) return NODATA;
   if (state.modua === "irabazlea") return r.c[0] ? r.c[0][3] : NODATA;
-  return bin(r.part, PART_BINS);
+  return bin(partEgoiliar(r), PART_BINS);
 }
 const margotuta = {};  // nivel → firma de lo último pintado
 const irabazleakMailaka = {};  // nivel → partido → zonas que gana
@@ -758,14 +789,14 @@ function argibideEsaldia(maila, id) {
 function botoZatia(maila, id) {
   const r = erregistroa(state.k, maila, id); if (!r) return `<div class="tt-m">${T.sinDatos}</div>`;
   const lehen = r.c[0] ? r.c[0][2] : 0;
-  return `<div class="tt-m">${T.part} ${pct(r.part)} · ${T.margen} ${ptu(r.m)} ${T.puntos}</div>` + r.c.filter((c) => c[2] >= lehen - ARGIBIDE_MARJINA).slice(0, 5)
+  return `<div class="tt-m">${T.part} ${partTestua(r)} · ${T.margen} ${ptu(r.m)} ${T.puntos}</div>` + r.c.filter((c) => c[2] >= lehen - ARGIBIDE_MARJINA).slice(0, 5)
     .map((c) => `<div class="tt-r"><span>${sq(c[3])} ${esc(c[0])}</span><span>${pct(c[2])}</span></div>`).join("");
 }
 // Resultados con «Bloques»: el % de cada bloque
 function blokeBotoZatia(maila, id) {
   const r = erregistroa(state.k, maila, id); if (!r) return `<div class="tt-m">${T.sinDatos}</div>`;
   const z = blokeBotoak(r), zatiak = blokeZatiak(z.v);
-  return `<div class="tt-m">${T.part} ${pct(r.part)}</div>${segBarra(zatiak.map((x) => [z.v[x], BLOKE_KOLOREA[x]]))}` +
+  return `<div class="tt-m">${T.part} ${partTestua(r)}</div>${segBarra(zatiak.map((x) => [z.v[x], BLOKE_KOLOREA[x]]))}` +
     zatiak.map((x) => `<div class="tt-r"><span>${sq(BLOKE_KOLOREA[x])} ${T.blokeIzenak[x]}</span><b>${pct(z.p[x])}</b></div>`).join("");
 }
 // Escaños del ámbito (provincia o superior)
@@ -823,9 +854,13 @@ async function hautatu(h, joan = false) {
   urlaIdatzi(); arnasa().then(panela);  // primero la zona resaltada, luego el panel
 }
 // Cuatro cifras de la zona: participación (con su variación), votantes, censo y margen 1.ª–2.ª
+// Participación con el voto exterior y, entre paréntesis, la de los residentes (la del mapa)
+const partTestua = (r) => `${pct(r.part)}${r.partE != null ? ` (${T.egoiliarrak} ${pct(r.partE)})` : ""}`;
 function kpis(r, ra) {
-  const d = aldaketa(ra && r.part != null && ra.part != null ? r.part - ra.part : null, { puntuak: true });
-  return `<div class="kpis"><div class="kpi"><div class="v">${pct(r.part)}${d}</div><div class="k">${T.part}</div></div>
+  // ▲▼ con la misma base: las dos con voto exterior o, si a una le falta, las dos de residentes
+  const [a, b] = ra && r.partE != null && ra.partE != null ? [r.part, ra.part] : [partEgoiliar(r), ra && partEgoiliar(ra)];
+  const d = aldaketa(ra && a != null && b != null ? a - b : null, { puntuak: true });
+  return `<div class="kpis"><div class="kpi"><div class="v">${pct(r.part)}${d}</div><div class="k">${T.part}${r.partE != null ? ` · ${T.egoiliarrak} ${pct(r.partE)}` : ""}</div></div>
     <div class="kpi"><div class="v">${fmt(r.votantes)}</div><div class="k">${T.votantes}</div></div>
     <div class="kpi"><div class="v">${fmt(r.censo)}</div><div class="k">${T.censo}</div></div>
     <div class="kpi"><div class="v">${ptu(r.m)}</div><div class="k">${T.margenKpi}</div></div></div>`;
@@ -893,6 +928,20 @@ const joateko = (maila, id) => `<button type="button" class="ibtn ekintza" data-
 // Sin escaños propios: por qué, y el botón a donde están (la provincia en el Congreso; la comunidad en las autonómicas)
 const eserlekurikEzZatia = (maila, id) => (autonomikoak() ? `<p class="hint">${T.eserBarrutiaAut}</p>${joateko("autonomia", autCca(maila, id))}`
   : `<p class="hint">${T.eserBarrutia}</p>${joateko("probintzia", id.slice(0, 2))}`);
+// Voto exterior (CERA) de una zona de la provincia para arriba: sus cifras y sus candidaturas, ya sumadas en los resultados de
+// la zona. Las autonómicas sin CERA en la fuente, un aviso (sus resultados van sin él)
+function ceraZatia(k, ak, maila, id, r) {
+  if (!["probintzia", "autonomia", "nazioa", "estatua", "tamaina"].includes(maila) || !r) return "";
+  const c = ceraErregistroa(k, maila, id), ca = ak ? ceraErregistroa(ak, maila, id) : null;
+  if (!c) return autonomikoak() && !(INFO[k].osagaiak && (AUT.oharrak[`${autCca(maila, id)}-${autHauteskundea(k, autCca(maila, id))}`] || []).includes("cera")) ? `<div class="lbl">${T.ceraLbl}</div><p class="hint">${T.ceraEz}</p>` : "";
+  const d = aldaketa(ca && c.part != null && ca.part != null ? c.part - ca.part : null, { puntuak: true });
+  const lehen = c.c[0] ? c.c[0][2] : 0;
+  return `<div class="lbl">${T.ceraLbl}</div><div class="kpis"><div class="kpi"><div class="v">${pct(c.part)}${d}</div><div class="k">${T.part}</div></div>
+    <div class="kpi"><div class="v">${fmt(c.votantes)}</div><div class="k">${T.votantes}</div></div><div class="kpi"><div class="v">${fmt(c.censo)}</div><div class="k">${T.censo}</div></div>
+    <div class="kpi"><div class="v">${fmt(c.vc)}</div><div class="k">${T.vc}</div></div></div>` +
+    c.c.slice(0, 8).map((x) => `<div class="row"><span class="nm">${sq(x[3])} ${esc(x[0])}</span><span class="num">${fmt(x[1])}</span><span class="pc">${pct(x[2])}</span><span class="bar"><i style="width:${Math.min(100, x[2] / Math.max(lehen, 1) * 100).toFixed(1)}%;background:${x[3]}"></i></span></div>`).join("") +
+    `<p class="hint">${T.ceraBarne}</p>`;
+}
 // Cabecera del panel: nombre, línea de datos y, si hay algo elegido, la × para volver al Estado
 function buruak(izen, meta, itxi = false) {
   return `<div class="hdr"><div><h2>${izen}</h2><div class="meta">${meta}</div></div>${itxi ? `<button type="button" class="itxi" aria-label="${T.cerrar}" title="${T.cerrar}" data-hautatu="">×</button>` : ""}</div>`;
@@ -1004,7 +1053,7 @@ function panela() {
     el.innerHTML = buruak(T.estado, `${T.congreso} · ${INFO[k].izena}${ak ? ` · ▲▼ ${T.respectoA} ${INFO[ak].izena}` : ""}`) + `${kpis(r, ra)}
       <div class="lbl">${lbl}</div><div class="taula"><span class="h">${zut}</span><span class="h num">${T.part}</span><span class="h">${T.primera}</span><span class="h num">${T.margen}</span>
       ${zonak.map(([id, x]) => `<span><button type="button" data-hautatu="${um}:${id}">${esc(izena(um, id))}</button></span><span class="num">${pct(x.part)}</span><span>${esc(x.c[0] ? x.c[0][0] : "–")}</span><span class="num">${ptu(x.m)}</span>`).join("")}</div>
-      ${state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : ""}${emaitzak(r)}<p class="hint">${T.estadoHint}</p>`;
+      ${state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : ""}${emaitzak(r)}${ceraZatia(k, ak, "estatua", "ES", r)}<p class="hint">${T.estadoHint}</p>`;
     return;
   }
   const r = erregistroa(k, h.maila, h.id), ra = ak && h.maila !== "sekzioa" ? erregistroa(ak, h.maila, h.id) : null, kanpo = kanpoan(k, h.maila, h.id);
@@ -1012,7 +1061,7 @@ function panela() {
   const meta = h.maila === "tamaina" ? T.tamainaTarteak[h.id] : T.mailak[h.maila];
   const aut = autonomikoak();
   el.innerHTML = buruak(esc(izena(h.maila, h.id)), `${meta} · ${aut ? autMeta(k, h) : `${T.congreso} ${INFO[k].izena}`}`, true) +
-    `${katea ? `<div class="katea">${katea}</div>` : ""}${aut ? autZatiak(k, h, ra && ak) : ""}${h.maila === "tamaina" ? tamainaZatia(k, h.id) : ""}${r ? kpis(r, ra) + (h.maila === barrutiMaila() ? azkenKutxa(k, h.id) : "") + (state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : "") + emaitzak(r) : kanpo ? "" : `<p class="hint">${T.sinDatos}</p>`}`;
+    `${katea ? `<div class="katea">${katea}</div>` : ""}${aut ? autZatiak(k, h, ra && ak) : ""}${h.maila === "tamaina" ? tamainaZatia(k, h.id) : ""}${r ? kpis(r, ra) + (h.maila === barrutiMaila() ? azkenKutxa(k, h.id) : "") + (state.modua === "blokeak" ? blokeBotoZerrenda(r, ra) : "") + emaitzak(r) + ceraZatia(k, ra && ak, h.maila, h.id, r) : kanpo ? "" : `<p class="hint">${T.sinDatos}</p>`}`;
 }
 // Botones con data-hautatu (tabla de naciones, migas de pan, ×): eligen esa zona y van a ella; vacío = el Estado
 function hautatuBotoia(e) {
@@ -1223,7 +1272,8 @@ function bilakaeraOrria(h) {
     `<span class="h num">${T.part}</span>${eser ? `<span class="h num">${T.escanos}</span>` : ""}` +
     ks.slice().reverse().map(errenkada).join("") + "</div>";
   return buru + `<div class="lbl">${T.bilEhunekoa}</div>${bilGrafikoa(ks, lerroak, { k })}` +
-    `<div class="lbl">${INFO[k].izena}${ak ? ` · ▲▼ ${T.respectoA} ${INFO[ak].izena}` : ""}</div>${legenda}<div class="lbl">${T.bilHauteskundez}</div>${taula}`;
+    `<div class="lbl">${INFO[k].izena}${ak ? ` · ▲▼ ${T.respectoA} ${INFO[ak].izena}` : ""}</div>${legenda}<div class="lbl">${T.bilHauteskundez}</div>${taula}` +
+    (CERA_MAILAK.has(maila) ? `<p class="hint">${T.bilCera}</p>` : "");
 }
 
 // ---- controles ----

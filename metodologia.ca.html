@@ -26,8 +26,8 @@
 <meta property="og:locale" content="ca_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=bc946b6b5c94">
-<link rel="stylesheet" href="estiloa.css?v=bc946b6b5c94">
+<link rel="stylesheet" href="letrak.css?v=60078376c51e">
+<link rel="stylesheet" href="estiloa.css?v=60078376c51e">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -63,8 +63,10 @@
     <li><b>Votants</b> = vots a candidatures + vots en blanc + vots nuls. <b>Participació</b> = votants / cens.</li>
     <li>Els percentatges de cada candidatura es calculen sobre els <b>vots a candidatures</b>, sense blancs ni nuls. Per això no
     coincideixen amb el percentatge oficial, que es calcula sobre els vots vàlids (amb els blancs).</li>
-    <li>El <b>vot exterior</b> (CERA, residents a l'estranger) no és a cap secció ni municipi i en queda fora, també dels totals de
-    província, comunitat, nació i Estat.</li>
+    <li>El <b>vot exterior</b> (CERA, residents a l'estranger) no és a cap secció ni municipi. Els municipis i les seccions van sense ell; de la
+    província cap amunt (comunitat, nació i Estat), els vots i els percentatges el porten, com el resultat oficial, i el tauler el
+    desglossa a part. La participació surt de les dues maneres: l'oficial, amb ell, i la dels residents, sense ell, que és la de la
+    capa del mapa i la de l'evolució (el vot exterior vota molt poc: amb ell, Ourense passa del 72 % al 53 % el 2023).</li>
     <li>Tot se suma des de la mesa electoral: secció, municipi, província, comunitat, nació i Estat.</li>
     <li>Els <b>municipis fusionats</b> es mostren com són avui en totes les eleccions: Oza-Cesuras (Oza dos Ríos i Cesuras, 2013)
     i Cerdedo-Cotobade (Cerdedo i Cotobade, 2016).</li>
@@ -182,7 +184,8 @@
     municipi (Astúries, l'Aragó 2011 i 2015, Múrcia excepte el 2019, Cantàbria 2015 i 2019, Castella-la Manxa excepte el 2019)
     o per província (Extremadura), en apropar el mapa aquestes zones es veuen per municipis.</li>
     <li><b>Com al Congrés:</b> votants = candidatures + blancs + nuls (on la font no dona blancs ni nuls, els seus votants);
-    percentatges sobre els vots a candidatures; sense vot exterior (CERA); municipis fusionats, tal com són avui.</li>
+    percentatges sobre els vots a candidatures; amb vot exterior (CERA) de la província cap amunt on la font el dona;
+    municipis fusionats, tal com són avui.</li>
     <li><b>Sigles:</b> les de cada font, amb la mateixa sigla escrita sempre igual (P.P. i PARTIDO POPULAR, com a PP). Les
     coalicions van amb el color del seu partit principal: Adelante Andalucía el 2018, de Podemos i IU, com a Podemos.</li>
     <li><b>Canàries</b>, des del 2019, vota amb dues paperetes, la d'illa i la regional: el mapa fa servir la d'illa; els escons, de les dues.</li>
@@ -210,7 +213,7 @@
 <section>
   <h2>Límits coneguts</h2>
   <ul class="zerrenda">
-    <li>Sense vot exterior (CERA), excepte per a l'últim escó: els totals són una mica menors que els oficials.</li>
+    <li>Municipis i seccions, sense vot exterior (CERA): la seva suma és una mica menor que el total de la província. De la província cap amunt, amb ell, excepte a les autonòmiques la font de les quals no el dona (en aquestes, els totals són una mica menors que els oficials). La capa de participació, amb la dels residents a tots els nivells.</li>
     <li>Percentatges sobre vots a candidatures, no sobre vots vàlids.</li>
     <li>El 2015, a les meses d'uns 2.200 municipis, els fitxers del Ministeri no quadren entre ells: el total de vots a
     candidatures no coincideix amb la suma dels vots de cada candidatura (43.289 vots a tot l'Estat, el 0,17 %). Els

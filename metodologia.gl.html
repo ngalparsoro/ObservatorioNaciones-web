@@ -26,8 +26,8 @@
 <meta property="og:locale" content="gl_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=bc946b6b5c94">
-<link rel="stylesheet" href="estiloa.css?v=bc946b6b5c94">
+<link rel="stylesheet" href="letrak.css?v=60078376c51e">
+<link rel="stylesheet" href="estiloa.css?v=60078376c51e">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -63,8 +63,10 @@
     <li><b>Votantes</b> = votos a candidaturas + votos en branco + votos nulos. <b>Participación</b> = votantes / censo.</li>
     <li>As porcentaxes de cada candidatura calcúlanse sobre os <b>votos a candidaturas</b>, sen brancos nin nulos. Por iso non
     coinciden coa porcentaxe oficial, que se calcula sobre os votos válidos (cos brancos).</li>
-    <li>O <b>voto exterior</b> (CERA, residentes no estranxeiro) non está en ningunha sección nin concello e queda fóra, tamén dos
-    totais de provincia, comunidade, nación e Estado.</li>
+    <li>O <b>voto exterior</b> (CERA, residentes no estranxeiro) non está en ningunha sección nin concello. Os concellos e as seccións van sen el;
+    da provincia para arriba (comunidade, nación e Estado), os votos e as porcentaxes lévano, coma o resultado oficial, e o panel
+    desagrégao á parte. A participación sae das dúas maneiras: a oficial, con el, e a dos residentes, sen el, que é a da capa do
+    mapa e a da evolución (o voto exterior vota moi pouco: con el, Ourense pasa do 72 % ao 53 % en 2023).</li>
     <li>Todo se suma desde a mesa electoral: sección, concello, provincia, comunidade, nación e Estado.</li>
     <li>Os <b>concellos fusionados</b> amósanse como son hoxe en todas as eleccións: Oza-Cesuras (Oza dos Ríos e Cesuras, 2013)
     e Cerdedo-Cotobade (Cerdedo e Cotobade, 2016).</li>
@@ -180,7 +182,8 @@
     concello (Asturias, Aragón 2011 e 2015, Murcia agás 2019, Cantabria 2015 e 2019, Castela-A Mancha agás 2019)
     ou por provincia (Estremadura), ao achegar o mapa esas zonas vense por concellos.</li>
     <li><b>Como no Congreso:</b> votantes = candidaturas + brancos + nulos (onde a fonte non dá brancos nin nulos, os seus
-    votantes); porcentaxes sobre os votos a candidaturas; sen voto exterior (CERA); concellos fusionados, como son hoxe.</li>
+    votantes); porcentaxes sobre os votos a candidaturas; con voto exterior (CERA) da provincia para arriba onde a fonte o dá;
+    concellos fusionados, como son hoxe.</li>
     <li><b>Siglas:</b> as de cada fonte, coa mesma sigla escrita sempre igual (P.P. e PARTIDO POPULAR, como PP). As coalicións
     van coa cor do seu partido principal: Adelante Andalucía en 2018, de Podemos e IU, como Podemos.</li>
     <li><b>Canarias</b>, desde 2019, vota con dúas papeletas, a de illa e a rexional: o mapa usa a de illa; os escanos, das dúas.</li>
@@ -207,7 +210,7 @@
 <section>
   <h2>Límites coñecidos</h2>
   <ul class="zerrenda">
-    <li>Sen voto exterior (CERA), agás para o último escano: os totais son algo menores que os oficiais.</li>
+    <li>Concellos e seccións, sen voto exterior (CERA): a súa suma é algo menor que o total da súa provincia. Da provincia cara arriba, con el, agás nas autonómicas cuxa fonte non o dá (nesas, os totais son algo menores que os oficiais). A capa de participación, coa dos residentes en todos os niveis.</li>
     <li>Porcentaxes sobre votos a candidaturas, non sobre votos válidos.</li>
     <li>En 2015, nas mesas duns 2.200 concellos, os ficheiros do Ministerio non cadran entre si: o total de votos a candidaturas
     non coincide coa suma dos votos de cada candidatura (43.289 votos en todo o Estado, o 0,17 %). As porcentaxes calcúlanse

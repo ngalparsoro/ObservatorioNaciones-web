@@ -26,8 +26,8 @@
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="letrak.css?v=bc946b6b5c94">
-<link rel="stylesheet" href="estiloa.css?v=bc946b6b5c94">
+<link rel="stylesheet" href="letrak.css?v=60078376c51e">
+<link rel="stylesheet" href="estiloa.css?v=60078376c51e">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -63,8 +63,11 @@
     <li><b>Votantes</b> = votos a candidaturas + votos en blanco + votos nulos. <b>Participación</b> = votantes / censo.</li>
     <li>Los porcentajes de cada candidatura se calculan sobre los <b>votos a candidaturas</b>, sin blancos ni nulos. Por eso no
     coinciden con el porcentaje oficial, que se calcula sobre los votos válidos (con los blancos).</li>
-    <li>El <b>voto exterior</b> (CERA, residentes en el extranjero) no está en ninguna sección ni municipio y queda fuera, también de
-    los totales de provincia, comunidad, nación y Estado.</li>
+    <li>El <b>voto exterior</b> (CERA, residentes en el extranjero) no está en ninguna sección ni municipio. Los municipios y las secciones van
+    sin él; de la provincia para arriba (comunidad, nación y Estado), los votos y los porcentajes lo llevan, como el resultado
+    oficial, y el panel lo desglosa aparte. La participación sale de las dos maneras: la oficial, con él, y la de los residentes,
+    sin él, que es la de la capa del mapa y la de la evolución (el voto exterior vota muy poco: con él, Ourense pasa del 72 % al 53 %
+    en 2023).</li>
     <li>Todo se suma desde la mesa electoral: sección, municipio, provincia, comunidad, nación y Estado.</li>
     <li>Los <b>municipios fusionados</b> se muestran como son hoy en todas las elecciones: Oza-Cesuras (Oza dos Ríos y Cesuras,
     2013) y Cerdedo-Cotobade (Cerdedo y Cotobade, 2016).</li>
@@ -182,7 +185,8 @@
     por sección desde su API), las mesas se suman por sección, como en el Congreso, y se dibujan con el seccionado del INE que mejor encaja con ellas. Donde la fuente
     solo los da por municipio (Asturias, Aragón 2011 y 2015, Murcia salvo 2019, Cantabria 2015 y 2019, Castilla-La Mancha salvo 2019) o por provincia (Extremadura), al acercar el mapa esas zonas se ven por municipios.</li>
     <li><b>Como en el Congreso:</b> votantes = candidaturas + blancos + nulos (donde la fuente no da blancos ni nulos, sus
-    votantes); porcentajes sobre los votos a candidaturas; sin voto exterior (CERA); municipios fusionados, como son hoy.</li>
+    votantes); porcentajes sobre los votos a candidaturas; con voto exterior (CERA) de la provincia para arriba donde la
+    fuente lo da; municipios fusionados, como son hoy.</li>
     <li><b>Siglas:</b> las de cada fuente, con la misma sigla escrita siempre igual (P.P. y PARTIDO POPULAR, como PP). Las
     coaliciones van con el color de su partido principal: Adelante Andalucía en 2018, de Podemos e IU, como Podemos.</li>
     <li><b>Canarias</b>, desde 2019, vota con dos papeletas, la de isla y la regional: el mapa usa la de isla; los escaños, de las dos.</li>
@@ -210,7 +214,7 @@
 <section>
   <h2>Límites conocidos</h2>
   <ul class="zerrenda">
-    <li>Sin voto exterior (CERA), salvo para el último escaño: los totales son algo menores que los oficiales.</li>
+    <li>Municipios y secciones, sin voto exterior (CERA): su suma es algo menor que el total de su provincia. De la provincia para arriba, con él, salvo en las autonómicas cuya fuente no lo da (en esas, los totales son algo menores que los oficiales). La capa de participación, con la de los residentes en todos los niveles.</li>
     <li>Porcentajes sobre votos a candidaturas, no sobre votos válidos.</li>
     <li>En 2015, en las mesas de unos 2.200 municipios, los ficheros del Ministerio no cuadran entre sí: el total de votos a
     candidaturas no coincide con la suma de los votos de cada candidatura (43.289 votos en todo el Estado, el 0,17 %). Los
