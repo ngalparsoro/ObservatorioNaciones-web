@@ -84,22 +84,56 @@ document.addEventListener("click", (e) => {
   for (const d of document.querySelectorAll("details[open]")) if (!d.contains(e.target) || e.target.closest("a")) d.open = false;
 });
 // ---- colores de cada capa, niveles y fondo ----
-const NODATA = "#2A3946";
-const PART_BINS = [[58, "#E4EEF5"], [64, "#B6CFE3"], [70, "#7FA6CB"], [76, "#4A7BAA"], [Infinity, "#22507D"]];
+// Las escalas, en las dos paletas. Lo que manda no es el tema de la interfaz sino el fondo del
+// mapa: con satélite encendido la imagen es de tono medio y sirve la paleta oscura en los dos
+// temas; solo al apagarlo en tema claro pasa a la de papel, con cada escala un paso más oscura
+// (su extremo pálido no se distinguiría de #E8EDF1). Lo que NO cambia: el color propio de cada
+// bloque (BLOKE_KOLOREA) y de cada candidatura, que son identidad.
+const PALETAK = {
+  ilun: {
+    nodata: "#2A3946",
+    part: [[58, "#E4EEF5"], [64, "#B6CFE3"], [70, "#7FA6CB"], [76, "#4A7BAA"], [Infinity, "#22507D"]],
+    lehia: [[1000, "#7A1F1F"], [5000, "#B8452E"], [10000, "#E08A4D"], [20000, "#EFC48F"], [Infinity, "#F5E9D6"]],
+    blokeak: { INB: ["#FFA3AE", "#FF8090", "#F1516D", "#D23857"], ESK: ["#A9C5FF", "#8CACFF", "#6A8BF0", "#5473D2"], "": ["#8A8F94"] },
+    tamaina: { txikiak: "#00818F", ertainak: "#00B8B0", handiak: "#7DF0D8" },
+    lehiaMugak: [[1000, "#E0704F"], [5000, "#EFC48F"]],
+    grafikoa: "#B6CFE3", grafikoa2: "#6A8090",
+    fondoa: "#0C131A", muga: "#0C131A", nabarmen: "#F2B544", mugaNaz: "#F2B544",
+  },
+  argi: {
+    nodata: "#C2CED7",
+    part: [[58, "#CFE0EC"], [64, "#9CBDD8"], [70, "#6690BC"], [76, "#36689B"], [Infinity, "#1A4269"]],
+    lehia: [[1000, "#6B1414"], [5000, "#9E3620"], [10000, "#CE6B33"], [20000, "#E2A86B"], [Infinity, "#EFD3AC"]],
+    // Mismos tonos del bloque (rojo 14°, azul 268°), recalculados sobre papel: cada paso llega a
+    // 2,9:1 o más contra el fondo claro (el más pálido del oscuro se quedaba en 2,2:1 y se leía
+    // como zona vacía), los escalones consecutivos están en 1,31-1,38 y los dos bloques siguen
+    // distinguiéndose con deuteranopia (2,6-3,2:1) y protanopia (2,1-2,4:1). El primer paso
+    // coincide casi con el color propio del bloque: en claro la escala arranca en su color.
+    blokeak: { INB: ["#F1506C", "#E31237", "#BD0F2E", "#9C0D26"], ESK: ["#6184EF", "#416BEC", "#1C4EE8", "#133DBE"], "": ["#6E747A"] },
+    // al contrario que en oscuro: aquí más escaños = más oscuro, porque el peso visual lo da la oscuridad
+    tamaina: { txikiak: "#009992", ertainak: "#00807A", handiak: "#00615D" },
+    lehiaMugak: [[1000, "#A83A1A"], [5000, "#C08A3A"]],
+    grafikoa: "#36689B", grafikoa2: "#556B7B",
+    fondoa: "#E8EDF1", muga: "#55707F", nabarmen: "#7A5200", mugaNaz: "#A97608",
+  },
+};
+let MAPA_K = PALETAK.ilun;
+let NODATA = MAPA_K.nodata;
+let PART_BINS = MAPA_K.part;
 // «Escaños reñidos»: votos que le faltaron a la siguiente candidatura para quitar el último escaño de la provincia
-const LEHIA_BINS = [[1000, "#7A1F1F"], [5000, "#B8452E"], [10000, "#E08A4D"], [20000, "#EFC48F"], [Infinity, "#F5E9D6"]];
+let LEHIA_BINS = MAPA_K.lehia;
 // «Bloques»: el bloque que se llevó el último escaño o el de más votos (data/master/blokeak.csv), más intenso cuanto más ventaja
 const BLOKE_MUGAK = [5000, 10000, 20000, Infinity];   // provincias: votos que le faltaron al otro bloque (último escaño)
 const BLOKE_PUNTUAK = [5, 10, 20, Infinity];          // demás niveles: ventaja del bloque con más votos, en puntos
 // Rojo y azul, pero no los del PSOE y el PP: algo más claros y con otro tono (OKLCH: rojo 14°, azul 268°). Comprobados con el
 // validador de color: los dos bloques se distinguen en los cuatro pasos (también con daltonismo) y el más oscuro se ve sobre el fondo.
 // De claro a intenso: más intenso cuanto más ventaja (en provincias, cuantos más votos le habrían hecho falta al otro bloque)
-const BLOKE_KOLOREAK = { INB: ["#FFA3AE", "#FF8090", "#F1516D", "#D23857"], ESK: ["#A9C5FF", "#8CACFF", "#6A8BF0", "#5473D2"], "": ["#8A8F94"] };
+let BLOKE_KOLOREAK = MAPA_K.blokeak;
 const BLOKE_KOLOREA = { INB: "#F1516D", ESK: "#6A8BF0", "": "#8A8F94" };  // el de cada bloque en barras y listas
 // «Circunscripciones»: las provincias por los escaños que eligen en cada elección (prozesatu.py: pequeñas 1-5, medianas 6-9,
 // grandes 10 o más). Un solo tono, de menos a más luz sobre el fondo oscuro (no dorado: es el color de las fronteras)
 const TAMAINAK = ["txikiak", "ertainak", "handiak"];
-const TAMAINA_KOLOREA = { txikiak: "#00818F", ertainak: "#00B8B0", handiak: "#7DF0D8" };
+let TAMAINA_KOLOREA = MAPA_K.tamaina;
 const ARGIBIDE_MARJINA = 10;  // en el puntero (Resultados), solo quien está a 10 puntos o menos de la primera fuerza
 const MAILAK = ["nazioa", "autonomia", "probintzia", "udalerria", "sekzioa"];
 const ZOOMAK = { nazioa: [0, 5.9], autonomia: [5.9, 6.8], probintzia: [6.8, 8], udalerria: [8, 10.8], sekzioa: [10.8, 24] };
@@ -511,7 +545,7 @@ for (const m of ["nazioa", "autonomia", "probintzia"]) for (const f of GEO[m].fe
 const sources = { lurra: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
   sat: { type: "raster", tiles: [SATELITEA], tileSize: 256, maxzoom: 13, attribution: SAT_KREDITUA },  // EOX no da más detalle
   orto: { type: "raster", tiles: ["orto://{z}/{x}/{y}"], tileSize: 256, minzoom: ORTO_ZOOM, maxzoom: 19, attribution: PNOA_KREDITUA } };
-const layers = [{ id: "atzealdea", type: "background", paint: { "background-color": "#0C131A" } },
+const layers = [{ id: "atzealdea", type: "background", paint: { "background-color": MAPA_K.fondoa } },
   { id: "sat", type: "raster", source: "sat", layout: { visibility: state.satelitea ? "visible" : "none" } },
   { id: "orto", type: "raster", source: "orto", minzoom: ORTO_ZOOM, layout: { visibility: state.satelitea ? "visible" : "none" } },
   { id: "lurra", type: "fill", source: "lurra", layout: { visibility: state.satelitea ? "none" : "visible" }, paint: { "fill-color": NODATA } }];
@@ -527,12 +561,12 @@ for (const m of MAILAK) {
     "fill-color": ["coalesce", ["feature-state", "c"], NODATA],
     "fill-opacity": opakutasuna() } });
   layers.push({ id: m + "-line", type: "line", source: m, layout: { visibility: "none" }, paint: {
-    "line-color": ["case", ["boolean", ["feature-state", "sel"], false], "#F2B544", "#0C131A"],
+    "line-color": ["case", ["boolean", ["feature-state", "sel"], false], MAPA_K.nabarmen, MAPA_K.muga],
     "line-opacity": ["case", ["boolean", ["feature-state", "sel"], false], 1, KANPO, 0, 1],
     "line-width": ["case", ["boolean", ["feature-state", "sel"], false], 2.5, m === "sekzioa" ? 0.3 : 0.6] } });
 }
 sources.mugak = { type: "geojson", data: GEO_NAZ };  // fronteras de nación (autonómicas: de las comunidades que votan), siempre encima
-layers.push({ id: "mugak", type: "line", source: "mugak", maxzoom: 8.6, paint: { "line-color": "#F2B544", "line-width": ["interpolate", ["linear"], ["zoom"], 4, 1, 9, 2.2], "line-opacity": 0.85 } });
+layers.push({ id: "mugak", type: "line", source: "mugak", maxzoom: 8.6, paint: { "line-color": MAPA_K.mugaNaz, "line-width": ["interpolate", ["linear"], ["zoom"], 4, 1, 9, 2.2], "line-opacity": 0.85 } });
 
 // Herramientas de la izquierda: en el ordenador, abiertas salvo que se hayan cerrado (el navegador lo recuerda); en el móvil, cerradas
 const mugikorra = () => matchMedia("(max-width: 900px)").matches;
@@ -1166,8 +1200,8 @@ const bilGelaxka = (testua, act, num) => `<span class="${[act ? "act" : "", num 
 function partBilakaera(maila, id, hist, ks, k, ak, nonoiz) {
   const es = maila !== "estatua" && !autonomikoak() && BILAKAERA[bilFitxategia("estatua")].r.ES;  // autonómicas: sin Estado
   // sin participación en alguna elección (Cantabria 2019, autonómicas): hueco en la línea y «–» en la tabla
-  const lerroak = [{ izena: izena(maila, id), kolorea: "#B6CFE3", b: Object.fromEntries(ks.filter((x) => hist[x][0] != null).map((x) => [x, hist[x][0]])) }];
-  if (es) lerroak.push({ izena: T.estado, kolorea: "#6A8090", marra: true, b: Object.fromEntries(ks.map((x) => [x, es[x][0]])) });
+  const lerroak = [{ izena: izena(maila, id), kolorea: MAPA_K.grafikoa, b: Object.fromEntries(ks.filter((x) => hist[x][0] != null).map((x) => [x, hist[x][0]])) }];
+  if (es) lerroak.push({ izena: T.estado, kolorea: MAPA_K.grafikoa2, marra: true, b: Object.fromEntries(ks.map((x) => [x, es[x][0]])) });
   const v = lerroak.flatMap((l) => Object.values(l.b));
   if (!v.length) return `<p class="hint">${T.autOharrak.partik}</p>`;
   const ymin = Math.floor((Math.min(...v) - 2) / 5) * 5, ymax = Math.ceil((Math.max(...v) + 2) / 5) * 5;
@@ -1183,7 +1217,7 @@ function partBilakaera(maila, id, hist, ks, k, ak, nonoiz) {
 function lehiaBilakaera(d, hist, ks, k) {
   const z = (x) => hist[x][5], izen = (i) => esc(d.s[i]);
   const barr = (x) => { if (!autonomikoak()) return ""; const [, , , , iz, p] = z(x); return esc(iz ? barrutiIzena(iz) : p ? izena("probintzia", p) : ""); };
-  const lerroa = { izena: T.lehiaLeg, kolorea: "#6A8090", b: Object.fromEntries(ks.map((x) => [x, z(x)[2]])), koloreak: Object.fromEntries(ks.map((x) => [x, d.k[z(x)[0]]])) };
+  const lerroa = { izena: T.lehiaLeg, kolorea: MAPA_K.grafikoa2, b: Object.fromEntries(ks.map((x) => [x, z(x)[2]])), koloreak: Object.fromEntries(ks.map((x) => [x, d.k[z(x)[0]]])) };
   const gehienez = Math.max(...Object.values(lerroa.b)), pausoa = [1000, 2000, 5000, 10000, 20000, 50000].find((p) => gehienez / p <= 5) || 100000;
   const [a, b, falta, n] = z(k);
   const taula = bilTaula([T.hauteskundea, T.bilAzkena, T.bilHurrengoa, T.botoak], ks.slice().reverse().map((x) => { const [i, j, f] = z(x);
@@ -1193,7 +1227,7 @@ function lehiaBilakaera(d, hist, ks, k) {
 }
 // Escaños reñidos, en una zona mayor del Congreso (Estado, nación, comunidad, tamaño): cuántos últimos escaños se decidieron
 // por pocos votos
-const LEHIA_MUGAK = [[1000, "#E0704F"], [5000, "#EFC48F"]];
+let LEHIA_MUGAK = MAPA_K.lehiaMugak;
 function lehiaBatura(maila, id, ks, k, ak, nonoiz) {
   const P = BILAKAERA[bilFitxategia("probintzia")].r, Z = (p, x) => P[p][x];
   const barruan = (p, x) => maila === "estatua" || (maila === "nazioa" && GOIK.autonomia[GOIK.probintzia[p]] === id)
@@ -1401,10 +1435,64 @@ function sateliteaAldatu() {
   map.setLayoutProperty("lurra", "visibility", state.satelitea ? "none" : "visible");  // comunales: se ve el terreno
   if (!state.satelitea) aurretik(lurraLortu());
   for (const m of MAILAK) map.setPaintProperty(m + "-fill", "fill-opacity", opakutasuna());
+  paletaEzarri();  // en tema claro, sin satélite el mapa pasa a la paleta de papel
   urlaIdatzi();
 }
 $("#satelitea").setAttribute("aria-pressed", state.satelitea);
 $("#satelitea").addEventListener("click", sateliteaAldatu);
+
+// ---- aspecto claro / oscuro (I) ----
+// La interfaz la cambia el CSS solo (tokens de tema.css; tema.js aplica el guardado antes del
+// primer pintado). Aquí va lo que el CSS no alcanza: los colores del mapa, que son propiedades
+// de MapLibre. La paleta del mapa depende del tema Y del satélite: sobre imagen de satélite
+// manda la oscura aunque la interfaz esté en claro, porque la imagen es de tono medio.
+const temaSistema = matchMedia("(prefers-color-scheme: light)");
+function temaAktiboa() {
+  const g = document.documentElement.getAttribute("data-theme");
+  return g === "light" || g === "dark" ? g : (temaSistema.matches ? "light" : "dark");
+}
+function mapaKoloreak() {
+  map.setPaintProperty("atzealdea", "background-color", MAPA_K.fondoa);
+  map.setPaintProperty("lurra", "fill-color", MAPA_K.nodata);
+  map.setPaintProperty("mugak", "line-color", MAPA_K.mugaNaz);
+  for (const m of MAILAK) {
+    map.setPaintProperty(m + "-line", "line-color",
+      ["case", ["boolean", ["feature-state", "sel"], false], MAPA_K.nabarmen, MAPA_K.muga]);
+  }
+}
+function paletaEzarri(lehena) {
+  const berria = (temaAktiboa() === "light" && !state.satelitea) ? PALETAK.argi : PALETAK.ilun;
+  if (berria === MAPA_K && !lehena) return;
+  MAPA_K = berria;
+  document.documentElement.setAttribute("data-mapa", MAPA_K === PALETAK.argi ? "argi" : "ilun");
+  NODATA = MAPA_K.nodata; PART_BINS = MAPA_K.part; LEHIA_BINS = MAPA_K.lehia;
+  BLOKE_KOLOREAK = MAPA_K.blokeak; TAMAINA_KOLOREA = MAPA_K.tamaina; LEHIA_MUGAK = MAPA_K.lehiaMugak;
+  if (estiloaPrest) mapaKoloreak(); else map.once("style.load", mapaKoloreak);
+  if (lehena) return;  // en el arranque pinta hasi(), no hace falta repintar
+  // el color de cada zona va en feature-state y margotu() lo cachea por firma: hay que invalidar
+  for (const k of Object.keys(margotuta)) delete margotuta[k];
+  eguneratu(); legenda(); panela();
+}
+function temaBotoia() {
+  // el icono (sol / luna) lo elige el CSS con aria-pressed; aquí solo el estado y lo que oye un
+  // lector de pantalla, que tiene que decir a qué tema se va, no en cuál estamos
+  const b = $("#tema"), argia = temaAktiboa() === "light";
+  b.setAttribute("aria-pressed", String(argia));
+  b.setAttribute("aria-label", argia ? T.ilunaAria : T.argiaAria);
+}
+function temaAldatu() {
+  const t = temaAktiboa() === "light" ? "dark" : "light";
+  try { localStorage.setItem("tema", t); } catch { /* sin almacenamiento: solo esta sesión */ }
+  document.documentElement.setAttribute("data-theme", t);
+  temaBotoia(); paletaEzarri();
+}
+$("#tema").addEventListener("click", temaAldatu);
+// sin elección guardada, seguir al sistema cuando pase de día a noche
+temaSistema.addEventListener("change", () => {
+  const g = document.documentElement.getAttribute("data-theme");
+  if (g !== "light" && g !== "dark") { temaBotoia(); paletaEzarri(); }
+});
+temaBotoia(); paletaEzarri(true);
 // Crédito de las ortofotos a pie de mapa (lo pide la licencia del IGN): solo cuando se ven
 function ortoKreditua() { $("#ortokreditua").hidden = !(state.satelitea && map.getZoom() >= ORTO_ZOOM); }
 map.on("zoom", ortoKreditua);
@@ -1603,7 +1691,7 @@ const LASTERBIDEAK = {
   w: () => moduaAldatu("irabazlea"), m: () => moduaAldatu("lehia"), t: () => moduaAldatu("part"), b: () => moduaAldatu("blokeak"),
   d: () => moduaAldatu("tamaina"), a: () => motaAldatu(autonomikoak() ? "kongresua" : "autonomikoak"),
   k: () => { const f = FITXAK[state.mota]; fitxaAldatu(f[(f.indexOf(state.fitxa) + 1) % f.length]); },  // la siguiente pestaña del tipo
-  s: sateliteaAldatu, l: railAldatu, 0: () => ikusi(PENINSULA), c: () => ikusi(KANARIAK),
+  s: sateliteaAldatu, i: temaAldatu, l: railAldatu, 0: () => ikusi(PENINSULA), c: () => ikusi(KANARIAK),
   "/": () => {
     if (mugikorra() ? !$("#app").classList.contains("rail-zabalik") : $("#app").classList.contains("menurik-ez")) railAldatu();
     $("#bilatu").focus();

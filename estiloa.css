@@ -3,14 +3,14 @@
    Disposición (ordenador): barra arriba, herramientas a la izquierda, leyenda abajo a la izquierda, línea de tiempo (con el
    buscador de elecciones) abajo en el centro y panel de resultados a la derecha. Móvil: línea de tiempo arriba y resultados
    en una hoja inferior. */
+/* Los COLORES no están aquí: viven en tema.css (oscuro y claro), que se carga antes que este
+   fichero. Si necesitas un color nuevo, añade el token allí en las dos paletas, no un literal
+   aquí. Únicos literales admitidos: texto y halo sobre rellenos de bloque (`--on-fill`), que no
+   dependen del tema porque no se apoyan en la página sino en un color saturado. */
 :root {
-  --bg: #0C131A; --bg-2: #131D26; --panel: rgba(14,22,30,.93); --panel-solid: #101A22;
-  --line: #2E4252; --line-2: #22323F; --ink: #D6E1E8; --ink-hi: #F4F7F9; --muted: #9FB3C2; --dim: #6A8090;
-  --gold: #F2B544; --gold-2: #F6C866; --gold-bg: #1D1B12; --gold-line: #5A4A1C; --up: #8CC63F; --down: #E0704F;
   --f-display: "Saira Semi Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
   --top-h: 64px; --rail-w: 236px; --panel-w: 400px;
-  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 var(--f-display); }
@@ -20,7 +20,8 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 
 /* ---- Barra superior ---- */
 #top { position: absolute; inset: 0 0 auto 0; height: var(--top-h); z-index: 1100; display: flex; align-items: center; gap: 20px;
-  padding: 0 20px 0 24px; background: linear-gradient(#131D26, #0E161E); border-bottom: 1px solid var(--line-2); }
+  padding: 0 20px 0 24px; background: linear-gradient(var(--top-1), var(--top-2)); border-bottom: 1px solid var(--line-2);
+  -webkit-backdrop-filter: var(--chrome-blur); backdrop-filter: var(--chrome-blur); }
 #top h1 { margin: 0; font: 600 18px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
 .beta { display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 5px 1px; border: 1px solid var(--gold-line); background: var(--gold-bg);
   font: 500 9px/1 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-2); position: relative; top: -2px; }
@@ -32,7 +33,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 #crumb button:hover { color: var(--ink); }
 .eskuina { margin-left: auto; display: flex; gap: 10px; align-items: center; flex: none; }
 .kbd { display: flex; gap: 5px; align-items: center; }
-.ibtn { background: transparent; color: var(--muted); border: 1px solid var(--line); font: 500 11px var(--f-mono); letter-spacing: .06em;
+.ibtn { background: transparent; color: var(--muted); border: 1px solid var(--line-ui); font: 500 11px var(--f-mono); letter-spacing: .06em;
   text-transform: uppercase; padding: 7px 10px; cursor: pointer; }
 .ibtn:hover { color: var(--ink); border-color: var(--muted); }
 .ibtn[aria-pressed="true"] { color: var(--gold-2); border-color: var(--gold); background: var(--gold-bg); }
@@ -44,7 +45,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .nabigazioa > summary::-webkit-details-marker { display: none; }
 .nabigazioa[open] > summary { color: var(--gold); border-color: var(--gold); background: var(--gold-bg); }
 .nab-menua { position: absolute; left: 0; top: calc(100% + 8px); z-index: 1300; min-width: 250px; display: flex; flex-direction: column;
-  background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0,0,0,.5); padding: 6px; }
+  background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 20px 60px var(--sh-soft); padding: 6px; }
 .nab-menua a { font: 500 12px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none;
   padding: 10px 12px; border-left: 2px solid transparent; }
 .nab-menua a:hover, .nab-menua a:focus-visible { color: var(--ink-hi); background: var(--bg-2); outline: none; }
@@ -57,7 +58,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .hizkuntzak > summary::after { content: "▾"; margin-left: 5px; color: var(--dim); }
 .hizkuntzak[open] > summary { border-color: var(--gold-line); color: var(--gold-2); }
 .hizk-menua { position: absolute; right: 0; top: calc(100% + 6px); z-index: 1300; min-width: 150px; display: grid; background: var(--panel-solid);
-  border: 1px solid var(--line); box-shadow: 0 12px 30px rgba(0,0,0,.5); }
+  border: 1px solid var(--line); box-shadow: 0 12px 30px var(--sh-soft); }
 .hizk-menua button, .hizk-menua a { display: flex; gap: 10px; align-items: baseline; padding: 9px 12px; background: transparent; border: 0;
   border-bottom: 1px solid var(--line-2); color: var(--ink); font: 400 13px var(--f-display); text-align: left; text-decoration: none; cursor: pointer; }
 .hizk-menua > :last-child { border-bottom: 0; }
@@ -72,12 +73,12 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .maplibregl-canvas:focus { outline: none; }
 #etiketak { position: absolute; inset: var(--top-h) 0 0 0; pointer-events: none; z-index: 500; overflow: hidden; }
 .etiketa { position: absolute; transform: translate(-50%, -50%); font: 600 11px var(--f-display); letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink-hi); text-shadow: 0 0 3px #000, 0 0 8px rgba(0,0,0,.8); white-space: nowrap; }
-.etiketa.nazioa { font-size: 14px; color: var(--gold-2); letter-spacing: .22em; }
+  text-transform: uppercase; color: var(--map-ink); text-shadow: 0 0 3px var(--halo), 0 0 8px var(--halo-2); white-space: nowrap; }
+.etiketa.nazioa { font-size: 14px; color: var(--map-gold); letter-spacing: .22em; }
 .etiketa.probintzia { font-size: 10px; font-weight: 500; }
 /* Municipios: en minúscula, como los rótulos de un mapa; las ciudades grandes, algo mayores */
-.etiketa.udalerria { font: 500 11.5px var(--f-display); letter-spacing: 0; text-transform: none; color: #E9F0F4;
-  text-shadow: 0 0 2px rgba(0,0,0,.95), 0 0 6px rgba(0,0,0,.7); }
+.etiketa.udalerria { font: 500 11.5px var(--f-display); letter-spacing: 0; text-transform: none; color: var(--map-ink);
+  text-shadow: 0 0 2px var(--halo), 0 0 6px var(--halo-2); }
 .etiketa.udalerria.hiria { font-size: 13px; font-weight: 600; letter-spacing: .02em; }
 .etiketa.udalerria.txikia { font-size: 10.5px; opacity: .82; }  /* relleno en las zonas con poca gente: un paso por detrás */
 /* Controles de MapLibre con el mismo cromo: zoom arriba a la izquierda (junto a la flecha), créditos ⓘ arriba a la derecha */
@@ -108,11 +109,16 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 }
 .lbl { display: block; font: 500 10px var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--dim); margin: 10px 0 6px; }
 .lbl:first-child { margin-top: 0; }
-#rail .lbl { color: var(--muted); text-shadow: 0 0 3px #000, 0 0 8px rgba(0,0,0,.8); }
-#bilatu { width: 100%; background: var(--bg-2); color: var(--ink); border: 1px solid var(--line); font: 400 14px var(--f-display); padding: 7px 10px; }
+/* Rótulos del raíl: sin halo, al aire, con el color de los topónimos del mapa (--map-ink),
+   que sigue la paleta del MAPA y no la de la interfaz: claros sobre el satélite en los dos
+   temas, oscuros sobre el papel al apagarlo. Peso 500, el máximo real de IBM Plex Mono. */
+#rail .lbl { text-shadow: none; color: var(--map-ink); font-weight: 500; }
+#bilatu { width: 100%; background: var(--chrome); color: var(--ink); border: 1px solid var(--line); font: 400 14px var(--f-display); padding: 7px 10px;
+  -webkit-backdrop-filter: var(--chrome-blur); backdrop-filter: var(--chrome-blur); }
 #bilatu::placeholder { color: var(--dim); }
 #moduak { display: flex; flex-direction: column; gap: 4px; }
-.mode { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px 8px 12px; border: 1px solid var(--line-2); background: var(--panel);
+.mode { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px 8px 12px; border: 1px solid var(--line-2); background: var(--chrome);
+  -webkit-backdrop-filter: var(--chrome-blur); backdrop-filter: var(--chrome-blur);
   color: var(--muted); font: 400 12px var(--f-mono); letter-spacing: .04em; text-align: left; cursor: pointer; }
 .mode:hover { color: var(--ink); border-color: var(--line); }
 .mode .sw { width: 10px; height: 10px; border: 1px solid var(--muted); flex: none; }
@@ -124,7 +130,11 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 .bikotea .mode { justify-content: center; padding-left: 10px; }
 /* capas que el tipo de elección no tiene: apagadas, con su fondo (no se transparenta el mapa) */
 .mode[hidden] { display: none; }  /* la capa que no tiene el tipo de elección (autonómicas: Circunscripciones) */
-.sel { width: 100%; background: var(--bg-2); color: var(--ink); border: 1px solid var(--line); font: 500 12px var(--f-mono); padding: 7px 8px; letter-spacing: .02em; }
+/* Los desplegables van como una opción más de la lista de modos: misma superficie flotante
+   y la misma letra y color, para que el raíl se lea como una sola columna. */
+.sel { width: 100%; background: var(--chrome); color: var(--muted); border: 1px solid var(--line-2);
+  font: 400 12px var(--f-mono); padding: 7px 8px; letter-spacing: .04em;
+  -webkit-backdrop-filter: var(--chrome-blur); backdrop-filter: var(--chrome-blur); }
 .rail-gezia { position: absolute; top: calc(var(--top-h) + 28px); left: calc(24px + var(--rail-w) + 4px); z-index: 1001; width: 20px; height: 44px; padding: 0;
   cursor: pointer; background: var(--panel-solid); color: var(--gold); border: 1px solid var(--line); border-left: 0; font: 600 18px/1 var(--f-display); }
 .rail-gezia:hover { background: var(--gold-bg); border-color: var(--gold-line); }
@@ -153,11 +163,12 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
    de tiempo. Los créditos completos, en ⓘ. */
 #ortokreditua { position: absolute; bottom: 4px; left: calc(24px + var(--rail-w) + 16px); right: calc(24px + var(--panel-w) + 16px);
   z-index: 900; text-align: center; font: 400 10px/12px var(--f-mono); color: var(--ink); letter-spacing: .02em;
-  text-shadow: 0 0 3px #000, 0 0 6px rgba(0,0,0,.9); pointer-events: none; white-space: nowrap; }
+  text-shadow: 0 0 3px var(--halo), 0 0 6px var(--halo-2); pointer-events: none; white-space: nowrap; }
 #ortokreditua a { color: inherit; pointer-events: auto; }
 #ortokreditua[hidden] { display: none; }
 #denboralerroa { position: absolute; bottom: 20px; left: calc(24px + var(--rail-w) + 16px); right: calc(24px + var(--panel-w) + 16px); z-index: 1040;
-  display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); }
+  display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--chrome); border: 1px solid var(--line);
+  -webkit-backdrop-filter: var(--chrome-blur); backdrop-filter: var(--chrome-blur); }
 #denboralerroa::before { content: ""; position: absolute; left: -2px; top: -2px; width: 12px; height: 12px; border: 2px solid var(--gold); border-right: 0; border-bottom: 0; }
 #dlplay { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--gold); background: var(--gold-bg); color: var(--gold); cursor: pointer; font-size: 12px; }
 #dlplay:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
@@ -188,7 +199,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 #dlhautatu > summary::-webkit-details-marker { display: none; }
 #dlhautatu[open] > summary { border-color: var(--gold-line); color: var(--gold-2); }
 .dl-menua { position: absolute; right: -1px; bottom: calc(100% + 6px); z-index: 1300; width: min(440px, calc(100% + 2px)); display: flex; flex-direction: column;
-  max-height: min(60vh, 480px); background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 -20px 60px rgba(0,0,0,.6); }
+  max-height: min(60vh, 480px); background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 -20px 60px var(--sh-strong); }
 #dlbilatu { flex: none; margin: 10px; padding: 7px 10px; background: var(--bg); border: 1px solid var(--line); color: var(--ink); }
 #dlbilatu:focus { outline: none; border-color: var(--gold); }
 .dl-zerrenda { position: relative; overflow-y: auto; scrollbar-width: thin; }
@@ -205,7 +216,7 @@ kbd { font: 500 10px var(--f-mono); color: var(--dim); border: 1px solid var(--l
 
 /* ---- Panel de resultados (derecha), con esquinas de instrumental ---- */
 #panela { position: absolute; top: calc(var(--top-h) + 36px); right: 24px; bottom: 20px; width: var(--panel-w); z-index: 1000;
-  background: var(--panel); border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0,0,0,.5); display: flex; flex-direction: column; }
+  background: var(--panel); border: 1px solid var(--line); box-shadow: 0 20px 60px var(--sh-soft); display: flex; flex-direction: column; }
 #panela::before, #panela::after { content: ""; position: absolute; width: 16px; height: 16px; border: 2px solid var(--gold); pointer-events: none; }
 #panela::before { left: -2px; top: -2px; border-right: 0; border-bottom: 0; }
 #panela::after { right: -2px; bottom: -2px; border-left: 0; border-top: 0; }
@@ -239,7 +250,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .row .num .d { margin-left: 0; }
 .row .pc { font: 500 13px var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; color: var(--ink-hi); min-width: 58px; }
 /* medidor por segmentos, como en el Behatokia: 20 casillas de 5 puntos */
-.bar { grid-column: 1 / -1; position: relative; height: 6px; background: #1E2B36; margin-bottom: 4px; }
+.bar { grid-column: 1 / -1; position: relative; height: 6px; background: var(--seg-off); margin-bottom: 4px; }
 .bar::after { content: ""; position: absolute; inset: 0; pointer-events: none;
   background: repeating-linear-gradient(90deg, transparent 0 calc(5% - 2px), var(--panel-solid) calc(5% - 2px) 5%); }
 .bar i { display: block; height: 100%; }
@@ -264,7 +275,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .nazio-eser button:hover { color: var(--gold-2); }
 .nazio-eser b { font: 500 13px var(--f-mono); text-align: right; color: var(--ink-hi); }
 .seg { display: flex; height: 18px; gap: 1px; }
-.seg i { display: flex; align-items: center; justify-content: center; font: 500 10px var(--f-mono); color: #0C131A; font-style: normal; min-width: 2px; }
+.seg i { display: flex; align-items: center; justify-content: center; font: 500 10px var(--f-mono); color: var(--on-seg); font-style: normal; min-width: 2px; }
 
 /* Evolución (pestaña Bilakaera): gráfico de líneas, leyenda con la variación y tabla elección a elección */
 .bil-graf { width: 100%; max-width: 520px; height: auto; }
@@ -288,7 +299,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 
 /* ---- Puntero, carga y ayuda ---- */
 #tip { position: absolute; z-index: 1200; pointer-events: none; display: none; background: var(--panel-solid); border: 1px solid var(--line);
-  padding: 8px 10px; min-width: 180px; max-width: 280px; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+  padding: 8px 10px; min-width: 180px; max-width: 280px; box-shadow: 0 8px 24px var(--sh-soft); }
 #tip.on { display: block; }
 .tt-n { font: 600 15px/1.1 var(--f-display); letter-spacing: .03em; text-transform: uppercase; color: var(--ink-hi); }
 .tt-m { font: 400 10.5px var(--f-mono); color: var(--muted); margin: 2px 0 4px; }
@@ -303,7 +314,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   letter-spacing: .14em; text-transform: uppercase; color: var(--gold-2); background: var(--panel); border: 1px solid var(--line); padding: 10px 16px; }
 #kargatzen[hidden] { display: none; }
 #laguntza { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1300; width: min(440px, calc(100% - 32px));
-  background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.6); padding: 20px 22px; }
+  background: var(--panel-solid); border: 1px solid var(--line); box-shadow: 0 30px 80px var(--sh-strong); padding: 20px 22px; }
 #laguntza::before, #laguntza::after { content: ""; position: absolute; width: 16px; height: 16px; border: 2px solid var(--gold); }
 #laguntza::before { left: -2px; top: -2px; border-right: 0; border-bottom: 0; }
 #laguntza::after { right: -2px; bottom: -2px; border-left: 0; border-top: 0; }
@@ -331,13 +342,13 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
   #satelitea::before { content: "◐"; font-size: 15px; }
   #denboralerroa { top: calc(var(--top-h) + 6px); bottom: auto; left: 8px; right: 8px; height: var(--dl-h); padding: 6px 10px; gap: 8px; }
   .dl-menua { top: calc(100% + 6px); bottom: auto; width: calc(100% + 2px); max-height: calc(100vh - var(--top-h) - var(--dl-h) - 40px);
-    box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+    box-shadow: 0 20px 60px var(--sh-strong); }
   .dl-bilatu-testua { display: none; }  /* en el móvil, solo la lupa */
   #dlhautatu > summary { padding: 9px; }
   .rail-gezia { top: calc(var(--top-h) + var(--dl-h) + 12px); left: 0; }
   #app.rail-zabalik .rail-gezia { left: min(268px, calc(100% - 28px)); }
   #rail { display: none; top: calc(var(--top-h) + var(--dl-h) + 12px); left: 8px; width: min(260px, calc(100% - 36px)); max-height: calc(100% - var(--top-h) - var(--dl-h) - 20px - var(--orria-h));
-    padding: 10px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0,0,0,.6); z-index: 1150; }
+    padding: 10px; background: var(--panel); border: 1px solid var(--line); box-shadow: 0 20px 60px var(--sh-strong); z-index: 1150; }
   #app.rail-zabalik #rail { display: flex; }
   #app.menurik-ez #rail { transform: none; opacity: 1; visibility: visible; }
   .mode kbd { display: none; }
@@ -379,7 +390,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 /* ---- Páginas estáticas (Metodología, Fuentes, Quiénes somos, Aviso legal, 404) ---- */
 .orria { min-height: 100%; background: var(--bg); color: var(--ink); }
 .orri-goiburua { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 20px; padding: 14px 24px;
-  background: linear-gradient(#131D26, #0E161E); border-bottom: 1px solid var(--line-2); }
+  background: linear-gradient(var(--top-1), var(--top-2)); border-bottom: 1px solid var(--line-2); }
 .orri-goiburua .logoa { font: 600 18px var(--f-display); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
 .orri-goiburua .hizkuntzak { margin-left: auto; }
 .orri-edukia { max-width: 1120px; margin: 0 auto; padding: 32px 24px 64px; display: grid; gap: 44px; }
@@ -419,7 +430,7 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 
 /* ---- Cómo se usa: el tutorial en vídeo, horizontal en pantallas anchas y vertical en el móvil de pie ---- */
 .bideoa { margin: 18px 0; }
-.bideoa video { display: block; width: 100%; height: auto; background: #0b1118; border: 1px solid var(--line); }
+.bideoa video { display: block; width: 100%; height: auto; background: var(--bg); border: 1px solid var(--line); }
 .bideoa .bideoa-vertical { display: none; max-width: 420px; margin: 0 auto; }
 @media (max-width: 700px) and (orientation: portrait) {
   .bideoa .bideoa-horizontal { display: none; }
@@ -459,3 +470,10 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .orri-edukia details.xehetasunak > summary { cursor: pointer; padding: 10px 0; font: 500 11.5px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gold-2); }
 .orri-edukia details.xehetasunak[open] > summary { border-bottom: 1px solid var(--line-2); margin-bottom: 8px; }
 .orri-edukia details.xehetasunak > summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Botón del tema: icono, no texto. Enseña el tema AL QUE SE VA, que es lo que hace al pulsarlo:
+   sol estando en oscuro, luna estando en claro. aria-pressed="true" = claro activo. */
+.ibtn.ikono { display: inline-flex; align-items: center; justify-content: center; padding: 6px 9px; }
+.ibtn.ikono svg { display: block; }
+#tema .ilargia, #tema[aria-pressed="true"] .eguzkia { display: none; }
+#tema[aria-pressed="true"] .ilargia { display: block; }

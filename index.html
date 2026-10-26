@@ -21,18 +21,20 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="vendor/maplibre-gl.css">
-<link rel="stylesheet" href="letrak.css?v=a50097bb80b5">
-<link rel="stylesheet" href="estiloa.css?v=a50097bb80b5">
+<script src="tema.js?v=547144c760cb"></script>
+<link rel="stylesheet" href="letrak.css?v=547144c760cb">
+<link rel="stylesheet" href="tema.css?v=547144c760cb">
+<link rel="stylesheet" href="estiloa.css?v=547144c760cb">
 <link rel="preload" href="fonts/saira-semi-condensed-600-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="preload" href="fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 <link rel="modulepreload" href="vendor/maplibre-gl.mjs">
 <link rel="modulepreload" href="vendor/maplibre-gl-shared.mjs">
-<link rel="modulepreload" href="testuak.js?v=a50097bb80b5">
-<link rel="modulepreload" href="hemizikloa.js?v=a50097bb80b5">
-<link rel="preload" href="data/index.json?v=a50097bb80b5" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="data/autonomikoak/index.json?v=a50097bb80b5" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="geo/nazioa.json?v=a50097bb80b5" as="fetch" crossorigin="anonymous">
-<link rel="preload" href="geo/izenak.json?v=a50097bb80b5" as="fetch" crossorigin="anonymous">
+<link rel="modulepreload" href="testuak.js?v=547144c760cb">
+<link rel="modulepreload" href="hemizikloa.js?v=547144c760cb">
+<link rel="preload" href="data/index.json?v=547144c760cb" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="data/autonomikoak/index.json?v=547144c760cb" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/nazioa.json?v=547144c760cb" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="geo/izenak.json?v=547144c760cb" as="fetch" crossorigin="anonymous">
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "8856f68d5f7a44b39b717f69fe47102e"}'></script>
 </head>
 <body>
@@ -55,6 +57,8 @@
       <div class="kbd" aria-hidden="true"><kbd>Q</kbd><kbd>E</kbd><kbd>/</kbd></div>
       <button type="button" id="laguntzabtn" class="ibtn" aria-expanded="false" aria-controls="laguntza" title="Atajos de teclado (?)" data-t-title="lasterbideakTit">?</button>
       <button type="button" id="satelitea" class="ibtn" aria-pressed="true" title="Imagen de satélite de fondo (S)" data-t-title="sateliteTit" data-t="satelite">Satélite</button>
+      <button type="button" id="tema" class="ibtn ikono" aria-pressed="false" aria-label="Aspecto claro / oscuro"
+              title="Aspecto claro / oscuro (I)" data-t-aria="temaAria" data-t-title="temaTit"><svg class="eguzkia" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="8" cy="8" r="3.1"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3.05 3.05l1.13 1.13M11.82 11.82l1.13 1.13M12.95 3.05l-1.13 1.13M4.18 11.82l-1.13 1.13"/></svg><svg class="ilargia" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13.4 10.1A5.8 5.8 0 0 1 5.9 2.6a5.9 5.9 0 1 0 7.5 7.5z"/></svg></button>
       <details class="hizkuntzak" id="hizkuntzak">
         <summary class="ibtn" aria-label="Idioma" title="Idioma" data-t-aria="hizkuntza" data-t-title="hizkuntza">ES</summary>
         <div class="hizk-menua"></div>
@@ -133,6 +137,7 @@
       <dt><kbd>W</kbd><kbd>M</kbd><kbd>T</kbd><kbd>B</kbd><kbd>D</kbd></dt><dd data-t="lagWMT">Ganador, escaños reñidos, participación, bloques, tamaño de circunscripción</dd>
       <dt><kbd>K</kbd></dt><dd data-t="lagK">Resultados → escaños → evolución (en el panel)</dd>
       <dt><kbd>S</kbd></dt><dd data-t="lagS">Imagen de satélite sí / no</dd>
+      <dt><kbd>I</kbd></dt><dd data-t="lagItxura">Aspecto claro / oscuro</dd>
       <dt><kbd>L</kbd></dt><dd data-t="lagL">Ocultar / mostrar las herramientas</dd>
       <dt><kbd>0</kbd><kbd>C</kbd></dt><dd data-t="lag0C">Península, Canarias</dd>
       <dt><kbd>/</kbd></dt><dd data-t="lagBilatu">Buscar un municipio</dd>
@@ -142,6 +147,6 @@
   <div id="tip" role="tooltip"></div>
   <div id="kargatzen" data-t="cargando">Cargando…</div>
 </div>
-<script type="module" src="app.js?v=a50097bb80b5"></script>
+<script type="module" src="app.js?v=547144c760cb"></script>
 </body>
 </html>

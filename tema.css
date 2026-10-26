@@ -1,0 +1,109 @@
+/* Capa de tokens · «Sala de situación» en oscuro y en claro.
+   ─────────────────────────────────────────────────────────────────────────────
+   ESTE FICHERO SE COMPARTE entre hautesbehatokia (Hauteskunde Behatokia) y
+   nazioenbehatokia (Observatorio de las Naciones): son dos sitios distintos con la
+   misma línea de diseño, así que tiene que ser IDÉNTICO byte a byte en los dos
+   repos. `python scripts/egiaztatu.py` avisa si se separan. No pongas aquí rutas
+   propias de un proyecto.
+
+   Oscuro es la base (:root), así que un navegador sin preferencia declarada ve
+   la pizarra de siempre. El claro entra de dos formas:
+     · prefers-color-scheme: light  → automático, salvo que haya elección guardada
+     · [data-theme="light"]         → elección explícita (tema.js, localStorage)
+   El claro no es «el oscuro invertido»: es papel de plano técnico, misma familia
+   azul-pizarra, y el ámbar se oscurece porque sobre blanco no contrasta.         */
+
+:root {
+  color-scheme: dark;
+  /* fondos */
+  --bg: #0C131A; --bg-2: #131D26; --panel: rgba(14,22,30,.93); --panel-solid: #101A22;
+  --top-1: #131D26; --top-2: #0E161E;
+  /* Superficies que FLOTAN sobre el mapa (cabecera, línea de tiempo, rueda de elecciones),
+     separadas de --panel: el panel de resultados lleva cifras densas y se queda opaco.
+     En oscuro van macizas, como hasta ahora; en claro translúcidas con desenfoque, que es
+     lo que las quita de encima del mapa sin perder legibilidad. */
+  --chrome: var(--panel); --chrome-blur: none; --dial-fill: var(--panel-solid);
+  /* Halo de los rótulos de la INTERFAZ que se apoyan en el mapa (los del raíl). Va aparte de
+     --halo, que sigue la paleta del MAPA porque es para los topónimos: con satélite encendido
+     --halo es oscuro, y en tema claro dejaba texto oscuro con halo oscuro sobre la imagen. */
+  --halo-ui: rgba(0,0,0,.92); --halo-ui-2: rgba(0,0,0,.65);
+  /* líneas */
+  --line: #2E4252; --line-2: #22323F; --line-ui: #576B7A;
+  /* texto */
+  --ink: #D6E1E8; --ink-hi: #F4F7F9; --muted: #9FB3C2; --dim: #6A8090;
+  /* acento: ámbar solo para lo activo */
+  --gold: #F2B544; --gold-2: #F6C866; --gold-bg: #1D1B12; --gold-line: #5A4A1C;
+  --gold-panel: rgba(28,24,12,.92);
+  /* señal */
+  --up: #8CC63F; --down: #E0704F;
+  /* medidores y retícula */
+  --seg-off: #1E2B36; --grid: rgba(120,150,170,.07);
+  /* sombras y halos */
+  --sh-soft: rgba(0,0,0,.5); --sh-strong: rgba(0,0,0,.7);
+  --halo: rgba(0,0,0,.9); --halo-2: rgba(0,0,0,.55);
+  /* rótulos sobre el mapa */
+  --map-ink: #E9F0F4; --map-ink-2: #D6E1E8; --map-gold: #F2B544;
+  /* menú radial, créditos y trama de «sin datos» */
+  --dial-hover: #18252F; --dial-on: #1A2833; --attrib-bg: rgba(12,19,26,.85);
+  --marra: rgba(214,225,232,.6);
+  /* sobre rellenos de partido: igual en los dos temas, no se apoya en la página */
+  --on-fill: #fff; --halo-fill: rgba(0,0,0,.7); --on-seg: #0C131A;
+}
+
+/* Claro automático: solo si no hay elección guardada (tema.js pone data-theme). */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { color-scheme: light;
+    --bg: #E8EDF1; --bg-2: #F4F7F9; --panel: rgba(255,255,255,.94); --panel-solid: #FFFFFF;
+    --top-1: rgba(255,255,255,.58); --top-2: rgba(237,241,244,.70);
+    --chrome: rgba(255,255,255,.68); --chrome-blur: saturate(135%) blur(14px);
+    --dial-fill: rgba(255,255,255,.72);
+    --halo-ui: rgba(255,255,255,.95); --halo-ui-2: rgba(255,255,255,.8);
+    --line: #A3B6C5; --line-2: #C6D4DD; --line-ui: #778A99;
+    --ink: #16222C; --ink-hi: #060D13; --muted: #415767; --dim: #556B7B;
+    --gold: #A97608; --gold-2: #6F4A00; --gold-bg: #FBF1DC; --gold-line: #D4AC5E;
+    --gold-panel: rgba(252,243,223,.95);
+    --up: #3A740C; --down: #A83A1A;
+    --seg-off: #D3DEE6; --grid: rgba(40,70,95,.09);
+    --sh-soft: rgba(22,42,60,.12); --sh-strong: rgba(22,42,60,.20);
+    --halo: rgba(255,255,255,.95); --halo-2: rgba(255,255,255,.75);
+    --map-ink: #0E1C26; --map-ink-2: #2B3E4C; --map-gold: #7A5200;
+    --dial-hover: rgba(216,226,233,.82); --dial-on: rgba(199,214,224,.88); --attrib-bg: rgba(255,255,255,.88);
+    --marra: rgba(30,50,66,.55); --on-fill: #fff; --halo-fill: rgba(0,0,0,.7); --on-seg: #0C131A;
+  }
+}
+
+/* Claro explícito: lo mismo, pero gana a la preferencia del sistema. */
+:root[data-theme="light"] { color-scheme: light;
+  --bg: #E8EDF1; --bg-2: #F4F7F9; --panel: rgba(255,255,255,.94); --panel-solid: #FFFFFF;
+  --top-1: rgba(255,255,255,.58); --top-2: rgba(237,241,244,.70);
+  --chrome: rgba(255,255,255,.68); --chrome-blur: saturate(135%) blur(14px);
+  --dial-fill: rgba(255,255,255,.72);
+  --halo-ui: rgba(255,255,255,.95); --halo-ui-2: rgba(255,255,255,.8);
+  --line: #A3B6C5; --line-2: #C6D4DD; --line-ui: #778A99;
+  --ink: #16222C; --ink-hi: #060D13; --muted: #415767; --dim: #556B7B;
+  --gold: #A97608; --gold-2: #6F4A00; --gold-bg: #FBF1DC; --gold-line: #D4AC5E;
+  --gold-panel: rgba(252,243,223,.95);
+  --up: #3A740C; --down: #A83A1A;
+  --seg-off: #D3DEE6; --grid: rgba(40,70,95,.09);
+  --sh-soft: rgba(22,42,60,.12); --sh-strong: rgba(22,42,60,.20);
+  --halo: rgba(255,255,255,.95); --halo-2: rgba(255,255,255,.75);
+  --map-ink: #0E1C26; --map-ink-2: #2B3E4C; --map-gold: #7A5200;
+  --dial-hover: rgba(216,226,233,.82); --dial-on: rgba(199,214,224,.88); --attrib-bg: rgba(255,255,255,.88);
+  --marra: rgba(30,50,66,.55); --on-fill: #fff; --halo-fill: rgba(0,0,0,.7); --on-seg: #0C131A;
+}
+
+/* ── Rótulos y halos sobre el mapa ──────────────────────────────────────────────
+   No los manda el tema de la interfaz sino el fondo del mapa: con satélite encendido
+   (imagen de tono medio) hacen falta rótulos claros con halo oscuro aunque la interfaz
+   esté en claro. paletaEzarri() escribe <html data-mapa>, y tema.js lo pone ya en «ilun» antes del primer pintado, porque el satélite arranca
+   encendido. Sin data-mapa valen los valores del tema, definidos arriba. */
+:root[data-mapa="ilun"] {
+  --map-ink: #E9F0F4; --map-ink-2: #D6E1E8; --map-gold: #F2B544;
+  --halo: rgba(0,0,0,.9); --halo-2: rgba(0,0,0,.55);
+  --marra: rgba(214,225,232,.6);
+}
+:root[data-mapa="argi"] {
+  --map-ink: #0E1C26; --map-ink-2: #2B3E4C; --map-gold: #7A5200;
+  --halo: rgba(255,255,255,.95); --halo-2: rgba(255,255,255,.75);
+  --marra: rgba(30,50,66,.55);
+}

@@ -48,7 +48,7 @@ export const TESTUAK = {
     hauteskundea: "Elección", bilSekzioa: "Las secciones cambian de un año a otro y no se pueden comparar: la evolución está en su municipio.",
     eserBarrutia: "Los municipios y las secciones no tienen escaños propios: se reparten por circunscripción, que es la provincia.",
     ikusi: (n) => `Ver ${n}`,
-    lagS: "Imagen de satélite sí / no", lagL: "Ocultar / mostrar las herramientas", lag0C: "Península, Canarias", lagBilatu: "Buscar un municipio",
+    argiaAria: "Cambiar al aspecto claro", ilunaAria: "Cambiar al aspecto oscuro", temaAria: "Aspecto claro / oscuro", temaTit: "Aspecto claro / oscuro (I)", lagItxura: "Aspecto claro / oscuro", lagS: "Imagen de satélite sí / no", lagL: "Ocultar / mostrar las herramientas", lag0C: "Península, Canarias", lagBilatu: "Buscar un municipio",
     lagEsc: "Quitar la selección y cerrar las ventanas",
     // autonómicas
     motaLbl: "Elecciones", kongresua: "Congreso", autonomicas: "Autonómicas", lagA: "Congreso / autonómicas",
@@ -120,7 +120,7 @@ export const TESTUAK = {
     hauteskundea: "Elecció", bilSekzioa: "Les seccions canvien d'un any a l'altre i no es poden comparar: l'evolució és al seu municipi.",
     eserBarrutia: "Els municipis i les seccions no tenen escons propis: es reparteixen per circumscripció, que és la província.",
     ikusi: (n) => `Veure ${n}`,
-    lagS: "Imatge de satèl·lit sí / no", lagL: "Amaga / mostra les eines", lag0C: "Península, Canàries", lagBilatu: "Cerca un municipi",
+    argiaAria: "Canviar a l'aspecte clar", ilunaAria: "Canviar a l'aspecte fosc", temaAria: "Aspecte clar / fosc", temaTit: "Aspecte clar / fosc (I)", lagItxura: "Aspecte clar / fosc", lagS: "Imatge de satèl·lit sí / no", lagL: "Amaga / mostra les eines", lag0C: "Península, Canàries", lagBilatu: "Cerca un municipi",
     lagEsc: "Treu la selecció i tanca les finestres",
     // autonòmiques
     motaLbl: "Eleccions", kongresua: "Congrés", autonomicas: "Autonòmiques", lagA: "Congrés / autonòmiques",
@@ -192,7 +192,7 @@ export const TESTUAK = {
     hauteskundea: "Elección", bilSekzioa: "As seccións cambian dun ano a outro e non se poden comparar: a evolución está no seu concello.",
     eserBarrutia: "Os concellos e as seccións non teñen escanos propios: repártense por circunscrición, que é a provincia.",
     ikusi: (n) => `Ver ${n}`,
-    lagS: "Imaxe de satélite si / non", lagL: "Agochar / amosar as ferramentas", lag0C: "Península, Canarias", lagBilatu: "Buscar un concello",
+    argiaAria: "Cambiar ao aspecto claro", ilunaAria: "Cambiar ao aspecto escuro", temaAria: "Aspecto claro / escuro", temaTit: "Aspecto claro / escuro (I)", lagItxura: "Aspecto claro / escuro", lagS: "Imaxe de satélite si / non", lagL: "Agochar / amosar as ferramentas", lag0C: "Península, Canarias", lagBilatu: "Buscar un concello",
     lagEsc: "Quitar a selección e pechar as xanelas",
     // autonómicas
     motaLbl: "Eleccións", kongresua: "Congreso", autonomicas: "Autonómicas", lagA: "Congreso / autonómicas",
@@ -264,7 +264,7 @@ export const TESTUAK = {
     hauteskundea: "Hauteskundea", bilSekzioa: "Sekzioak urtetik urtera aldatzen dira eta ezin dira alderatu: bilakaera haren udalerrian dago.",
     eserBarrutia: "Udalerriek eta sekzioek ez dute eserleku propiorik: barrutika banatzen dira, eta barrutia probintzia da.",
     ikusi: (n) => `${n} ikusi`,
-    lagS: "Satelite-irudia erakutsi / ezkutatu", lagL: "Tresnak ezkutatu / erakutsi", lag0C: "Penintsula, Kanariak", lagBilatu: "Udalerri bat bilatu",
+    argiaAria: "Itxura argira aldatu", ilunaAria: "Itxura ilunera aldatu", temaAria: "Itxura argia / iluna", temaTit: "Itxura argia / iluna (I)", lagItxura: "Itxura argia / iluna", lagS: "Satelite-irudia erakutsi / ezkutatu", lagL: "Tresnak ezkutatu / erakutsi", lag0C: "Penintsula, Kanariak", lagBilatu: "Udalerri bat bilatu",
     lagEsc: "Hautapena kendu eta leihoak itxi",
     // autonomikoak
     motaLbl: "Hauteskundeak", kongresua: "Kongresua", autonomicas: "Autonomikoak", lagA: "Kongresua / autonomikoak",
@@ -336,7 +336,7 @@ export const TESTUAK = {
     hauteskundea: "Election", bilSekzioa: "Sections change from year to year and cannot be compared: see the trend for its municipality.",
     eserBarrutia: "Municipalities and sections have no seats of their own: seats are allocated by constituency, which is the province.",
     ikusi: (n) => `View ${n}`,
-    lagS: "Satellite image on / off", lagL: "Hide / show the tools", lag0C: "Peninsula, Canary Islands", lagBilatu: "Search for a municipality",
+    argiaAria: "Switch to light appearance", ilunaAria: "Switch to dark appearance", temaAria: "Light / dark appearance", temaTit: "Light / dark appearance (I)", lagItxura: "Light / dark appearance", lagS: "Satellite image on / off", lagL: "Hide / show the tools", lag0C: "Peninsula, Canary Islands", lagBilatu: "Search for a municipality",
     lagEsc: "Clear the selection and close windows",
     // regional elections
     motaLbl: "Elections", kongresua: "Congress", autonomicas: "Regional", lagA: "Congress / regional",
