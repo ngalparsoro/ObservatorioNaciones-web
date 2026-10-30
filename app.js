@@ -978,9 +978,9 @@ function ceraZatia(k, ak, maila, id, r) {
     c.c.slice(0, 8).map((x) => `<div class="row"><span class="nm">${sq(x[3])} ${esc(x[0])}</span><span class="num">${fmt(x[1])}</span><span class="pc">${pct(x[2])}</span><span class="bar"><i style="width:${Math.min(100, x[2] / Math.max(lehen, 1) * 100).toFixed(1)}%;background:${x[3]}"></i></span></div>`).join("") +
     `<p class="hint">${T.ceraBarne}</p>`;
 }
-// Cabecera del panel: nombre, línea de datos y, si hay algo elegido, la × para volver al Estado
+// Cabecera del panel: nombre, línea de datos, el botón del folio y, si hay algo elegido, la × para volver al Estado
 function buruak(izen, meta, itxi = false) {
-  return `<div class="hdr"><div><h2>${izen}</h2><div class="meta">${meta}</div></div>${itxi ? `<button type="button" class="itxi" aria-label="${T.cerrar}" title="${T.cerrar}" data-hautatu="">×</button>` : ""}</div>`;
+  return `<div class="hdr"><div><h2>${izen}</h2><div class="meta">${meta}</div></div>${folioBotoia()}${itxi ? `<button type="button" class="itxi" aria-label="${T.cerrar}" title="${T.cerrar}" data-hautatu="">×</button>` : ""}</div>`;
 }
 // Migas de pan en la barra de arriba: Estado › nación › comunidad › provincia › municipio (autonómicas: Autonómicas ›
 // comunidad › …)
@@ -1115,6 +1115,36 @@ async function fitxaAldatu(f) {
   if (hov && tip.classList.contains("on")) tip.innerHTML = argibidea(hov.source, String(hov.id));  // el puntero sigue a la pestaña
 }
 $("#fitxak").addEventListener("click", (e) => { const f = e.target.closest("[data-fitxa]"); if (f) fitxaAldatu(f.dataset.fitxa); });
+
+// ---- el folio: el resumen de la zona en PDF (web/folioa.js) ----
+// El botón va en la cabecera del panel, a la derecha del nombre de la zona, en la pestaña de resultados. El módulo,
+// jsPDF y las letras (530 kB) no se piden hasta que alguien lo pulsa: la visita normal no los paga. Los grupos de
+// «Circunscripciones» no son un territorio y no tienen folio; una sección lleva al folio de su municipio.
+let folioZain = null;
+const folioModulua = () => (folioZain ??= import(huellaz("./folioa.js")).catch((e) => { folioZain = null; throw e; }));
+const folioDu = () => state.fitxa === "emaitzak" && !(state.hautatua && state.hautatua.maila === "tamaina");
+const folioBotoia = () => (folioDu()
+  ? `<button type="button" class="folio" id="foliobtn" title="${T.folio.botoia}" aria-label="${T.folio.botoia}">↓ PDF</button>` : "");
+// Lo que el folio necesita de aquí: los datos ya cargados, los nombres y las mismas funciones que usa el panel
+const folioTestuingurua = () => ({ T, HIZK, LOKALEA, fmt, INDEX, AUT, GOIK, INFO, GEO, DATA_SYNC, state, load, huellaz,
+  izena, sekUdalerria, sekUrtea, prestatu, erregistroa, ceraErregistroa, eserlekuak, sekzioDatuak,
+  autHauteskundeFitx, autUdalerriak, udalIzenakLortu });
+let folioLanean = false;
+$("#edukia").addEventListener("click", async (e) => {
+  const b = e.target.closest("#foliobtn"); if (!b || folioLanean) return;
+  folioLanean = true;
+  b.setAttribute("aria-busy", "true"); b.textContent = `↓ ${T.cargando}`;
+  try {
+    const { folioa } = await folioModulua();
+    await folioa(folioTestuingurua());
+  } catch (err) {
+    b.textContent = `↓ ${T.folio.errorea}`;
+    console.error(err);
+  } finally {
+    folioLanean = false;
+    setTimeout(() => { if ($("#foliobtn") === b) { b.removeAttribute("aria-busy"); b.textContent = "↓ PDF"; } }, 1200);
+  }
+});
 
 // ---- evolución (pestaña Bilakaera, como en el Behatokia): cómo ha votado la zona en todas las elecciones ----
 // Datos: data/bilakaera/<nivel>.json y data/bilakaera/udalerria/<provincia>.json (prozesatu.py): por zona y elección,

@@ -266,6 +266,11 @@ h2 { margin: 0; font: 600 26px/1.05 var(--f-display); letter-spacing: .03em; tex
 .hint { color: var(--muted); font-size: 12.5px; margin: 0; }
 .itxi { flex: none; margin-left: auto; width: 28px; height: 28px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; }
 .itxi:hover { color: var(--ink-hi); border-color: var(--muted); }
+/* Botón del folio en PDF, a la derecha del nombre de la zona (folioa.js) */
+.folio { flex: none; margin-left: auto; background: none; border: 1px solid var(--line); color: var(--muted); font: 400 10px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; padding: 3px 7px; cursor: pointer; white-space: nowrap; }
+.folio:hover { color: var(--gold-2); border-color: var(--gold); }
+.folio[aria-busy="true"] { cursor: progress; }
+.hdr .folio + .itxi { margin-left: 4px; }
 /* Escaños: hemiciclo y reparto por nación */
 .hemi { width: 100%; max-width: 340px; align-self: center; height: auto; }
 .hemi circle { stroke: var(--panel-solid); stroke-width: .4; }
